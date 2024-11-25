@@ -1,18 +1,25 @@
 import React from 'react';
 import { ProgressBar } from 'primereact/progressbar';
-import { Chat } from './components/Chat';
-import { Card } from 'primereact/card';
+import { Chat } from './sections/Chat';
+import { Intro } from './sections/Intro';
+import { Inventory } from './sections/Inventory';
+import { Room } from './sections/Room';
 
 const App = () => {
   return (
-    <>
-      <ProgressBar value={20} color="#B73E43" className="m-2" />
-      <div className="flex justify-content-between m-2">
-        <Card title="Main content" />
-        <Chat />
+    <div className="m-2 flex flex-column gap-2">
+      <ProgressBar value={20} color="#B73E43" />
+      <div className="grid">
+        <div className="col col-0">
+          <Room />
+        </div>
+        <div className="col col-3">
+          <Chat />
+        </div>
       </div>
-      <Card title={'Inventory'} className="m-2" />
-    </>
+      <Inventory />
+      <Intro />
+    </div>
   );
 };
 
