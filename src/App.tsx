@@ -1,9 +1,9 @@
 import React from 'react';
 import { ProgressBar } from 'primereact/progressbar';
 import { Chat } from './sections/Chat';
-import { Intro } from './sections/Intro';
 import { Inventory } from './sections/Inventory';
-import { Room } from './sections/Room';
+import { Intro } from './sections/Intro';
+import { TVRoom } from './sections/rooms/TVRoom';
 
 const App = () => {
   return (
@@ -11,7 +11,8 @@ const App = () => {
       <ProgressBar value={20} color="#B73E43" />
       <div className="grid">
         <div className="col col-0">
-          <Room />
+          {/* <Room room={Rooms.bedroom} /> */}
+          <TVRoom />
         </div>
         <div className="col col-3">
           <Chat />

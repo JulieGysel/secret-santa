@@ -5,7 +5,7 @@ import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 import { ChipProps, Chip } from 'primereact/chip';
 
-export const Chat = ({ className }: { className?: string }) => {
+export const Chat = () => {
   const chipTemplate = (props: ChipProps) => (
     <>
       {props.label}
@@ -28,7 +28,7 @@ export const Chat = ({ className }: { className?: string }) => {
           />
         </div>
       }
-      className={className}
+      className="h-full"
       pt={{ content: { className: 'flex flex-column gap-3' } }}
     >
       <div className="flex gap-1">
