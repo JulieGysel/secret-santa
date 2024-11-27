@@ -4,6 +4,8 @@ import { Dialog } from 'primereact/dialog';
 import { MenuButton } from '../../components/MenuButton';
 import { Button } from 'primereact/button';
 import { RoomSwitch } from '../RoomSwitch';
+import { FridgeItem, FridgeItems, FridgeItemType } from '../inventory';
+import { useGameContext } from '../../hooks/GameContext';
 
 const endingLines = [
   <p>Well, except for fucking Santa who's decided to move in for some reason.</p>,
@@ -11,7 +13,9 @@ const endingLines = [
   <p>Santa is humming a Christmas carol. It sounds weirdly ominous.</p>,
 ];
 
-const FridgeItems = () => {
+const FridgeItemSection = () => {
+  console.log(Object.values(FridgeItems));
+  const { inventory } = useGameContext();
   return (
     <>
       <p>
@@ -19,17 +23,11 @@ const FridgeItems = () => {
         perhaps.
       </p>
       <div className="flex flex-wrap gap-2">
-        <MenuButton label="Eggs" items={[{ label: 'Grab' }]} />
-        <MenuButton label="Milk" items={[{ label: 'Grab' }]} />
-        <MenuButton label="Cream" items={[{ label: 'Grab' }]} />
-        <MenuButton label="Jam" items={[{ label: 'Grab' }]} />
-        <MenuButton label="Ham" items={[{ label: 'Grab' }]} />
-        <MenuButton label="Pickles" items={[{ label: 'Grab' }]} />
-        <MenuButton label="Butter" items={[{ label: 'Grab' }]} />
-        <MenuButton label="Cheese" items={[{ label: 'Grab' }]} />
-        <MenuButton label="Mayonnaise" items={[{ label: 'Grab' }]} />
-        <MenuButton label="Beer" items={[{ label: 'Grab' }]} />
-        <MenuButton label="Carrots" items={[{ label: 'Grab' }]} />
+        {Object.values(FridgeItems)
+          .filter((item) => !inventory.includes(item as unknown as FridgeItemType))
+          .map((item, i) => (
+            <FridgeItem item={item as unknown as FridgeItemType} key={`fridge-item-${i}`} />
+          ))}
       </div>
     </>
   );
@@ -96,7 +94,7 @@ export const Bedroom = () => {
           label: 'Look inside',
           command: () => {
             setVisible(true);
-            setDialogContent(<FridgeItems />);
+            setDialogContent(<FridgeItemSection />);
           },
         },
       ]}

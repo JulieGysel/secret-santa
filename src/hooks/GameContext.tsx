@@ -1,4 +1,5 @@
 import React from 'react';
+import { InventoryItem } from '../sections/inventory';
 
 export enum RoomType {
   BEDROOM = 'Bedroom',
@@ -15,6 +16,8 @@ export type GameContextType = {
   setRoom: (room: string) => void;
   progress: number;
   setProgress: (progress: number) => void;
+  inventory: InventoryItem[];
+  addToInventory: (item: InventoryItem) => void;
 };
 
 export const GameContext = React.createContext<GameContextType | null>(null);
