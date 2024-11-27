@@ -17,7 +17,7 @@ export const Chat = () => {
     <Card
       title={'Pølsefest'}
       footer={
-        <div className="flex flex-row-reverse">
+        <div className="flex justify-content-end">
           <Button
             rounded
             icon="pi pi-send"
@@ -28,8 +28,7 @@ export const Chat = () => {
           />
         </div>
       }
-      className="h-full"
-      pt={{ content: { className: 'flex flex-column gap-3' } }}
+      pt={{ content: { className: 'flex flex-column gap-3 h-full' } }}
     >
       <div className="flex gap-1">
         <Avatar label="A" shape="circle" className="mr-2" />

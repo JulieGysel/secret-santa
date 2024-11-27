@@ -5,7 +5,7 @@ import { MenuButton } from '../../components/MenuButton';
 import { Button } from 'primereact/button';
 import { RoomSwitch } from '../RoomSwitch';
 
-export const TVRoom = () => {
+export const Kitchen = () => {
   const [visible, setVisible] = React.useState(false);
   const [dialogContent, setDialogContent] = React.useState<string | React.ReactNode>();
 
@@ -67,7 +67,7 @@ export const TVRoom = () => {
   return (
     <>
       <Room
-        title={'TV Room'}
+        title={'Kitchen'}
         description={
           <>
             <p>

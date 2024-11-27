@@ -5,7 +5,7 @@ import { MenuButton } from '../../components/MenuButton';
 import { Button } from 'primereact/button';
 import { RoomSwitch } from '../RoomSwitch';
 
-export const TVRoom = () => {
+export const Basement = () => {
   const [visible, setVisible] = React.useState(false);
   const [dialogContent, setDialogContent] = React.useState<string | React.ReactNode>();
 
@@ -37,27 +37,39 @@ export const TVRoom = () => {
   ];
 
   const roomItems = [
-    <MenuButton label="TV" items={[]} disabledReason="Nobody wanted to watch a movie right now." />,
+    <MenuButton label="Freezer" items={[{ label: 'Look inside' }]} />,
     <MenuButton
-      label="Board game stack"
+      label="Table tennis"
       items={[
         {
           label: 'Play a game',
           command: () => {
             setVisible(true);
-            setDialogContent('XYZ? Good choice! That will be a fun couple hours...');
+            setDialogContent('Playing table tennis.');
           },
         },
       ]}
     />,
     <MenuButton
-      label="Outside doors"
+      label="Table footbal"
       items={[
         {
-          label: 'Look outside',
+          label: 'Play a game',
           command: () => {
             setVisible(true);
-            setDialogContent('Nasty Danish morning weather.');
+            setDialogContent('Playing footbal.');
+          },
+        },
+      ]}
+    />,
+    <MenuButton
+      label="Bar area"
+      items={[
+        {
+          label: 'Look around',
+          command: () => {
+            setVisible(true);
+            setDialogContent('Looking around.');
           },
         },
       ]}
@@ -67,7 +79,7 @@ export const TVRoom = () => {
   return (
     <>
       <Room
-        title={'TV Room'}
+        title={'Basement'}
         description={
           <>
             <p>

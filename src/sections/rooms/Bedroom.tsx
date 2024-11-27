@@ -47,6 +47,11 @@ export const Bedroom = () => {
   const [visible, setVisible] = React.useState(false);
   const [dialogContent, setDialogContent] = React.useState<string | React.ReactNode>();
 
+  const closeModal = () => {
+    setVisible(false);
+    setDialogContent(undefined);
+  };
+
   const roomActions = [
     <MenuButton
       label="Talk to Santa"
@@ -74,7 +79,7 @@ export const Bedroom = () => {
       severity="info"
       onClick={() => {
         setVisible(true);
-        setDialogContent(<RoomSwitch />);
+        setDialogContent(<RoomSwitch closeModal={closeModal} />);
       }}
     />,
   ];
@@ -127,14 +132,9 @@ export const Bedroom = () => {
         roomItems={roomItems}
       ></Room>
       <Dialog
-        footer={
-          <Button label="Back" outlined severity="secondary" onClick={() => setVisible(false)} />
-        }
+        footer={<Button label="Back" outlined severity="secondary" onClick={closeModal} />}
         visible={visible}
-        onHide={() => {
-          setVisible(false);
-          setDialogContent(undefined);
-        }}
+        onHide={closeModal}
         dismissableMask
         draggable={false}
         resizable={false}

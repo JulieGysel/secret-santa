@@ -13,12 +13,9 @@ export const Room = ({
   roomItems: React.ReactNode[];
 }) => {
   return (
-    <Card title={title} className="h-full">
+    <Card title={title} className="h-full" footer={<div className="flex gap-2">{roomActions}</div>}>
       <>{description}</>
-      <div className="flex flex-column gap-2">
-        <div className="flex gap-2">{roomItems}</div>
-        <div className="flex gap-2">{roomActions}</div>
-      </div>
+      <div className="flex gap-2">{roomItems}</div>
     </Card>
   );
 };
