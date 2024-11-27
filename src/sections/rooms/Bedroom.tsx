@@ -5,19 +5,11 @@ import { MenuButton } from '../../components/MenuButton';
 import { Button } from 'primereact/button';
 import { RoomSwitch } from '../RoomSwitch';
 
-const bedroomData = {
-  title: 'Bedroom',
-  description: (
-    <>
-      <p>
-        If you had friends over, you would probably mention that your room is such a mess. But
-        everybody would know it's not true at all.
-      </p>
-      <p>Not much in your room looks out of the ordinary.</p>
-      <p>Well, except for fucking Santa who's decided to move in for some reason.</p>
-    </>
-  ),
-};
+const endingLines = [
+  <p>Well, except for fucking Santa who's decided to move in for some reason.</p>,
+  <p>And Santa is still chilling on your chair.</p>,
+  <p>Santa is humming a Christmas carol. It sounds weirdly ominous.</p>,
+];
 
 const FridgeItems = () => {
   return (
@@ -123,11 +115,22 @@ export const Bedroom = () => {
     />,
   ];
 
+  const endLine = endingLines[Math.floor(Math.random() * 100) % endingLines.length];
+
   return (
     <>
       <Room
-        title={bedroomData.title}
-        description={bedroomData.description}
+        title={'Bedroom'}
+        description={
+          <>
+            <p>
+              If you had friends over, you would probably mention that your room is such a mess. But
+              everybody would know it's not true at all.
+            </p>
+            <p>Not much in your room looks out of the ordinary.</p>
+            {endLine}
+          </>
+        }
         roomActions={roomActions}
         roomItems={roomItems}
       ></Room>

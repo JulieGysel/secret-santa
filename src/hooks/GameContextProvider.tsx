@@ -25,6 +25,7 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
   const [isLoading, setLoading] = React.useState(true);
   const [showIntro, setShowIntro] = React.useState<boolean>(true);
   const [room, setRoom] = React.useState<RoomType>(RoomType.BEDROOM);
+  const [progress, setProgress] = React.useState(0);
 
   React.useEffect(() => {
     console.log(getCookie('intro'));
@@ -37,9 +38,10 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
     setShowIntro(false);
   };
 
-  const value = React.useMemo(() => ({ showIntro, onHideIntro, room, setRoom }), [room, showIntro]);
-
-  console.log(value, isLoading);
+  const value = React.useMemo(
+    () => ({ showIntro, onHideIntro, room, setRoom, progress, setProgress }),
+    [progress, room, showIntro],
+  );
 
   return (
     <GameContext.Provider value={value}>

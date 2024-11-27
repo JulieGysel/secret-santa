@@ -13,6 +13,8 @@ export type GameContextType = {
   onHideIntro: VoidFunction;
   room: RoomType;
   setRoom: (room: string) => void;
+  progress: number;
+  setProgress: (progress: number) => void;
 };
 
 export const GameContext = React.createContext<GameContextType | null>(null);

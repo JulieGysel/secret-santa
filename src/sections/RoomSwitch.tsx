@@ -7,7 +7,7 @@ export const RoomSwitch = ({ closeModal }: { closeModal: VoidFunction }) => {
 
   return (
     <div className="flex flex-wrap gap-2">
-      {Object.values(RoomType).map((roomType) => (
+      {Object.values(RoomType).map((roomType, i) => (
         <Button
           label={roomType}
           outlined
@@ -16,6 +16,7 @@ export const RoomSwitch = ({ closeModal }: { closeModal: VoidFunction }) => {
             setRoom(roomType);
             closeModal();
           }}
+          key={`room-button-${i}`}
         />
       ))}
     </div>
