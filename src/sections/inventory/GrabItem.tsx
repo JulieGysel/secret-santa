@@ -6,16 +6,16 @@ import { MenuProps } from 'primereact/menu';
 
 export const GrabItem = ({
   item,
-  additionalActions = [],
+  customItems,
 }: {
   item: InventoryItemType;
-  additionalActions?: MenuProps['model'];
+  customItems?: MenuProps['model'];
 }) => {
   const { addToInventory } = useGameContext();
   return (
     <MenuButton
       label={item}
-      items={[...additionalActions, { label: 'Grab', command: () => addToInventory(item) }]}
+      items={customItems || [{ label: 'Grab', command: () => addToInventory(item) }]}
     />
   );
 };

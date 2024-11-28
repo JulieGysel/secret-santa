@@ -8,7 +8,19 @@ import { useGameContext } from '../../hooks/GameContext';
 import { CupboardItems, GrabItem, Miscelaneous } from '../inventory';
 
 const Trash = () => {
-  return <>You sweet, helpful person!</>;
+  const { inventory } = useGameContext();
+  const wrappingPaperAvailable = !inventory.includes(Miscelaneous.paper);
+
+  return (
+    <>
+      <p>You sweet, helpful person!</p>
+      {wrappingPaperAvailable && (
+        <div className="flex flex-wrap gap-2">
+          <GrabItem item={Miscelaneous.paper} />
+        </div>
+      )}
+    </>
+  );
 };
 
 const Oven = () => {
@@ -51,6 +63,18 @@ const Cupboard = () => {
 export const Kitchen = () => {
   const [visible, setVisible] = React.useState(false);
   const [dialogContent, setDialogContent] = React.useState<string | React.ReactNode>();
+  const { inventory } = useGameContext();
+  const additionalActions = !inventory.includes(Miscelaneous.paper)
+    ? [
+        {
+          label: 'Take out',
+          command: () => {
+            setVisible(true);
+            setDialogContent(<Trash />);
+          },
+        },
+      ]
+    : [];
 
   const closeModal = () => {
     setVisible(false);
@@ -74,7 +98,7 @@ export const Kitchen = () => {
       severity="danger"
       onClick={() => {
         setVisible(true);
-        setDialogContent('');
+        setDialogContent('Complaining...');
       }}
     />,
     <Button
@@ -123,16 +147,9 @@ export const Kitchen = () => {
             setDialogContent('You think you will find something useful in the trash?');
           },
         },
-        {
-          label: 'Take out',
-          command: () => {
-            setVisible(true);
-            setDialogContent(<Trash />);
-          },
-        },
+        ...additionalActions,
       ]}
     />,
-    <MenuButton label="Countertop" items={[]} />,
     <MenuButton
       label="Kitchen sink"
       items={[
@@ -147,7 +164,9 @@ export const Kitchen = () => {
           label: 'Clean',
           command: () => {
             setVisible(true);
-            setDialogContent('Somehow, the kitchen sink is never clean enough.');
+            setDialogContent(
+              'Somehow, the kitchen sink is never clean enough. But thank you for your attempt.',
+            );
           },
         },
       ]}

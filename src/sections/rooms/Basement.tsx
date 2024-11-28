@@ -77,7 +77,7 @@ export const Basement = () => {
       label="Freezer"
       items={[
         {
-          label: 'Look inside',
+          label: 'Freezer',
           command: () => {
             setVisible(true);
             setDialogContent(<Freezer />);
@@ -100,9 +100,10 @@ export const Basement = () => {
                   with you.
                 </p>
                 <p>
-                  {Math.floor(Math.random() * 100) % Math.ceil(tennisGames / 10)
+                  {/* todo: games won statistic */}
+                  {Math.random() < Math.min(tennisGames / 33, 1)
                     ? 'Congratulations! You won this time!'
-                    : 'You lost the game. But perhaps you will have more luck next time?'}
+                    : "You lost the game. But that's okay, these things take practice."}
                 </p>
               </>,
             );
@@ -125,7 +126,8 @@ export const Basement = () => {
                   with you.
                 </p>
                 <p>
-                  {Math.floor(Math.random() * 100) % Math.ceil(footballGames / 10)
+                  {/* todo: games won statistic */}
+                  {Math.random() < Math.min(footballGames / 33, 1)
                     ? 'Congratulations! You won this time!'
                     : 'You lost the game. But perhaps you will have more luck next time?'}
                 </p>

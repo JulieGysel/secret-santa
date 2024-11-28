@@ -23,8 +23,8 @@ const FreeStuffSection = () => {
   );
 };
 
-const MonsteraSection = () => {
-  const { inventory, paintingDown, setPaintingDown } = useGameContext();
+const MonsteraSection = ({ closeModal }: { closeModal: () => void }) => {
+  const { inventory, paintingDown, setPaintingDown, addToInventory } = useGameContext();
 
   const paintingPos = paintingDown
     ? "The controversial painging is stood by the monstera's plant pot."
@@ -40,10 +40,20 @@ const MonsteraSection = () => {
           <div className="flex flex-wrap gap-2">
             <GrabItem
               item={Miscelaneous.painting}
-              additionalActions={[
+              customItems={[
                 {
                   label: paintingDown ? 'Put up' : 'Put down',
-                  command: () => setPaintingDown(!paintingDown),
+                  command: () => {
+                    setPaintingDown(!paintingDown);
+                    closeModal();
+                  },
+                },
+                {
+                  label: 'Grab',
+                  command: () => {
+                    addToInventory(Miscelaneous.painting);
+                    closeModal();
+                  },
                 },
               ]}
             />
@@ -125,7 +135,7 @@ export const CommonRoom = () => {
           label: 'Explore',
           command: () => {
             setVisible(true);
-            setDialogContent(<MonsteraSection />);
+            setDialogContent(<MonsteraSection closeModal={closeModal} />);
           },
         },
       ]}

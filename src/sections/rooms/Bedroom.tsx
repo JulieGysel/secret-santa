@@ -97,7 +97,7 @@ export const Bedroom = () => {
       label="Fridge"
       items={[
         {
-          label: 'Look inside',
+          label: 'Explore',
           command: () => {
             setVisible(true);
             setDialogContent(<FridgeItemSection />);

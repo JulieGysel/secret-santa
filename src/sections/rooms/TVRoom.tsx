@@ -6,7 +6,7 @@ import { Button } from 'primereact/button';
 import { RoomSwitch } from '../RoomSwitch';
 
 // todo
-const games = ['Settlers of Catan', 'Cards'];
+const games = ['Settlers of Catan', 'Chess', 'Cards'];
 
 export const TVRoom = () => {
   const [visible, setVisible] = React.useState(false);
@@ -46,6 +46,15 @@ export const TVRoom = () => {
     <MenuButton
       label="Board game stack"
       items={[
+        {
+          label: 'Explore',
+          command: () => {
+            setVisible(true);
+            setDialogContent(
+              `So many games to choose from. There is ${games.join(', ')}... The condition of some leaves a lot to be desired. But you can play them anyway!`,
+            );
+          },
+        },
         {
           label: 'Play a game',
           command: () => {

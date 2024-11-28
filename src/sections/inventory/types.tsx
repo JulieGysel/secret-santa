@@ -28,15 +28,16 @@ export enum Miscelaneous {
   painting = 'Painting',
   rum = 'Half empty bottle of rum',
   sheetPan = 'Sheet pan',
+  paper = 'Wrapping paper',
 }
 
 type MiscelaneousKey = keyof typeof Miscelaneous;
 export type MiscelaneousType = (typeof Miscelaneous)[MiscelaneousKey];
 
 export enum FreezerItems {
-  appleSlices = 'Æbleskiver',
   bread = 'Bread',
   veg = 'Frozen vegetables',
+  appleSlices = 'Æbleskiver',
   meat = 'Frozen meat',
   iceLolly = 'Ice Lolly (grape flavoured)',
   ice = 'Ice cubes',
