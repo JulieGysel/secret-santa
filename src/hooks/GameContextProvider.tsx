@@ -22,6 +22,18 @@ const getCookie = (key: string) => {
   return '';
 };
 
+const movies = [
+  'The Holdovers',
+  'Die Hard',
+  'Home Alone',
+  'Elf',
+  'The Nightmare Before Christmas',
+  'Love Actually',
+  'The Polar Express',
+  'Pretty Woman',
+  'Star Wars Holiday Special',
+];
+
 export const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setLoading] = React.useState(true);
   const [showIntro, setShowIntro] = React.useState<boolean>(false);
@@ -32,6 +44,8 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
 
   const [tennisGames, setTennisGames] = React.useState<number>();
   const [footballGames, setFootballGames] = React.useState<number>();
+
+  const [movie, setMovie] = React.useState('');
 
   React.useEffect(() => {
     setShowIntro(!getCookie('intro'));
@@ -98,6 +112,26 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
     }
   }, [footballGames]);
 
+  React.useEffect(() => {
+    const randomizeValue = () => {
+      const nextMovie = movies[Math.floor(Math.random() * 100) % movies.length];
+      setMovie(nextMovie);
+
+      console.log('Now playing', nextMovie);
+
+      const clearAfter = Math.random() * 1000 * 10 + 1000 * 15;
+      setTimeout(() => {
+        setMovie('');
+        console.log('No movie playing');
+      }, clearAfter); // Clear the value after the random time
+    };
+
+    const interval = setInterval(randomizeValue, 1000 * 60); // Trigger every 60 seconds
+
+    // Cleanup interval on unmount
+    return () => clearInterval(interval);
+  }, []);
+
   const value = React.useMemo(
     () => ({
       showIntro,
@@ -114,11 +148,13 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
       setTennisGames,
       footballGames,
       setFootballGames,
+      movie,
     }),
     [
       addToInventory,
       footballGames,
       inventory,
+      movie,
       paintingDown,
       progress,
       room,
@@ -127,7 +163,7 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
     ],
   );
 
-  console.log(value, isLoading);
+  console.log(value);
 
   return (
     <GameContext.Provider value={value}>

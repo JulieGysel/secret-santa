@@ -29,6 +29,7 @@ export enum Miscelaneous {
   rum = 'Half empty bottle of rum',
   sheetPan = 'Sheet pan',
   paper = 'Wrapping paper',
+  cookieRecipe = 'Cookie recipe',
 }
 
 type MiscelaneousKey = keyof typeof Miscelaneous;

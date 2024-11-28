@@ -12,18 +12,19 @@ export enum RoomType {
 export type GameContextType = {
   showIntro: boolean;
   onHideIntro: VoidFunction;
-  room: RoomType;
-  setRoom: (room: string) => void;
+  room: RoomType | undefined;
+  setRoom: React.Dispatch<React.SetStateAction<RoomType | undefined>>;
   progress: number;
   setProgress: (progress: number) => void;
   inventory: InventoryItem[];
   addToInventory: (item: InventoryItem) => void;
   paintingDown: boolean;
   setPaintingDown: (down: boolean) => void;
-  tennisGames: number;
+  tennisGames: number | undefined;
   setTennisGames: (games: number) => void;
-  footballGames: number;
+  footballGames: number | undefined;
   setFootballGames: (games: number) => void;
+  movie: string;
 };
 
 export const GameContext = React.createContext<GameContextType | null>(null);
