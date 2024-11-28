@@ -18,6 +18,12 @@ export type GameContextType = {
   setProgress: (progress: number) => void;
   inventory: InventoryItem[];
   addToInventory: (item: InventoryItem) => void;
+  paintingDown: boolean;
+  setPaintingDown: (down: boolean) => void;
+  tennisGames: number;
+  setTennisGames: (games: number) => void;
+  footballGames: number;
+  setFootballGames: (games: number) => void;
 };
 
 export const GameContext = React.createContext<GameContextType | null>(null);

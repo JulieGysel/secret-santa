@@ -10,6 +10,8 @@ export const Intro = () => {
   React.useEffect(() => {
     if (!showIntro) {
       setVisible(false);
+    } else {
+      setVisible(true);
     }
   }, [showIntro]);
 

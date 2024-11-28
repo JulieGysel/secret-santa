@@ -4,10 +4,46 @@ import { Dialog } from 'primereact/dialog';
 import { MenuButton } from '../../components/MenuButton';
 import { Button } from 'primereact/button';
 import { RoomSwitch } from '../RoomSwitch';
+import { useGameContext } from '../../hooks/GameContext';
+import { FreezerItems, GrabItem, Miscelaneous } from '../inventory';
+
+const Freezer = () => {
+  const { inventory } = useGameContext();
+  const freezerItems = Object.values(FreezerItems).filter((item) => !inventory.includes(item));
+
+  return (
+    <>
+      <p>Wow! That's a lot of stuff!</p>
+      <div className="flex flex-wrap gap-2">
+        {freezerItems.map((item, i) => (
+          <GrabItem item={item} key={`grab-item-${i}`} />
+        ))}
+      </div>
+    </>
+  );
+};
+
+const Bar = () => {
+  const { inventory } = useGameContext();
+  const rumAvailable = !inventory.includes(Miscelaneous.rum);
+
+  return (
+    <>
+      {/* todo */}
+      <p>Bar area description</p>
+      {rumAvailable && (
+        <div className="flex flex-wrap gap-2">
+          <GrabItem item={Miscelaneous.rum} />
+        </div>
+      )}
+    </>
+  );
+};
 
 export const Basement = () => {
   const [visible, setVisible] = React.useState(false);
   const [dialogContent, setDialogContent] = React.useState<string | React.ReactNode>();
+  const { tennisGames, setTennisGames, footballGames, setFootballGames } = useGameContext();
 
   const closeModal = () => {
     setVisible(false);
@@ -22,7 +58,7 @@ export const Basement = () => {
       severity="danger"
       onClick={() => {
         setVisible(true);
-        setDialogContent('');
+        setDialogContent('Complaining...');
       }}
     />,
     <Button
@@ -37,7 +73,18 @@ export const Basement = () => {
   ];
 
   const roomItems = [
-    <MenuButton label="Freezer" items={[{ label: 'Look inside' }]} />,
+    <MenuButton
+      label="Freezer"
+      items={[
+        {
+          label: 'Look inside',
+          command: () => {
+            setVisible(true);
+            setDialogContent(<Freezer />);
+          },
+        },
+      ]}
+    />,
     <MenuButton
       label="Table tennis"
       items={[
@@ -45,19 +92,45 @@ export const Basement = () => {
           label: 'Play a game',
           command: () => {
             setVisible(true);
-            setDialogContent('Playing table tennis.');
+            setTennisGames(tennisGames + 1);
+            setDialogContent(
+              <>
+                <p>
+                  You can always count on there being someone who will play a round of table tennis
+                  with you.
+                </p>
+                <p>
+                  {Math.floor(Math.random() * 100) % Math.ceil(tennisGames / 10)
+                    ? 'Congratulations! You won this time!'
+                    : 'You lost the game. But perhaps you will have more luck next time?'}
+                </p>
+              </>,
+            );
           },
         },
       ]}
     />,
     <MenuButton
-      label="Table footbal"
+      label="Table football"
       items={[
         {
           label: 'Play a game',
           command: () => {
             setVisible(true);
-            setDialogContent('Playing footbal.');
+            setFootballGames(footballGames + 1);
+            setDialogContent(
+              <>
+                <p>
+                  You can always count on there being someone who will play a game of table football
+                  with you.
+                </p>
+                <p>
+                  {Math.floor(Math.random() * 100) % Math.ceil(footballGames / 10)
+                    ? 'Congratulations! You won this time!'
+                    : 'You lost the game. But perhaps you will have more luck next time?'}
+                </p>
+              </>,
+            );
           },
         },
       ]}
@@ -69,7 +142,7 @@ export const Basement = () => {
           label: 'Look around',
           command: () => {
             setVisible(true);
-            setDialogContent('Looking around.');
+            setDialogContent(<Bar />);
           },
         },
       ]}
@@ -82,12 +155,8 @@ export const Basement = () => {
         title={'Basement'}
         description={
           <>
-            <p>
-              If you had friends over, you would probably mention that your room is such a mess. But
-              everybody would know it's not true at all.
-            </p>
-            <p>Not much in your room looks out of the ordinary.</p>
-            <p>Well, except for fucking Santa who's decided to move in for some reason.</p>
+            {/* //todo */}
+            <p>Basement description</p>
           </>
         }
         roomActions={roomActions}

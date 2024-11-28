@@ -4,6 +4,57 @@ import { Dialog } from 'primereact/dialog';
 import { MenuButton } from '../../components/MenuButton';
 import { Button } from 'primereact/button';
 import { RoomSwitch } from '../RoomSwitch';
+import { useGameContext } from '../../hooks/GameContext';
+import { FreeStuff, GrabItem, Miscelaneous } from '../inventory';
+
+const FreeStuffSection = () => {
+  const { inventory } = useGameContext();
+  const fridgeItems = Object.values(FreeStuff).filter((item) => !inventory.includes(item));
+
+  return (
+    <>
+      <p>Wow! That's a lot of free stuff! Or junk that should be thrown out?</p>
+      <div className="flex flex-wrap gap-2">
+        {fridgeItems.map((item, i) => (
+          <GrabItem item={item} key={`grab-item-${i}`} />
+        ))}
+      </div>
+    </>
+  );
+};
+
+const MonsteraSection = () => {
+  const { inventory, paintingDown, setPaintingDown } = useGameContext();
+
+  const paintingPos = paintingDown
+    ? "The controversial painging is stood by the monstera's plant pot."
+    : 'The controversial painging is hanging on the wall next to it.';
+
+  return (
+    <>
+      <p>The Monstera is a big plant.</p>
+
+      {!inventory.includes(Miscelaneous.painting) ? (
+        <>
+          <p>{paintingPos}</p>
+          <div className="flex flex-wrap gap-2">
+            <GrabItem
+              item={Miscelaneous.painting}
+              additionalActions={[
+                {
+                  label: paintingDown ? 'Put up' : 'Put down',
+                  command: () => setPaintingDown(!paintingDown),
+                },
+              ]}
+            />
+          </div>
+        </>
+      ) : (
+        <p>The controversial painting is nowhere to be found.</p>
+      )}
+    </>
+  );
+};
 
 export const CommonRoom = () => {
   const [visible, setVisible] = React.useState(false);
@@ -22,7 +73,7 @@ export const CommonRoom = () => {
       severity="danger"
       onClick={() => {
         setVisible(true);
-        setDialogContent('');
+        setDialogContent('Complaining about Santa...');
       }}
       key="complain"
     />,
@@ -39,9 +90,47 @@ export const CommonRoom = () => {
   ];
 
   const roomItems = [
-    <MenuButton label="Tables" items={[]} key="tables" />,
-    <MenuButton label="Free stuff" items={[]} key="free-stuff" />,
-    <MenuButton label="Monstera" items={[]} key="monstera" />,
+    <MenuButton
+      label="Tables"
+      items={[
+        {
+          label: 'Explore',
+          command: () => {
+            setVisible(true);
+            setDialogContent(
+              'The tables in the common room offer a big working surface to everyone in the dorm.',
+            );
+          },
+        },
+      ]}
+      key="tables"
+    />,
+    <MenuButton
+      label="Free stuff"
+      items={[
+        {
+          label: 'Explore',
+          command: () => {
+            setVisible(true);
+            setDialogContent(<FreeStuffSection />);
+          },
+        },
+      ]}
+      key="free-stuff"
+    />,
+    <MenuButton
+      label="Monstera"
+      items={[
+        {
+          label: 'Explore',
+          command: () => {
+            setVisible(true);
+            setDialogContent(<MonsteraSection />);
+          },
+        },
+      ]}
+      key="monstera"
+    />,
     <MenuButton
       label="Outside doors"
       items={[
@@ -63,12 +152,8 @@ export const CommonRoom = () => {
         title={'Common Room'}
         description={
           <>
-            <p>
-              If you had friends over, you would probably mention that your room is such a mess. But
-              everybody would know it's not true at all.
-            </p>
-            <p>Not much in your room looks out of the ordinary.</p>
-            <p>Well, except for fucking Santa who's decided to move in for some reason.</p>
+            {/* //todo */}
+            <p>Common room description</p>
           </>
         }
         roomActions={roomActions}

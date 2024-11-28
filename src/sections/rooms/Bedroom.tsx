@@ -4,7 +4,7 @@ import { Dialog } from 'primereact/dialog';
 import { MenuButton } from '../../components/MenuButton';
 import { Button } from 'primereact/button';
 import { RoomSwitch } from '../RoomSwitch';
-import { FridgeItem, FridgeItems, FridgeItemType } from '../inventory';
+import { FridgeItems, GrabItem } from '../inventory';
 import { useGameContext } from '../../hooks/GameContext';
 
 const endingLines = [
@@ -14,20 +14,21 @@ const endingLines = [
 ];
 
 const FridgeItemSection = () => {
-  console.log(Object.values(FridgeItems));
   const { inventory } = useGameContext();
+  const fridgeItems = Object.values(FridgeItems).filter((item) => !inventory.includes(item));
+
   return (
     <>
-      <p>
-        The fridge could do with some cleaning. But not right now. When there's less stuff inside
-        perhaps.
-      </p>
+      <p>The fridge could do with some cleaning. But not right now.</p>
+      {fridgeItems.length < 5 ? (
+        <p>You are too busy right now.</p>
+      ) : (
+        <p>When there's less stuff inside perhaps.</p>
+      )}
       <div className="flex flex-wrap gap-2">
-        {Object.values(FridgeItems)
-          .filter((item) => !inventory.includes(item as unknown as FridgeItemType))
-          .map((item, i) => (
-            <FridgeItem item={item as unknown as FridgeItemType} key={`fridge-item-${i}`} />
-          ))}
+        {fridgeItems.map((item, i) => (
+          <GrabItem item={item} key={`grab-item-${i}`} />
+        ))}
       </div>
     </>
   );
@@ -36,6 +37,11 @@ const FridgeItemSection = () => {
 export const Bedroom = () => {
   const [visible, setVisible] = React.useState(false);
   const [dialogContent, setDialogContent] = React.useState<string | React.ReactNode>();
+
+  const endLine = React.useMemo(
+    () => endingLines[Math.floor(Math.random() * 100) % endingLines.length],
+    [],
+  );
 
   const closeModal = () => {
     setVisible(false);
@@ -112,8 +118,6 @@ export const Bedroom = () => {
       ]}
     />,
   ];
-
-  const endLine = endingLines[Math.floor(Math.random() * 100) % endingLines.length];
 
   return (
     <>

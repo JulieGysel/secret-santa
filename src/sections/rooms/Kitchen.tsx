@@ -4,6 +4,49 @@ import { Dialog } from 'primereact/dialog';
 import { MenuButton } from '../../components/MenuButton';
 import { Button } from 'primereact/button';
 import { RoomSwitch } from '../RoomSwitch';
+import { useGameContext } from '../../hooks/GameContext';
+import { CupboardItems, GrabItem, Miscelaneous } from '../inventory';
+
+const Trash = () => {
+  return <>You sweet, helpful person!</>;
+};
+
+const Oven = () => {
+  const { inventory } = useGameContext();
+  const panAvailable = !inventory.includes(Miscelaneous.sheetPan);
+
+  return (
+    <>
+      {/* todo */}
+      <p>It's an oven.</p>
+      {panAvailable && (
+        <div className="flex flex-wrap gap-2">
+          <GrabItem item={Miscelaneous.sheetPan} />
+        </div>
+      )}
+    </>
+  );
+};
+
+const Cupboard = () => {
+  const { inventory } = useGameContext();
+  const cupboardItems = Object.values(CupboardItems).filter((item) => !inventory.includes(item));
+
+  return (
+    <>
+      {cupboardItems.length < 3 ? (
+        <p>Your cupboard is strangely empty.</p>
+      ) : (
+        <p>There is some stuff in your cupboard.</p>
+      )}
+      <div className="flex flex-wrap gap-2">
+        {cupboardItems.map((item, i) => (
+          <GrabItem item={item} key={`grab-item-${i}`} />
+        ))}
+      </div>
+    </>
+  );
+};
 
 export const Kitchen = () => {
   const [visible, setVisible] = React.useState(false);
@@ -15,6 +58,15 @@ export const Kitchen = () => {
   };
 
   const roomActions = [
+    <Button
+      label="Cook something"
+      outlined
+      severity="secondary"
+      onClick={() => {
+        setVisible(true);
+        setDialogContent('You think you can cook?');
+      }}
+    />,
     <div className="flex-grow-1"></div>,
     <Button
       label="Complain about Santa"
@@ -37,21 +89,71 @@ export const Kitchen = () => {
   ];
 
   const roomItems = [
-    <MenuButton label="TV" items={[]} disabledReason="Nobody wanted to watch a movie right now." />,
     <MenuButton
-      label="Board game stack"
+      label="Cupboard"
       items={[
         {
-          label: 'Play a game',
+          label: 'Explore',
           command: () => {
             setVisible(true);
-            setDialogContent('XYZ? Good choice! That will be a fun couple hours...');
+            setDialogContent(<Cupboard />);
           },
         },
       ]}
     />,
     <MenuButton
-      label="Outside doors"
+      label="Oven"
+      items={[
+        {
+          label: 'Explore',
+          command: () => {
+            setVisible(true);
+            setDialogContent(<Oven />);
+          },
+        },
+      ]}
+    />,
+    <MenuButton
+      label="Trash"
+      items={[
+        {
+          label: 'Explore',
+          command: () => {
+            setVisible(true);
+            setDialogContent('You think you will find something useful in the trash?');
+          },
+        },
+        {
+          label: 'Take out',
+          command: () => {
+            setVisible(true);
+            setDialogContent(<Trash />);
+          },
+        },
+      ]}
+    />,
+    <MenuButton label="Countertop" items={[]} />,
+    <MenuButton
+      label="Kitchen sink"
+      items={[
+        {
+          label: 'Explore',
+          command: () => {
+            setVisible(true);
+            setDialogContent("It's a kitchen sink.");
+          },
+        },
+        {
+          label: 'Clean',
+          command: () => {
+            setVisible(true);
+            setDialogContent('Somehow, the kitchen sink is never clean enough.');
+          },
+        },
+      ]}
+    />,
+    <MenuButton
+      label="Window"
       items={[
         {
           label: 'Look outside',
@@ -68,16 +170,8 @@ export const Kitchen = () => {
     <>
       <Room
         title={'Kitchen'}
-        description={
-          <>
-            <p>
-              If you had friends over, you would probably mention that your room is such a mess. But
-              everybody would know it's not true at all.
-            </p>
-            <p>Not much in your room looks out of the ordinary.</p>
-            <p>Well, except for fucking Santa who's decided to move in for some reason.</p>
-          </>
-        }
+        // todo
+        description={<p>Kitchen description.</p>}
         roomActions={roomActions}
         roomItems={roomItems}
       ></Room>

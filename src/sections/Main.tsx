@@ -9,8 +9,6 @@ import { Tooltip } from 'primereact/tooltip';
 export const Main = () => {
   const context = useGameContext();
 
-  console.log(context);
-
   const room = React.useMemo(() => {
     switch (context.room) {
       case RoomType.BASEMENT:

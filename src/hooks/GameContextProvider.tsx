@@ -1,8 +1,8 @@
 import React from 'react';
 import { GameContext, RoomType } from './GameContext';
-import { InventoryItem } from '../sections/inventory';
+import { InventoryItemType } from '../sections/inventory';
 
-const setCookie = (key: string, value: string) => {
+const setCookie = (key: string, value: string | number) => {
   document.cookie = `${key}=${value};path=/;`;
 };
 
@@ -24,18 +24,47 @@ const getCookie = (key: string) => {
 
 export const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setLoading] = React.useState(true);
-  const [showIntro, setShowIntro] = React.useState<boolean>(true);
-  const [room, setRoom] = React.useState<RoomType>(RoomType.BEDROOM);
+  const [showIntro, setShowIntro] = React.useState<boolean>(false);
+  const [room, setRoom] = React.useState<RoomType>();
   const [progress, setProgress] = React.useState(0);
-  const [inventory, setInventory] = React.useState<InventoryItem[]>([]);
+  const [inventory, setInventory] = React.useState<InventoryItemType[]>([]);
+  const [paintingDown, setPaintingDown] = React.useState(true);
+
+  const [tennisGames, setTennisGames] = React.useState<number>();
+  const [footballGames, setFootballGames] = React.useState<number>();
 
   React.useEffect(() => {
-    console.log(getCookie('intro'));
     setShowIntro(!getCookie('intro'));
 
-    const inv = getCookie('inventory').split(',') as InventoryItem[];
-    setInventory(inv);
+    const inv = getCookie('inventory').split(',');
+    if (!(inv.length === 1 && inv[0] === '')) {
+      setInventory(inv as InventoryItemType[]);
+    }
+
+    const r = getCookie('room') as RoomType;
+    if (r) {
+      setRoom(r);
+    } else {
+      setRoom(RoomType.BEDROOM);
+      setCookie('room', room as string);
+    }
+
+    const tg = Number(getCookie('tennisGames'));
+    if (tg) {
+      setTennisGames(tg);
+    } else {
+      setTennisGames(0);
+    }
+
+    const fg = Number(getCookie('footballGames'));
+    if (fg) {
+      setFootballGames(tg);
+    } else {
+      setFootballGames(0);
+    }
+
     setLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onHideIntro = () => {
@@ -44,12 +73,30 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
   };
 
   const addToInventory = React.useCallback(
-    (item: InventoryItem) => {
+    (item: InventoryItemType) => {
       setInventory([...inventory, item]);
       setCookie('inventory', inventory.join(','));
     },
     [inventory],
   );
+
+  React.useEffect(() => {
+    if (room) {
+      setCookie('room', room as string);
+    }
+  }, [room]);
+
+  React.useEffect(() => {
+    if (tennisGames) {
+      setCookie('tennisGames', tennisGames);
+    }
+  }, [tennisGames]);
+
+  React.useEffect(() => {
+    if (footballGames) {
+      setCookie('footballGames', footballGames);
+    }
+  }, [footballGames]);
 
   const value = React.useMemo(
     () => ({
@@ -61,9 +108,26 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
       setProgress,
       inventory,
       addToInventory,
+      paintingDown,
+      setPaintingDown,
+      tennisGames,
+      setTennisGames,
+      footballGames,
+      setFootballGames,
     }),
-    [addToInventory, inventory, progress, room, showIntro],
+    [
+      addToInventory,
+      footballGames,
+      inventory,
+      paintingDown,
+      progress,
+      room,
+      showIntro,
+      tennisGames,
+    ],
   );
+
+  console.log(value, isLoading);
 
   return (
     <GameContext.Provider value={value}>

@@ -5,9 +5,14 @@ import { MenuButton } from '../../components/MenuButton';
 import { Button } from 'primereact/button';
 import { RoomSwitch } from '../RoomSwitch';
 
+// todo
+const games = ['Settlers of Catan', 'Cards'];
+
 export const TVRoom = () => {
   const [visible, setVisible] = React.useState(false);
   const [dialogContent, setDialogContent] = React.useState<string | React.ReactNode>();
+
+  const game = React.useMemo(() => games[Math.floor(Math.random() * 100) % games.length], []);
 
   const closeModal = () => {
     setVisible(false);
@@ -45,7 +50,7 @@ export const TVRoom = () => {
           label: 'Play a game',
           command: () => {
             setVisible(true);
-            setDialogContent('XYZ? Good choice! That will be a fun couple hours...');
+            setDialogContent(`${game}? Good choice! That will be a fun couple hours...`);
           },
         },
       ]}
@@ -68,16 +73,7 @@ export const TVRoom = () => {
     <>
       <Room
         title={'TV Room'}
-        description={
-          <>
-            <p>
-              If you had friends over, you would probably mention that your room is such a mess. But
-              everybody would know it's not true at all.
-            </p>
-            <p>Not much in your room looks out of the ordinary.</p>
-            <p>Well, except for fucking Santa who's decided to move in for some reason.</p>
-          </>
-        }
+        description={<p>TV Description</p>}
         roomActions={roomActions}
         roomItems={roomItems}
       ></Room>

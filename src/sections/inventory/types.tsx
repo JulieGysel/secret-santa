@@ -10,10 +10,64 @@ export enum FridgeItems {
   beer = 'Beer',
   carrots = 'Carrots',
 }
-export type FridgeItemType = typeof FridgeItems;
+
+type FridgeItemKey = keyof typeof FridgeItems;
+export type FridgeItemType = (typeof FridgeItems)[FridgeItemKey];
+
+export enum FreeStuff {
+  pan = 'Pan',
+  tshirt = 'T-Shirt',
+  scissors = 'Scissors',
+  vase = 'Vase',
+}
+
+type FreeStuffKey = keyof typeof FreeStuff;
+export type FreeStuffType = (typeof FreeStuff)[FreeStuffKey];
+
+export enum Miscelaneous {
+  painting = 'Painting',
+  rum = 'Half empty bottle of rum',
+  sheetPan = 'Sheet pan',
+}
+
+type MiscelaneousKey = keyof typeof Miscelaneous;
+export type MiscelaneousType = (typeof Miscelaneous)[MiscelaneousKey];
+
+export enum FreezerItems {
+  appleSlices = 'Æbleskiver',
+  bread = 'Bread',
+  veg = 'Frozen vegetables',
+  meat = 'Frozen meat',
+  iceLolly = 'Ice Lolly (grape flavoured)',
+  ice = 'Ice cubes',
+}
+
+type FreezerItemKey = keyof typeof FreezerItems;
+export type FreezerItemType = (typeof FreezerItems)[FreezerItemKey];
+
+export enum CupboardItems {
+  flour = 'Flour',
+  sugar = 'Sugar',
+  bowl = 'Bowl',
+  spatula = 'Spatula',
+  plates = 'Plates',
+  utensils = 'Utensils',
+}
+
+type CupboardItemKey = keyof typeof CupboardItems;
+export type CupboardItemType = (typeof CupboardItems)[CupboardItemKey];
 
 export const InventoryItems = {
   ...FridgeItems,
+  ...FreeStuff,
+  ...Miscelaneous,
+  ...FreezerItems,
+  ...CupboardItems,
 };
 
-export type InventoryItem = typeof InventoryItems;
+export type InventoryItemType =
+  | FridgeItemType
+  | FreeStuff
+  | MiscelaneousType
+  | FreezerItemType
+  | CupboardItemType;
