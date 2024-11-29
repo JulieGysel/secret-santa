@@ -1,5 +1,5 @@
 import React from 'react';
-import { InventoryItem } from '../sections/inventory';
+import { InventoryItemType } from '../sections/inventory';
 
 export enum RoomType {
   BEDROOM = 'Bedroom',
@@ -16,8 +16,8 @@ export type GameContextType = {
   setRoom: React.Dispatch<React.SetStateAction<RoomType | undefined>>;
   progress: number;
   setProgress: (progress: number) => void;
-  inventory: InventoryItem[];
-  addToInventory: (item: InventoryItem) => void;
+  inventory: InventoryItemType[];
+  addToInventory: (item: InventoryItemType) => void;
   paintingDown: boolean;
   setPaintingDown: (down: boolean) => void;
   tennisGames: number | undefined;

@@ -5,6 +5,7 @@ import { Inventory } from './Inventory';
 import { RoomType, useGameContext } from '../hooks/GameContext';
 import { Basement, Bedroom, CommonRoom, Kitchen, TVRoom } from './rooms';
 import { Tooltip } from 'primereact/tooltip';
+import { ChatContextProvider } from '../hooks/ChatContextProvider';
 
 export const Main = () => {
   const context = useGameContext();
@@ -38,7 +39,9 @@ export const Main = () => {
       <div className="grid">
         <div className="col col-0">{room}</div>
         <div className="col col-3">
-          <Chat />
+          <ChatContextProvider>
+            <Chat />
+          </ChatContextProvider>
         </div>
       </div>
       <div className="flex-grow-1"></div>

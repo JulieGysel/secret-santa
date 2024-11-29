@@ -4,8 +4,18 @@ import { Badge } from 'primereact/badge';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 import { ChipProps, Chip } from 'primereact/chip';
+import { useChatContext } from '../hooks/ChatContext';
+import { InputText } from 'primereact/inputtext';
 
 export const Chat = () => {
+  const { messages, likeMessage, addMessage } = useChatContext();
+  const [newMessage, setNewMessage] = React.useState('');
+
+  const onSubmit = React.useCallback(() => {
+    addMessage({ message: newMessage, author: 'A', liked: false });
+    setNewMessage('');
+  }, [addMessage, newMessage]);
+
   const chipTemplate = (props: ChipProps) => (
     <>
       {props.label}
@@ -17,30 +27,49 @@ export const Chat = () => {
     <Card
       title={'Pølsefest'}
       footer={
-        <div className="flex justify-content-end">
-          <Button
-            rounded
-            icon="pi pi-send"
-            iconPos="right"
-            aria-label="Send a message"
-            tooltip="Send a message"
-            tooltipOptions={{ position: 'left' }}
-          />
-        </div>
+        <form onSubmit={onSubmit}>
+          <div className="flex justify-content-end gap-2">
+            <InputText
+              value={newMessage}
+              className="w-full border-round-3xl"
+              onChange={(e) => setNewMessage(e.target.value)}
+            />
+            <div>
+              <Button
+                rounded
+                icon="pi pi-send"
+                iconPos="right"
+                aria-label="Send a message"
+                tooltip="Send a message"
+                tooltipOptions={{ position: 'left' }}
+                type="submit"
+              />
+            </div>
+          </div>
+        </form>
       }
-      pt={{ content: { className: 'flex flex-column gap-3 h-full' } }}
+      pt={{ content: { className: 'flex flex-column gap-3 h-full max-h-25rem overflow-y-auto' } }}
     >
-      <div className="flex gap-1">
-        <Avatar label="A" shape="circle" className="mr-2" />
-        <Chip label="This is a test message." className="p-overlay-badge" template={chipTemplate}>
-          <Badge value={'❤'} className="p-overlay-badge" severity={'danger'} />
-        </Chip>
-      </div>
-
-      <div className="flex flex-row-reverse	gap-1">
-        <Avatar label="B" shape="circle" className="mr-2" />
-        <Chip label="This is another test message." pt={{ root: { className: 'bg-primary' } }} />
-      </div>
+      {messages.map(({ message, author, liked, id }) => (
+        <div className={`flex gap-1 ${author === 'A' && 'flex-row-reverse'}`}>
+          <Avatar label={author} shape="circle" className="mr-2" />
+          <Chip
+            label={message}
+            className="p-overlay-badge p-2 px-3"
+            template={chipTemplate}
+            onClick={() => {
+              if (!liked) {
+                console.log('liking', id);
+                likeMessage(id);
+              }
+            }}
+            style={{ cursor: liked ? 'default' : 'pointer' }}
+            pt={{ root: { className: author === 'A' ? 'bg-primary' : '' } }}
+          >
+            {liked && <Badge value={'❤'} className="p-overlay-badge" severity={'danger'} />}
+          </Chip>
+        </div>
+      ))}
     </Card>
   );
 };
