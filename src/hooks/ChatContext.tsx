@@ -10,7 +10,7 @@ export type MessageType = {
 export type ChatContextType = {
   messages: MessageType[];
   likeMessage: (id: number) => void;
-  addMessage: (message: Omit<MessageType, 'id'>) => void;
+  addMessage: (message: Omit<MessageType, 'id'>[]) => void;
 };
 
 export const ChatContext = React.createContext<ChatContextType | null>(null);

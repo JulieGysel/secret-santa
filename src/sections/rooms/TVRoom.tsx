@@ -91,7 +91,7 @@ export const TVRoom = () => {
   };
 
   const roomActions = [
-    <div className="flex-grow-1"></div>,
+    <div className="flex-grow-1" key={'span'}></div>,
     <Button
       label="Complain about Santa"
       outlined
@@ -100,6 +100,7 @@ export const TVRoom = () => {
         setVisible(true);
         setDialogContent('');
       }}
+      key={'complain'}
     />,
     <Button
       label="Leave the room"
@@ -109,11 +110,17 @@ export const TVRoom = () => {
         setVisible(true);
         setDialogContent(<RoomSwitch closeModal={closeModal} />);
       }}
+      key={'leave'}
     />,
   ];
 
   const roomItems = [
-    <MenuButton label="TV" items={tvActions} disabledReason="No movie is currently playing." />,
+    <MenuButton
+      label="TV"
+      items={tvActions}
+      disabledReason="No movie is currently playing."
+      key={'tv'}
+    />,
     <MenuButton
       label="Board game stack"
       items={[
@@ -134,6 +141,7 @@ export const TVRoom = () => {
           },
         },
       ]}
+      key={'board-games'}
     />,
     <MenuButton
       label="Outside doors"
@@ -146,6 +154,7 @@ export const TVRoom = () => {
           },
         },
       ]}
+      key={'doors'}
     />,
   ];
 

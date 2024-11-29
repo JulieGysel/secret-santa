@@ -16,14 +16,53 @@ const getMovieMessage = (movie: string) => {
   return messages[Math.floor(Math.random() * 100) % messages.length];
 };
 
+enum MessageTypes {
+  door = 'door',
+  search = 'search',
+}
+
+const messageTypes = Object.keys(MessageTypes);
+const items = ['scissors', 'a hair dryer', 'some tape'];
+
+const getRandMessage = (): Omit<MessageType, 'id'>[] => {
+  const messageType = messageTypes[Math.floor(Math.random() * 100) % messageTypes.length];
+
+  switch (messageType) {
+    case MessageTypes.door:
+      return [
+        { message: 'Will someone let me in?', author: 'B', liked: false },
+        { message: 'In', author: 'B', liked: false },
+      ];
+    case MessageTypes.search:
+      return [
+        {
+          message: `Does anybody have ${items[Math.floor(Math.random() * 100) % items.length]}?`,
+          author: 'D',
+          liked: false,
+        },
+      ];
+    default:
+      return [];
+  }
+};
+
 export const ChatContextProvider = ({ children }: { children: React.ReactNode }) => {
   const { movie } = useGameContext();
   const [messages, setMessages] = React.useState<MessageType[]>([]);
   const [sendMovie, setSendMovie] = React.useState(true);
 
   const addMessage = React.useCallback(
-    (message: Omit<MessageType, 'id'>) => {
-      setMessages([...messages, { ...message, id: messages.length }]);
+    (newMessages: Omit<MessageType, 'id'>[]) => {
+      let index = messages.length - 1;
+      const newMessagesWithId = newMessages.map((message) => {
+        index++;
+        return {
+          ...message,
+          id: index,
+        };
+      }) as MessageType[];
+
+      setMessages([...messages, ...newMessagesWithId]);
     },
     [messages],
   );
@@ -31,11 +70,13 @@ export const ChatContextProvider = ({ children }: { children: React.ReactNode })
   React.useEffect(() => {
     if (movie) {
       if (sendMovie) {
-        addMessage({
-          message: getMovieMessage(movie),
-          author: 'X',
-          liked: false,
-        });
+        addMessage([
+          {
+            message: getMovieMessage(movie),
+            author: 'X',
+            liked: false,
+          },
+        ]);
         setSendMovie(false);
       }
     } else {
@@ -59,12 +100,16 @@ export const ChatContextProvider = ({ children }: { children: React.ReactNode })
   React.useEffect(() => {
     const randomizeValue = () => {
       const clearAfter = Math.random() * 1000 * 7 + 1000 * 10;
+      const addMessages = getRandMessage();
+      console.log('new randm messages', addMessages);
+
+      addMessage(addMessages);
       setTimeout(() => {}, clearAfter); // Clear the value after the random time
     };
 
     const interval = setInterval(randomizeValue, 1000 * 30); // Trigger every 60 seconds
     return () => clearInterval(interval);
-  }, []);
+  }, [addMessage]);
 
   const value: ChatContextType = React.useMemo(
     () => ({ messages, likeMessage, addMessage }),

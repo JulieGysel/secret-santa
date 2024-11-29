@@ -7,7 +7,11 @@ export const Inventory = () => {
   const { inventory } = useGameContext();
 
   return (
-    <Card title={'Inventory'} pt={{ content: { className: 'white-space-nowrap	overflow-x-auto' } }}>
+    <Card
+      title={'Inventory'}
+      pt={{ content: { className: 'white-space-nowrap	overflow-x-auto' } }}
+      className="flex-grow-0"
+    >
       {inventory.map((item, i) => (
         <Button
           label={item}

@@ -27,24 +27,22 @@ export const Main = () => {
   }, [context.room]);
 
   return (
-    <div className="p-2 flex flex-column gap-2 h-screen">
-      <Tooltip target={'.progress_bar'} />
+    <div className="flex flex-column gap-2 p-2 h-screen">
       <ProgressBar
         value={context.progress}
         color="#B73E43"
-        className="progress_bar"
+        className="progress_bar flex-grow-0"
         data-pr-tooltip="You are this close to making Santa leave"
         data-pr-position="mouse"
       />
-      <div className="grid">
-        <div className="col col-0">{room}</div>
-        <div className="col col-3">
+      <div className="flex-grow-1 grid w-full">
+        <div className="col">{room}</div>
+        <div className="col col-4">
           <ChatContextProvider>
             <Chat />
           </ChatContextProvider>
         </div>
       </div>
-      <div className="flex-grow-1"></div>
       <Inventory />
     </div>
   );
