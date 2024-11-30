@@ -93,4 +93,25 @@ export const ReusableItems: InventoryItemType[] = [
   CupboardItems.spatula,
   CupboardItems.sugar,
   CupboardItems.flour,
+  FridgeItems.eggs,
 ];
+
+export const AcceptableGifts: InventoryItemType[] = [
+  CookedItems.cookedAppleSlices,
+  CookedItems.cookies,
+  CookedItems.eggnog,
+  FridgeItems.carrots,
+  FridgeItems.beer,
+];
+
+export const getGiftValue = (item: InventoryItemType) => {
+  switch (item) {
+    case InventoryItems.cookedAppleSlices:
+    case InventoryItems.eggnog:
+      return 5;
+    case InventoryItems.cookieRecipe:
+      return 20;
+    default:
+      return 0;
+  }
+};

@@ -96,7 +96,7 @@ const recipeList: { [key: string]: Recipe } = {
   },
 };
 
-const CookingSection = () => {
+const CookingSection = ({ closeModal }: { closeModal: VoidFunction }) => {
   const { inventory, cookRecipe } = useGameContext();
   const options = Object.values(recipeList).map(({ name, value, requires }) => ({
     value,
@@ -136,8 +136,9 @@ const CookingSection = () => {
       console.log('using up', usedItems);
       cookRecipe(usedItems, currentRecipe);
       setCurrentRecipe(undefined);
+      closeModal();
     }
-  }, [currentRecipe, cookRecipe]);
+  }, [currentRecipe, cookRecipe, closeModal]);
 
   return (
     <>
@@ -151,6 +152,7 @@ const CookingSection = () => {
           placeholder="Select a recipe"
           className="w-5"
           itemTemplate={itemTemplate}
+          pt={{ wrapper: { className: 'max-h-full	w-5' } }}
         />
         <Button label="Cook" disabled={!currentRecipe} onClick={onCook} />
       </div>
@@ -186,7 +188,7 @@ export const Kitchen = () => {
       severity="secondary"
       onClick={() => {
         setVisible(true);
-        setDialogContent(<CookingSection />);
+        setDialogContent(<CookingSection closeModal={closeModal} />);
       }}
     />,
     <div className="flex-grow-1"></div>,

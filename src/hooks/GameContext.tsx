@@ -15,11 +15,12 @@ export type GameContextType = {
   room: RoomType | undefined;
   setRoom: React.Dispatch<React.SetStateAction<RoomType | undefined>>;
   progress: number;
-  setProgress: (progress: number) => void;
+  makeProgress: (inc: number) => void;
   inventory: InventoryItemType[];
   addToInventory: (item: InventoryItemType) => void;
   usedUp: InventoryItemType[];
   cookRecipe: (items: InventoryItemType[], recipe: CookedItemKey) => void;
+  giftItem: (gift: InventoryItemType) => void;
   paintingDown: boolean;
   setPaintingDown: (down: boolean) => void;
   tennisGames: number | undefined;

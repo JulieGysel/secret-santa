@@ -4,8 +4,15 @@ import { Dialog } from 'primereact/dialog';
 import { MenuButton } from '../../components/MenuButton';
 import { Button } from 'primereact/button';
 import { RoomSwitch } from '../RoomSwitch';
-import { FridgeItems, GrabItem } from '../inventory';
+import {
+  AcceptableGifts,
+  FridgeItems,
+  getGiftValue,
+  GrabItem,
+  InventoryItemType,
+} from '../inventory';
 import { useGameContext } from '../../hooks/GameContext';
+import { Dropdown } from 'primereact/dropdown';
 
 const endingLines = [
   <p>Well, except for fucking Santa who's decided to move in for some reason.</p>,
@@ -34,6 +41,46 @@ const FridgeItemSection = () => {
   );
 };
 
+const GiftSection = () => {
+  const [gift, setGift] = React.useState<InventoryItemType>();
+  const { inventory, giftItem, makeProgress } = useGameContext();
+
+  const options = React.useMemo(
+    () => inventory.map((item) => ({ name: item, value: item })),
+    [inventory],
+  );
+
+  const onGift = React.useCallback(() => {
+    console.log('atempting to gift', gift);
+    if (gift && AcceptableGifts.includes(gift)) {
+      console.log('gift accepted!');
+
+      giftItem(gift);
+      makeProgress(getGiftValue(gift));
+
+      setGift(undefined);
+    }
+  }, [gift, giftItem, makeProgress]);
+
+  return (
+    <>
+      <p>What would you like to give to Santa?</p>
+      <div className="flex gap-2">
+        <Dropdown
+          value={gift}
+          options={options}
+          placeholder="Choose your gift"
+          onChange={(e) => setGift(e.value)}
+          optionLabel="name"
+          className="w-6"
+        />
+
+        <Button label="Gift" disabled={!gift} onClick={onGift} />
+      </div>
+    </>
+  );
+};
+
 export const Bedroom = () => {
   const [visible, setVisible] = React.useState(false);
   const [dialogContent, setDialogContent] = React.useState<string | React.ReactNode>();
@@ -56,7 +103,13 @@ export const Bedroom = () => {
         { label: 'Let Santa complain' },
         { label: 'Invite to watch a movie' },
         { label: "Point out it's snowing" },
-        { label: 'Give something to Santa' },
+        {
+          label: 'Give something to Santa',
+          command: () => {
+            setVisible(true);
+            setDialogContent(<GiftSection />);
+          },
+        },
       ]}
     />,
     <div className="flex-grow-1"></div>,
