@@ -10,6 +10,17 @@ import { InputText } from 'primereact/inputtext';
 export const Chat = () => {
   const { messages, likeMessage, addMessage } = useChatContext();
   const [newMessage, setNewMessage] = React.useState('');
+  // const [offsetHeight, setOffsetHeight] = React.useState<number>();
+  // const chatRef = React.useRef<HTMLElement | null>(null);
+  // const [documentHeight, setDocumentHeight] = React.useState<number>();
+
+  // const observer = new ResizeObserver((entries) => {
+  //   for (const entry of entries) {
+  //     console.log('document height', entry.contentRect.height);
+  //     setDocumentHeight(entry.contentRect.height);
+  //   }
+  // });
+  // observer.observe(document.querySelector('body'));
 
   const onSubmit = React.useCallback(
     (e: React.SyntheticEvent) => {
@@ -27,12 +38,20 @@ export const Chat = () => {
     </>
   );
 
-  React.useEffect(() => {
-    const div = document.getElementsByClassName('scrollableContent')[0] as HTMLElement;
-    if (div) {
-      div.setAttribute('style', `max-height: ${div.offsetHeight}px`);
-    }
-  }, []);
+  // React.useEffect(() => {
+  //   // const div = document.getElementsByClassName('scrollableContent')[0] as HTMLElement;
+  //   if (chatRef.current) {
+  //     setOffsetHeight(chatRef.current.offsetHeight);
+  //     console.log('chat height', chatRef.current.offsetHeight);
+  //   }
+  // }, [offsetHeight, documentHeight]);
+
+  // React.useEffect(() => {
+  //   // const div = document.getElementsByClassName('scrollableContent')[0] as HTMLElement;
+  //   if (chatRef.current) {
+  //     chatRef.current.setAttribute('style', `max-height: ${offsetHeight}px`);
+  //   }
+  // }, [offsetHeight]);
 
   return (
     <Card
@@ -61,7 +80,8 @@ export const Chat = () => {
       }
       pt={{
         content: {
-          className: 'flex flex-column gap-3 flex-grow-1 overflow-y-auto scrollableContent',
+          className: 'flex flex-column gap-3 flex-grow-1 overflow-y-auto',
+          style: { height: '0' },
         },
         body: {
           className: 'h-full flex flex-column',
