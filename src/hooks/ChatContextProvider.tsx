@@ -101,7 +101,6 @@ export const ChatContextProvider = ({ children }: { children: React.ReactNode })
     const randomizeValue = () => {
       const clearAfter = Math.random() * 1000 * 7 + 1000 * 10;
       const addMessages = getRandMessage();
-      console.log('new randm messages', addMessages);
 
       addMessage(addMessages);
       setTimeout(() => {}, clearAfter); // Clear the value after the random time
