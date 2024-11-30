@@ -8,8 +8,10 @@ import { useGameContext } from '../../hooks/GameContext';
 import { FreezerItems, GrabItem, Miscelaneous } from '../inventory';
 
 const Freezer = () => {
-  const { inventory } = useGameContext();
-  const freezerItems = Object.values(FreezerItems).filter((item) => !inventory.includes(item));
+  const { inventory, usedUp } = useGameContext();
+  const freezerItems = Object.values(FreezerItems)
+    .filter((item) => !inventory.includes(item))
+    .filter((item) => !usedUp.includes(item));
 
   return (
     <>

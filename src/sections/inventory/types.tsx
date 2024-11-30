@@ -26,8 +26,8 @@ export type FreeStuffType = (typeof FreeStuff)[FreeStuffKey];
 
 export enum Miscelaneous {
   painting = 'Painting',
-  rum = 'Half empty bottle of rum',
-  sheetPan = 'Sheet pan',
+  rum = 'Half a bottle of rum',
+  bakingTray = 'Baking tray',
   paper = 'Wrapping paper',
   cookieRecipe = 'Cookie recipe',
 }
@@ -38,7 +38,7 @@ export type MiscelaneousType = (typeof Miscelaneous)[MiscelaneousKey];
 export enum FreezerItems {
   bread = 'Bread',
   veg = 'Frozen vegetables',
-  appleSlices = 'Æbleskiver',
+  appleSlices = 'Æbleskiver (frozen)',
   meat = 'Frozen meat',
   iceLolly = 'Ice Lolly (grape flavoured)',
   ice = 'Ice cubes',
@@ -59,12 +59,22 @@ export enum CupboardItems {
 type CupboardItemKey = keyof typeof CupboardItems;
 export type CupboardItemType = (typeof CupboardItems)[CupboardItemKey];
 
+export enum CookedItems {
+  cookedAppleSlices = 'Æbleskiver',
+  cookies = 'Cookies',
+  eggnog = 'Eggnog',
+}
+
+export type CookedItemKey = keyof typeof CookedItems;
+export type CookedItemType = (typeof CookedItems)[CookedItemKey];
+
 export const InventoryItems = {
   ...FridgeItems,
   ...FreeStuff,
   ...Miscelaneous,
   ...FreezerItems,
   ...CupboardItems,
+  ...CookedItems,
 };
 
 export type InventoryItemType =
@@ -72,4 +82,15 @@ export type InventoryItemType =
   | FreeStuff
   | MiscelaneousType
   | FreezerItemType
-  | CupboardItemType;
+  | CupboardItemType
+  | CookedItemType;
+
+export const ReusableItems: InventoryItemType[] = [
+  Miscelaneous.bakingTray,
+  FreeStuff.pan,
+  FreeStuff.scissors,
+  CupboardItems.bowl,
+  CupboardItems.spatula,
+  CupboardItems.sugar,
+  CupboardItems.flour,
+];

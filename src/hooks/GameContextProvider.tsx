@@ -1,6 +1,6 @@
 import React from 'react';
 import { GameContext, RoomType } from './GameContext';
-import { InventoryItemType } from '../sections/inventory';
+import { CookedItemKey, CookedItems, InventoryItemType } from '../sections/inventory';
 
 const setCookie = (key: string, value: string | number) => {
   document.cookie = `${key}=${value};path=/;`;
@@ -48,6 +48,7 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
   const [room, setRoom] = React.useState<RoomType>();
   const [progress, setProgress] = React.useState(0);
   const [inventory, setInventory] = React.useState<InventoryItemType[]>([]);
+  const [usedUp, setUsedUp] = React.useState<InventoryItemType[]>([]);
   const [paintingDown, setPaintingDown] = React.useState(true);
 
   const [tennisGames, setTennisGames] = React.useState<number>();
@@ -61,6 +62,11 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
     const inv = getCookie('inventory').split(',');
     if (!(inv.length === 1 && inv[0] === '')) {
       setInventory(inv as InventoryItemType[]);
+    }
+
+    const used = getCookie('usedUp').split(',');
+    if (!(used.length === 1 && used[0] === '')) {
+      setUsedUp(used as InventoryItemType[]);
     }
 
     const r = getCookie('room') as RoomType;
@@ -97,9 +103,24 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
   const addToInventory = React.useCallback(
     (item: InventoryItemType) => {
       setInventory([...inventory, item]);
-      setCookie('inventory', inventory.join(','));
+      setCookie('inventory', [...inventory, item].join(','));
     },
     [inventory],
+  );
+
+  const cookRecipe = React.useCallback(
+    (items: InventoryItemType[], recipe: CookedItemKey) => {
+      const newUsedUp = [...usedUp, ...items];
+      setUsedUp(newUsedUp);
+      setCookie('usedUp', newUsedUp.join(','));
+
+      const newInventory = inventory
+        .filter((item) => !items.includes(item))
+        .concat(CookedItems[recipe]);
+      setInventory(newInventory);
+      setCookie('inventory', newInventory.join(','));
+    },
+    [inventory, usedUp],
   );
 
   React.useEffect(() => {
@@ -150,6 +171,8 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
       setProgress,
       inventory,
       addToInventory,
+      usedUp,
+      cookRecipe,
       paintingDown,
       setPaintingDown,
       tennisGames,
@@ -159,15 +182,17 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
       movie,
     }),
     [
-      addToInventory,
-      footballGames,
-      inventory,
-      movie,
-      paintingDown,
-      progress,
-      room,
       showIntro,
+      room,
+      progress,
+      inventory,
+      addToInventory,
+      usedUp,
+      cookRecipe,
+      paintingDown,
       tennisGames,
+      footballGames,
+      movie,
     ],
   );
 

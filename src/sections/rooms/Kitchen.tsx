@@ -5,7 +5,18 @@ import { MenuButton } from '../../components/MenuButton';
 import { Button } from 'primereact/button';
 import { RoomSwitch } from '../RoomSwitch';
 import { useGameContext } from '../../hooks/GameContext';
-import { CupboardItems, GrabItem, Miscelaneous } from '../inventory';
+import {
+  CookedItemKey,
+  CookedItems,
+  CookedItemType,
+  CupboardItems,
+  GrabItem,
+  InventoryItems,
+  InventoryItemType,
+  Miscelaneous,
+  ReusableItems,
+} from '../inventory';
+import { Dropdown } from 'primereact/dropdown';
 
 const Trash = () => {
   const { inventory } = useGameContext();
@@ -25,7 +36,7 @@ const Trash = () => {
 
 const Oven = () => {
   const { inventory } = useGameContext();
-  const panAvailable = !inventory.includes(Miscelaneous.sheetPan);
+  const panAvailable = !inventory.includes(Miscelaneous.bakingTray);
 
   return (
     <>
@@ -33,7 +44,7 @@ const Oven = () => {
       <p>It's an oven.</p>
       {panAvailable && (
         <div className="flex flex-wrap gap-2">
-          <GrabItem item={Miscelaneous.sheetPan} />
+          <GrabItem item={Miscelaneous.bakingTray} />
         </div>
       )}
     </>
@@ -55,6 +66,93 @@ const Cupboard = () => {
         {cupboardItems.map((item, i) => (
           <GrabItem item={item} key={`grab-item-${i}`} />
         ))}
+      </div>
+    </>
+  );
+};
+
+type Recipe = { name: CookedItemType; value: CookedItemKey; requires: InventoryItemType[] };
+
+const recipeList: { [key: string]: Recipe } = {
+  cookies: {
+    value: 'cookies',
+    name: CookedItems.cookies,
+    requires: [
+      InventoryItems.cookieRecipe,
+      InventoryItems.bakingTray,
+      InventoryItems.eggs,
+      InventoryItems.flour,
+    ],
+  },
+  eggnog: {
+    value: 'eggnog',
+    name: CookedItems.eggnog,
+    requires: [InventoryItems.cream, InventoryItems.rum, InventoryItems.eggs],
+  },
+  cookedAppleSlices: {
+    value: 'cookedAppleSlices',
+    name: CookedItems.cookedAppleSlices,
+    requires: [InventoryItems.bakingTray, InventoryItems.sugar, InventoryItems.appleSlices],
+  },
+};
+
+const CookingSection = () => {
+  const { inventory, cookRecipe } = useGameContext();
+  const options = Object.values(recipeList).map(({ name, value, requires }) => ({
+    value,
+    name,
+    disabled: !requires.every((ingredient) => inventory.includes(ingredient)),
+  }));
+
+  const [currentRecipe, setCurrentRecipe] = React.useState();
+
+  React.useEffect(() => {
+    if (currentRecipe) {
+      console.log(currentRecipe, recipeList[currentRecipe]);
+    }
+  }, [currentRecipe]);
+
+  const itemTemplate = (option: Recipe) => {
+    return (
+      <div className="flex flex-column">
+        <div>{option.name}</div>
+        <div className="text-xs">
+          Requires:{' '}
+          {recipeList[option.value].requires
+            .map((ingredient) => ingredient.toLowerCase())
+            .join(', ')}
+        </div>
+      </div>
+    );
+  };
+
+  const onCook = React.useCallback(() => {
+    if (currentRecipe) {
+      console.log('cooking ', currentRecipe);
+      const usedItems = recipeList[currentRecipe].requires.filter(
+        (item) => !Object.values(ReusableItems).includes(item),
+      );
+
+      console.log('using up', usedItems);
+      cookRecipe(usedItems, currentRecipe);
+      setCurrentRecipe(undefined);
+    }
+  }, [currentRecipe, cookRecipe]);
+
+  return (
+    <>
+      <p>What do you want to cook today?</p>
+      <div className="flex gap-2">
+        <Dropdown
+          value={currentRecipe}
+          options={options}
+          onChange={(e) => setCurrentRecipe(e.value)}
+          optionLabel={'name'}
+          placeholder="Select a recipe"
+          className="w-5"
+          itemTemplate={itemTemplate}
+        />
+        <Button label="Cook" disabled={!currentRecipe} onClick={onCook} />
       </div>
     </>
   );
@@ -88,7 +186,7 @@ export const Kitchen = () => {
       severity="secondary"
       onClick={() => {
         setVisible(true);
-        setDialogContent('You think you can cook?');
+        setDialogContent(<CookingSection />);
       }}
     />,
     <div className="flex-grow-1"></div>,

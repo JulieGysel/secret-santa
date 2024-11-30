@@ -1,5 +1,5 @@
 import React from 'react';
-import { InventoryItemType } from '../sections/inventory';
+import { CookedItemKey, InventoryItemType } from '../sections/inventory';
 
 export enum RoomType {
   BEDROOM = 'Bedroom',
@@ -18,6 +18,8 @@ export type GameContextType = {
   setProgress: (progress: number) => void;
   inventory: InventoryItemType[];
   addToInventory: (item: InventoryItemType) => void;
+  usedUp: InventoryItemType[];
+  cookRecipe: (items: InventoryItemType[], recipe: CookedItemKey) => void;
   paintingDown: boolean;
   setPaintingDown: (down: boolean) => void;
   tennisGames: number | undefined;
