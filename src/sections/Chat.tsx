@@ -11,10 +11,14 @@ export const Chat = () => {
   const { messages, likeMessage, addMessage } = useChatContext();
   const [newMessage, setNewMessage] = React.useState('');
 
-  const onSubmit = React.useCallback(() => {
-    addMessage([{ message: newMessage, author: 'A', liked: false }]);
-    setNewMessage('');
-  }, [addMessage, newMessage]);
+  const onSubmit = React.useCallback(
+    (e: React.SyntheticEvent) => {
+      e.preventDefault();
+      addMessage([{ message: newMessage, author: 'A', liked: false }]);
+      setNewMessage('');
+    },
+    [addMessage, newMessage],
+  );
 
   const chipTemplate = (props: ChipProps) => (
     <>
