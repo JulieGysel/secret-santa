@@ -32,6 +32,14 @@ const movies = [
   'The Polar Express',
   'Pretty Woman',
   'Star Wars Holiday Special',
+  'Hot Frosty',
+  'Harry Potter',
+  'How the Grinch Stole Christmas',
+  'The Holiday',
+  'Gremlins',
+  'A Christmas Carol',
+  'Frozen',
+  'The Grinch',
 ];
 
 export const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
