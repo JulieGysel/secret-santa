@@ -11,7 +11,7 @@ export const MenuButton = ({
   items: MenuProps['model'];
   disabledReason?: string;
 }) => {
-  const menuRef = React.useRef(null);
+  const menuRef = React.useRef<Menu | null>(null);
 
   return (
     <>

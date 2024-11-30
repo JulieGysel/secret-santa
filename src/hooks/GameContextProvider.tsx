@@ -1,11 +1,6 @@
 import React from 'react';
 import { GameContext, RoomType } from './GameContext';
-import {
-  CookedItemKey,
-  CookedItems,
-  InventoryItems,
-  InventoryItemType,
-} from '../sections/inventory';
+import { CookedItemKey, CookedItems, InventoryItemType } from '../sections/inventory';
 
 const setCookie = (key: string, value: string | number) => {
   document.cookie = `${key}=${value};path=/;`;

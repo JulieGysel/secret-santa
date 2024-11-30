@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import { Intro } from './sections/Intro';
 import { GameContextProvider } from './hooks/GameContextProvider';
 import { Main } from './sections/Main';

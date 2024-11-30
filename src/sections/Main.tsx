@@ -4,7 +4,6 @@ import { Chat } from './Chat';
 import { Inventory } from './Inventory';
 import { RoomType, useGameContext } from '../hooks/GameContext';
 import { Basement, Bedroom, CommonRoom, Kitchen, TVRoom } from './rooms';
-import { Tooltip } from 'primereact/tooltip';
 import { ChatContextProvider } from '../hooks/ChatContextProvider';
 
 export const Main = () => {

@@ -94,7 +94,7 @@ export const Basement = () => {
           label: 'Play a game',
           command: () => {
             setVisible(true);
-            setTennisGames(tennisGames + 1);
+            setTennisGames((tennisGames || 0) + 1);
             setDialogContent(
               <>
                 <p>
@@ -103,7 +103,7 @@ export const Basement = () => {
                 </p>
                 <p>
                   {/* todo: games won statistic */}
-                  {Math.random() < Math.min(tennisGames / 33, 1)
+                  {Math.random() < Math.min((tennisGames || 0) / 33, 1)
                     ? 'Congratulations! You won this time!'
                     : "You lost the game. But that's okay, these things take practice."}
                 </p>
@@ -120,7 +120,7 @@ export const Basement = () => {
           label: 'Play a game',
           command: () => {
             setVisible(true);
-            setFootballGames(footballGames + 1);
+            setFootballGames((footballGames || 0) + 1);
             setDialogContent(
               <>
                 <p>
@@ -129,7 +129,7 @@ export const Basement = () => {
                 </p>
                 <p>
                   {/* todo: games won statistic */}
-                  {Math.random() < Math.min(footballGames / 33, 1)
+                  {Math.random() < Math.min((footballGames || 0) / 33, 1)
                     ? 'Congratulations! You won this time!'
                     : 'You lost the game. But perhaps you will have more luck next time?'}
                 </p>
