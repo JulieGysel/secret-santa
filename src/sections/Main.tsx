@@ -34,9 +34,9 @@ export const Main = () => {
         data-pr-tooltip="You are this close to making Santa leave"
         data-pr-position="mouse"
       />
-      <div className="flex-grow-1 grid w-full m-auto">
-        <div className="col pl-0">{room}</div>
-        <div className="col col-4 pr-0">
+      <div className="flex-grow-1 flex gap-2 w-full m-auto">
+        <div className="flex-grow-1">{room}</div>
+        <div className="flex-grow-0 w-4 max-w-30rem	">
           <ChatContextProvider>
             <Chat />
           </ChatContextProvider>

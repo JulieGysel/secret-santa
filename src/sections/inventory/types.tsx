@@ -54,6 +54,7 @@ export enum CupboardItems {
   spatula = 'Spatula',
   plates = 'Plates',
   utensils = 'Utensils',
+  cinnamon = 'Cinnamon',
 }
 
 type CupboardItemKey = keyof typeof CupboardItems;
@@ -86,14 +87,11 @@ export type InventoryItemType =
   | CookedItemType;
 
 export const ReusableItems: InventoryItemType[] = [
-  Miscelaneous.bakingTray,
-  FreeStuff.pan,
-  FreeStuff.scissors,
-  CupboardItems.bowl,
-  CupboardItems.spatula,
   CupboardItems.sugar,
-  CupboardItems.flour,
   FridgeItems.eggs,
+  CupboardItems.cinnamon,
+
+  FreeStuff.scissors,
 ];
 
 export const AcceptableGifts: InventoryItemType[] = [
@@ -109,7 +107,7 @@ export const getGiftValue = (item: InventoryItemType) => {
     case InventoryItems.cookedAppleSlices:
     case InventoryItems.eggnog:
       return 5;
-    case InventoryItems.cookieRecipe:
+    case InventoryItems.cookies:
       return 20;
     default:
       return 0;

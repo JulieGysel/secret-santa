@@ -73,26 +73,40 @@ const Cupboard = () => {
 
 type Recipe = { name: CookedItemType; value: CookedItemKey; requires: InventoryItemType[] };
 
-const recipeList: { [key: string]: Recipe } = {
+const recipeList: { [key in CookedItemKey]: Recipe } = {
+  cookedAppleSlices: {
+    value: 'cookedAppleSlices',
+    name: CookedItems.cookedAppleSlices,
+    requires: [InventoryItems.bakingTray, InventoryItems.appleSlices, InventoryItems.sugar],
+  },
   cookies: {
     value: 'cookies',
     name: CookedItems.cookies,
     requires: [
-      InventoryItems.cookieRecipe,
+      InventoryItems.bowl,
+      InventoryItems.spatula,
       InventoryItems.bakingTray,
+
+      InventoryItems.cookieRecipe,
       InventoryItems.eggs,
+      InventoryItems.butter,
       InventoryItems.flour,
+      InventoryItems.sugar,
+      InventoryItems.cinnamon,
     ],
   },
   eggnog: {
     value: 'eggnog',
     name: CookedItems.eggnog,
-    requires: [InventoryItems.cream, InventoryItems.rum, InventoryItems.eggs],
-  },
-  cookedAppleSlices: {
-    value: 'cookedAppleSlices',
-    name: CookedItems.cookedAppleSlices,
-    requires: [InventoryItems.bakingTray, InventoryItems.sugar, InventoryItems.appleSlices],
+    requires: [
+      InventoryItems.pan,
+
+      InventoryItems.cream,
+      InventoryItems.milk,
+      InventoryItems.eggs,
+      InventoryItems.rum,
+      InventoryItems.cinnamon,
+    ],
   },
 };
 
@@ -152,7 +166,7 @@ const CookingSection = ({ closeModal }: { closeModal: VoidFunction }) => {
           placeholder="Select a recipe"
           className="w-5"
           itemTemplate={itemTemplate}
-          pt={{ wrapper: { className: 'max-h-full	w-5' } }}
+          pt={{ wrapper: { className: 'max-h-full' } }}
         />
         <Button label="Cook" disabled={!currentRecipe} onClick={onCook} />
       </div>

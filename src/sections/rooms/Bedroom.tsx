@@ -6,9 +6,11 @@ import { Button } from 'primereact/button';
 import { RoomSwitch } from '../RoomSwitch';
 import {
   AcceptableGifts,
+  CookedItems,
   FridgeItems,
   getGiftValue,
   GrabItem,
+  InventoryItems,
   InventoryItemType,
 } from '../inventory';
 import { useGameContext } from '../../hooks/GameContext';
@@ -21,8 +23,10 @@ const endingLines = [
 ];
 
 const FridgeItemSection = () => {
-  const { inventory } = useGameContext();
-  const fridgeItems = Object.values(FridgeItems).filter((item) => !inventory.includes(item));
+  const { inventory, usedUp } = useGameContext();
+  const fridgeItems = Object.values(FridgeItems)
+    .filter((item) => !inventory.includes(item))
+    .filter((item) => !usedUp.includes(item));
 
   return (
     <>
@@ -42,6 +46,8 @@ const FridgeItemSection = () => {
 };
 
 const GiftSection = () => {
+  const [isVisible, setVisible] = React.useState(false);
+  const [dialogContent, setDialogContent] = React.useState('');
   const [gift, setGift] = React.useState<InventoryItemType>();
   const { inventory, giftItem, makeProgress } = useGameContext();
 
@@ -54,11 +60,24 @@ const GiftSection = () => {
     console.log('atempting to gift', gift);
     if (gift && AcceptableGifts.includes(gift)) {
       console.log('gift accepted!');
+      setVisible(true);
+
+      setDialogContent(`Santa: “Aww, thank you! I love ${gift}!”`);
 
       giftItem(gift);
       makeProgress(getGiftValue(gift));
 
       setGift(undefined);
+    } else {
+      switch (gift) {
+        case InventoryItems.sugar:
+          setDialogContent('Santa: “Are you trying to give me diabetes?”');
+          break;
+        default:
+          setDialogContent(`Santa: What am I supposed to do with ${gift}?”`);
+          break;
+      }
+      setVisible(true);
     }
   }, [gift, giftItem, makeProgress]);
 
@@ -77,6 +96,20 @@ const GiftSection = () => {
 
         <Button label="Gift" disabled={!gift} onClick={onGift} />
       </div>
+      <Dialog
+        visible={isVisible}
+        onHide={() => setVisible(false)}
+        footer={
+          <Button label="Back" outlined severity="secondary" onClick={() => setVisible(false)} />
+        }
+        dismissableMask
+        draggable={false}
+        resizable={false}
+        closable={false}
+        className="w-5"
+      >
+        <p>{dialogContent}</p>
+      </Dialog>
     </>
   );
 };
@@ -97,14 +130,11 @@ export const Bedroom = () => {
 
   const roomActions = [
     <MenuButton
-      label="Talk to Santa"
+      label="Santa"
       items={[
-        { label: 'Praise Santa' },
-        { label: 'Let Santa complain' },
-        { label: 'Invite to watch a movie' },
-        { label: "Point out it's snowing" },
+        { label: 'Talk to Santa' },
         {
-          label: 'Give something to Santa',
+          label: 'Give a gift to Santa',
           command: () => {
             setVisible(true);
             setDialogContent(<GiftSection />);
