@@ -67,7 +67,7 @@ export const Chat = () => {
     }
   }, [messages]);
 
-  const search = (e: AutoCompleteCompleteEvent) => {
+  const search = (_: AutoCompleteCompleteEvent) => {
     setChatHints([...messageHints]);
   };
 

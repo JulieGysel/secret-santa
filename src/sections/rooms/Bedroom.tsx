@@ -6,7 +6,6 @@ import { Button } from 'primereact/button';
 import { RoomSwitch } from '../RoomSwitch';
 import {
   AcceptableGifts,
-  CookedItems,
   FridgeItems,
   getGiftValue,
   GrabItem,
