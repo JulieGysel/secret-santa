@@ -29,6 +29,8 @@ export type GameContextType = {
   footballGames: number | undefined;
   setFootballGames: (games: number) => void;
   movie: string;
+
+  progressAudioRef: React.RefObject<HTMLAudioElement>;
 };
 
 export const GameContext = React.createContext<GameContextType | null>(null);

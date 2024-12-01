@@ -64,6 +64,7 @@ export const ChatContextProvider = ({ children }: { children: React.ReactNode })
   const { movie } = useGameContext();
   const [messages, setMessages] = React.useState<MessageType[]>([]);
   const [sendMovie, setSendMovie] = React.useState(true);
+  const audioRef = React.useRef<HTMLAudioElement>(null);
 
   const addMessage = React.useCallback(
     (newMessages: Omit<MessageType, 'id'>[]) => {
@@ -77,6 +78,9 @@ export const ChatContextProvider = ({ children }: { children: React.ReactNode })
       }) as MessageType[];
 
       setMessages([...messages, ...newMessagesWithId]);
+      if (newMessages[0].author !== ' ') {
+        audioRef.current?.play();
+      }
     },
     [messages],
   );
@@ -136,8 +140,8 @@ export const ChatContextProvider = ({ children }: { children: React.ReactNode })
         } else if (chance === 1) {
           likeMessage(messages.length - 1);
         }
-      } else if (lastMessage.type === 'door' && lastMessage.liked) {
-        addMessage([{ message: 'In', author: 'B', liked: false, type: 'door' }]);
+      } else if (lastMessage.type === 'door' && lastMessage.liked && lastMessage.message !== 'In') {
+        addMessage([{ message: 'In', author: lastMessage.author, liked: false, type: 'door' }]);
       } else if (lastMessage.type === 'complain') {
         if (chance === 0) {
           addMessage([
@@ -154,11 +158,9 @@ export const ChatContextProvider = ({ children }: { children: React.ReactNode })
   }, [addMessage, likeMessage, messages]);
 
   const value: ChatContextType = React.useMemo(
-    () => ({ messages, likeMessage, addMessage }),
+    () => ({ messages, likeMessage, addMessage, audioRef }),
     [addMessage, likeMessage, messages],
   );
-
-  console.log(messages);
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
 };

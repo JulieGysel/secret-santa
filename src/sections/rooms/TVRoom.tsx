@@ -7,6 +7,9 @@ import { RoomSwitch } from '../RoomSwitch';
 import { useGameContext } from '../../hooks/GameContext';
 import { GrabItem, Miscelaneous } from '../inventory';
 
+import commonSound from '../../audio/common.mp3';
+import movieSound from '../../audio/movie.mp3';
+
 // todo
 const games = ['Settlers of Catan', 'Chess', 'Cards'];
 
@@ -56,6 +59,12 @@ const Movie = ({ movie }: { movie: string }) => {
               </div>
             </Dialog>
           </div>
+          <audio preload="auto" hidden autoPlay loop>
+            <source src={commonSound} type="audio/mpeg" />
+          </audio>
+          <audio preload="auto" hidden autoPlay loop>
+            <source src={movieSound} type="audio/mpeg" />
+          </audio>
         </>
       )}
     </>
@@ -66,6 +75,9 @@ export const TVRoom = () => {
   const [visible, setVisible] = React.useState(false);
   const [dialogContent, setDialogContent] = React.useState<string | React.ReactNode>();
   const { movie } = useGameContext();
+
+  const roomAudioRef = React.useRef<HTMLAudioElement>(null);
+  const movieAudioRef = React.useRef<HTMLAudioElement>(null);
 
   const tvActions = React.useMemo(
     () =>
@@ -158,6 +170,19 @@ export const TVRoom = () => {
     />,
   ];
 
+  React.useEffect(() => {
+    if (movieAudioRef.current && roomAudioRef.current) {
+      console.log(movie || 'no movie');
+      if (movie) {
+        movieAudioRef.current.play();
+        roomAudioRef.current.pause();
+      } else {
+        roomAudioRef.current.play();
+        movieAudioRef.current.pause();
+      }
+    }
+  }, [movie]);
+
   return (
     <>
       <Room
@@ -178,6 +203,13 @@ export const TVRoom = () => {
       >
         {dialogContent}
       </Dialog>
+      <audio ref={roomAudioRef} preload="auto" hidden loop>
+        <source src={commonSound} type="audio/mpeg" />
+      </audio>
+
+      <audio ref={movieAudioRef} preload="auto" hidden loop>
+        <source src={movieSound} type="audio/mpeg" />
+      </audio>
     </>
   );
 };

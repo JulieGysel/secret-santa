@@ -14,6 +14,7 @@ export type ChatContextType = {
   messages: MessageType[];
   likeMessage: (id: number) => void;
   addMessage: (message: NewMessageType[]) => void;
+  audioRef: React.RefObject<HTMLAudioElement>;
 };
 
 export const ChatContext = React.createContext<ChatContextType | null>(null);

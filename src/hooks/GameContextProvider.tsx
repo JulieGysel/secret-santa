@@ -3,7 +3,6 @@ import { GameContext, RoomType } from './GameContext';
 import {
   CookedItemKey,
   CookedItems,
-  InventoryItems,
   InventoryItemType,
   WrappedItemsMap,
 } from '../sections/inventory';
@@ -49,6 +48,8 @@ const movies = [
 ];
 
 export const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
+  const progressAudioRef = React.useRef<HTMLAudioElement>(null);
+
   const [isLoading, setLoading] = React.useState(true);
   const [showIntro, setShowIntro] = React.useState<boolean>(false);
   const [room, setRoom] = React.useState<RoomType>();
@@ -120,6 +121,10 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
     (inc: number) => {
       setProgress(progress + inc);
       setCookie('progress', progress + inc);
+
+      if (inc) {
+        progressAudioRef.current?.play();
+      }
     },
     [progress],
   );
@@ -243,6 +248,7 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
       footballGames,
       setFootballGames,
       movie,
+      progressAudioRef,
     }),
     [
       showIntro,

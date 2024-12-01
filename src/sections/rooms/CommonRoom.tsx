@@ -15,6 +15,8 @@ import {
 } from '../inventory';
 import { Dropdown } from 'primereact/dropdown';
 
+import commonSound from '../../audio/common.mp3';
+
 const FreeStuffSection = () => {
   const { inventory, usedUp } = useGameContext();
   const fridgeItems = Object.values(FreeStuff)
@@ -44,7 +46,7 @@ const MonsteraSection = ({ closeModal }: { closeModal: () => void }) => {
     <>
       <p>The Monstera is a big plant.</p>
 
-      {!inventory.includes(Miscelaneous.painting) && usedUp.includes(Miscelaneous.painting) ? (
+      {!inventory.includes(Miscelaneous.painting) && !usedUp.includes(Miscelaneous.painting) ? (
         <>
           <p>{paintingPos}</p>
           <div className="flex flex-wrap gap-2">
@@ -286,6 +288,9 @@ export const CommonRoom = () => {
       >
         {dialogContent}
       </Dialog>
+      <audio preload="auto" hidden autoPlay loop>
+        <source src={commonSound} type="audio/mpeg" />
+      </audio>
     </>
   );
 };

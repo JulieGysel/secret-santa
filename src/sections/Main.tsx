@@ -6,6 +6,8 @@ import { RoomType, useGameContext } from '../hooks/GameContext';
 import { Basement, Bedroom, CommonRoom, Kitchen, TVRoom } from './rooms';
 import { ChatContextProvider } from '../hooks/ChatContextProvider';
 
+import experience from '../audio/experience.mp3';
+
 export const Main = () => {
   const context = useGameContext();
 
@@ -26,23 +28,28 @@ export const Main = () => {
   }, [context.room]);
 
   return (
-    <div className="flex flex-column gap-2 p-2 h-screen">
-      <ProgressBar
-        value={context.progress}
-        color="#B73E43"
-        className="progress_bar flex-grow-0"
-        data-pr-tooltip="You are this close to making Santa leave"
-        data-pr-position="mouse"
-      />
-      <div className="flex-grow-1 flex gap-2 w-full m-auto">
-        <div className="flex-grow-1">{room}</div>
-        <div className="flex-grow-0 w-4 max-w-30rem	">
-          <ChatContextProvider>
-            <Chat />
-          </ChatContextProvider>
+    <>
+      <div className="flex flex-column gap-2 p-2 h-screen">
+        <ProgressBar
+          value={context.progress}
+          color="#B73E43"
+          className="progress_bar flex-grow-0"
+          data-pr-tooltip="You are this close to making Santa leave"
+          data-pr-position="mouse"
+        />
+        <div className="flex-grow-1 flex gap-2 w-full m-auto">
+          <div className="flex-grow-1">{room}</div>
+          <div className="flex-grow-0 w-4 max-w-30rem" style={{ minWidth: '25rem' }}>
+            <ChatContextProvider>
+              <Chat />
+            </ChatContextProvider>
+          </div>
         </div>
+        <Inventory />
       </div>
-      <Inventory />
-    </div>
+      <audio ref={context.progressAudioRef} preload="auto" hidden>
+        <source src={experience} type="audio/mpeg" />
+      </audio>
+    </>
   );
 };

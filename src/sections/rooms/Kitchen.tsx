@@ -18,6 +18,8 @@ import {
 } from '../inventory';
 import { Dropdown } from 'primereact/dropdown';
 
+import kitchenSound from '../../audio/kitchen.mp3';
+
 const Trash = () => {
   const { inventory } = useGameContext();
   const wrappingPaperAvailable = !inventory.includes(Miscelaneous.paper);
@@ -320,6 +322,9 @@ export const Kitchen = () => {
       >
         {dialogContent}
       </Dialog>
+      <audio preload="auto" hidden autoPlay loop>
+        <source src={kitchenSound} type="audio/mpeg" />
+      </audio>
     </>
   );
 };

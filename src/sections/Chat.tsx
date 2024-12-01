@@ -6,6 +6,7 @@ import { Card } from 'primereact/card';
 import { ChipProps, Chip } from 'primereact/chip';
 import { MessageType, useChatContext } from '../hooks/ChatContext';
 import { AutoComplete, AutoCompleteCompleteEvent } from 'primereact/autocomplete';
+import pop from './../audio/pop.mp3';
 
 const messageHints: Omit<MessageType, 'id'>[] = [
   {
@@ -26,7 +27,7 @@ const messageHints: Omit<MessageType, 'id'>[] = [
 ];
 
 export const Chat = () => {
-  const { messages, likeMessage, addMessage } = useChatContext();
+  const { messages, likeMessage, addMessage, audioRef } = useChatContext();
   const [newMessage, setNewMessage] = React.useState<Omit<MessageType, 'id'> | string>('');
   const [chatHints, setChatHints] = React.useState<object[]>([]);
   const chatRef = React.useRef<HTMLElement | null>(null);
@@ -67,7 +68,6 @@ export const Chat = () => {
   }, [messages]);
 
   const search = (e: AutoCompleteCompleteEvent) => {
-    console.log(e, chatHints);
     setChatHints([...messageHints]);
   };
 
@@ -83,9 +83,6 @@ export const Chat = () => {
                 value={newMessage}
                 placeholder="Aa"
                 onChange={(e) => setNewMessage(e.target.value)}
-                onSelect={(e) => {
-                  console.log('selct', e);
-                }}
                 suggestions={chatHints}
                 completeMethod={search}
                 className="w-full"
@@ -150,6 +147,9 @@ export const Chat = () => {
           </div>
         </div>
       ))}
+      <audio ref={audioRef} preload="auto" hidden>
+        <source src={pop} type="audio/mpeg" />
+      </audio>
     </Card>
   );
 };
