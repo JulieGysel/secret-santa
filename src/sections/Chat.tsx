@@ -4,19 +4,51 @@ import { Badge } from 'primereact/badge';
 import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 import { ChipProps, Chip } from 'primereact/chip';
-import { useChatContext } from '../hooks/ChatContext';
-import { InputText } from 'primereact/inputtext';
+import { MessageType, useChatContext } from '../hooks/ChatContext';
+import { AutoComplete, AutoCompleteCompleteEvent } from 'primereact/autocomplete';
+
+const messageHints: Omit<MessageType, 'id'>[] = [
+  {
+    type: 'complain',
+    message: 'Santa sucks!!!',
+    author: ' ',
+    liked: false,
+  },
+  {
+    type: 'complain',
+    message: 'Does anybody want a Santa?',
+    author: ' ',
+    liked: false,
+  },
+
+  { type: 'praise', message: 'Guys, Santa is quite nice actually', author: ' ', liked: false },
+  { type: 'praise', message: "I'm starting to like this Santa guy", author: ' ', liked: false },
+];
 
 export const Chat = () => {
   const { messages, likeMessage, addMessage } = useChatContext();
-  const [newMessage, setNewMessage] = React.useState('');
+  const [newMessage, setNewMessage] = React.useState<Omit<MessageType, 'id'> | string>('');
+  const [chatHints, setChatHints] = React.useState<object[]>([]);
   const chatRef = React.useRef<HTMLElement | null>(null);
 
   const onSubmit = React.useCallback(
     (e: React.SyntheticEvent) => {
       e.preventDefault();
-      addMessage([{ message: newMessage, author: 'A', liked: false }]);
-      setNewMessage('');
+      if (newMessage) {
+        addMessage(
+          typeof newMessage === 'object'
+            ? [newMessage]
+            : [
+                {
+                  message: newMessage,
+                  author: ' ',
+                  liked: false,
+                  type: 'other',
+                },
+              ],
+        );
+        setNewMessage('');
+      }
     },
     [addMessage, newMessage],
   );
@@ -34,17 +66,38 @@ export const Chat = () => {
     }
   }, [messages]);
 
+  const search = (e: AutoCompleteCompleteEvent) => {
+    console.log(e, chatHints);
+    setChatHints([...messageHints]);
+  };
+
   return (
     <Card
       title={'Pølsefest'}
       footer={
         <form onSubmit={onSubmit}>
           <div className="flex justify-content-end gap-2">
-            <InputText
-              value={newMessage}
-              className="w-full border-round-3xl"
-              onChange={(e) => setNewMessage(e.target.value)}
-            />
+            <div className="flex-grow-1">
+              <AutoComplete
+                field="message"
+                value={newMessage}
+                placeholder="Aa"
+                onChange={(e) => setNewMessage(e.target.value)}
+                onSelect={(e) => {
+                  console.log('selct', e);
+                }}
+                suggestions={chatHints}
+                completeMethod={search}
+                className="w-full"
+                pt={{
+                  input: {
+                    root: {
+                      className: 'w-full border-round-3xl',
+                    },
+                  },
+                }}
+              />
+            </div>
             <div>
               <Button
                 rounded
@@ -75,9 +128,9 @@ export const Chat = () => {
       }}
     >
       {messages.map(({ message, author, liked, id }) => (
-        <div className={`flex gap-1 ${author === 'A' && 'flex-row-reverse'}`} key={`message-${id}`}>
+        <div className={`flex gap-1 ${author === ' ' && 'flex-row-reverse'}`} key={`message-${id}`}>
           <div>
-            <Avatar label={author} shape="circle" className="mr-2" />
+            <Avatar label={author} shape="circle" className="mx-2" />
           </div>
           <div>
             <Chip
@@ -86,12 +139,11 @@ export const Chat = () => {
               template={chipTemplate}
               onClick={() => {
                 if (!liked) {
-                  console.log('liking', id);
                   likeMessage(id);
                 }
               }}
               style={{ cursor: liked ? 'default' : 'pointer' }}
-              pt={{ root: { className: author === 'A' ? 'bg-primary' : '' } }}
+              pt={{ root: { className: author === ' ' ? 'bg-primary' : '' } }}
             >
               {liked && <Badge value={'❤'} className="p-overlay-badge" severity={'danger'} />}
             </Chip>

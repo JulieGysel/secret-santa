@@ -1,16 +1,19 @@
 import React from 'react';
 
 export type MessageType = {
+  type: 'complain' | 'praise' | 'movie' | 'door' | 'thing' | 'other';
   author: string;
   message: string;
   liked: boolean;
   id: number;
 };
 
+export type NewMessageType = Omit<MessageType, 'id'>;
+
 export type ChatContextType = {
   messages: MessageType[];
   likeMessage: (id: number) => void;
-  addMessage: (message: Omit<MessageType, 'id'>[]) => void;
+  addMessage: (message: NewMessageType[]) => void;
 };
 
 export const ChatContext = React.createContext<ChatContextType | null>(null);

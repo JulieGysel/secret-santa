@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChatContext, ChatContextType, MessageType } from './ChatContext';
+import { ChatContext, ChatContextType, MessageType, NewMessageType } from './ChatContext';
 import { useGameContext } from './GameContext';
 
 const getMovieMessage = (movie: string) => {
@@ -16,34 +16,48 @@ const getMovieMessage = (movie: string) => {
   return messages[Math.floor(Math.random() * 100) % messages.length];
 };
 
-enum MessageTypes {
-  door = 'door',
-  search = 'search',
-}
+const randMessages: NewMessageType[] = [
+  // doors
+  { message: 'Will someone let me in?', author: 'E', liked: false, type: 'door' },
+  { message: 'will someone let me in', author: 'C', liked: false, type: 'door' },
+  { message: 'will someone let me in, please?', author: 'M', liked: false, type: 'door' },
+  { message: 'someone please let me in', author: 'G', liked: false, type: 'door' },
+  { message: 'door please?', author: 'N', liked: false, type: 'door' },
 
-const messageTypes = Object.keys(MessageTypes);
-const items = ['scissors', 'a hair dryer', 'some tape'];
+  // spiders
+  { message: 'Can someone help me with a spider?', type: 'other', author: 'M', liked: false },
+  { message: 'can someone help with a spider?', type: 'other', author: 'N', liked: false },
 
-const getRandMessage = (): Omit<MessageType, 'id'>[] => {
-  const messageType = messageTypes[Math.floor(Math.random() * 100) % messageTypes.length];
+  // laundry
+  { message: 'machine 1 done', type: 'other', author: 'K', liked: false },
+  { message: 'Machine 2 done', type: 'other', author: 'D', liked: false },
+  { message: 'Dryer', type: 'other', author: 'B', liked: false },
+  { message: 'dryer', type: 'other', author: 'C', liked: false },
 
-  switch (messageType) {
-    case MessageTypes.door:
-      return [
-        { message: 'Will someone let me in?', author: 'B', liked: false },
-        { message: 'In', author: 'B', liked: false },
-      ];
-    case MessageTypes.search:
-      return [
-        {
-          message: `Does anybody have ${items[Math.floor(Math.random() * 100) % items.length]}?`,
-          author: 'D',
-          liked: false,
-        },
-      ];
-    default:
-      return [];
-  }
+  // things
+  {
+    message: `Does anybody have scissors?`,
+    author: 'D',
+    liked: false,
+    type: 'thing',
+  },
+  {
+    message: `Does anybody have a hair dryer?`,
+    author: 'D',
+    liked: false,
+    type: 'thing',
+  },
+  {
+    message: `Does anybody have some tape?`,
+    author: 'D',
+    liked: false,
+    type: 'thing',
+  },
+];
+
+const getRandMessage = (): NewMessageType[] => {
+  const rand = Math.floor(Math.random() * 100) % randMessages.length;
+  return [randMessages[rand]];
 };
 
 export const ChatContextProvider = ({ children }: { children: React.ReactNode }) => {
@@ -75,6 +89,7 @@ export const ChatContextProvider = ({ children }: { children: React.ReactNode })
             message: getMovieMessage(movie),
             author: 'X',
             liked: false,
+            type: 'movie',
           },
         ]);
         setSendMovie(false);
@@ -110,10 +125,40 @@ export const ChatContextProvider = ({ children }: { children: React.ReactNode })
     return () => clearInterval(interval);
   }, [addMessage]);
 
+  React.useEffect(() => {
+    if (messages.length) {
+      const lastMessage = messages[messages.length - 1];
+      const chance = Math.floor(Math.random() * 100) % 3;
+
+      if (lastMessage.type === 'praise' && !lastMessage.liked) {
+        if (chance === 0) {
+          addMessage([{ type: 'other', author: 'L', message: 'See? I told you', liked: false }]);
+        } else if (chance === 1) {
+          likeMessage(messages.length - 1);
+        }
+      } else if (lastMessage.type === 'door' && lastMessage.liked) {
+        addMessage([{ message: 'In', author: 'B', liked: false, type: 'door' }]);
+      } else if (lastMessage.type === 'complain') {
+        if (chance === 0) {
+          addMessage([
+            {
+              type: 'other',
+              author: 'L',
+              message: "oh come on he can't be that bad",
+              liked: false,
+            },
+          ]);
+        }
+      }
+    }
+  }, [addMessage, likeMessage, messages]);
+
   const value: ChatContextType = React.useMemo(
     () => ({ messages, likeMessage, addMessage }),
     [addMessage, likeMessage, messages],
   );
+
+  console.log(messages);
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
 };
