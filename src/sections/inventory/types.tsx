@@ -30,6 +30,7 @@ export enum Miscelaneous {
   bakingTray = 'Baking tray',
   paper = 'Wrapping paper',
   cookieRecipe = 'Cookie recipe',
+  tape = 'Tape',
 }
 
 type MiscelaneousKey = keyof typeof Miscelaneous;
@@ -69,6 +70,15 @@ export enum CookedItems {
 export type CookedItemKey = keyof typeof CookedItems;
 export type CookedItemType = (typeof CookedItems)[CookedItemKey];
 
+export enum WrappedItems {
+  wrappedVase = 'Wrapped vase',
+  wrappedPainting = 'Wrapped painting',
+  wrappedTshirt = 'Wrapped t-shirt',
+}
+
+export type WrappedItemKey = keyof typeof WrappedItems;
+export type WrappedItemType = (typeof WrappedItems)[WrappedItemKey];
+
 export const InventoryItems = {
   ...FridgeItems,
   ...FreeStuff,
@@ -76,6 +86,7 @@ export const InventoryItems = {
   ...FreezerItems,
   ...CupboardItems,
   ...CookedItems,
+  ...WrappedItems,
 };
 
 export type InventoryItemType =
@@ -84,31 +95,55 @@ export type InventoryItemType =
   | MiscelaneousType
   | FreezerItemType
   | CupboardItemType
-  | CookedItemType;
+  | CookedItemType
+  | WrappedItemType;
 
 export const ReusableItems: InventoryItemType[] = [
-  CupboardItems.sugar,
-  FridgeItems.eggs,
-  CupboardItems.cinnamon,
+  InventoryItems.sugar,
+  InventoryItems.eggs,
+  InventoryItems.cinnamon,
 
-  FreeStuff.scissors,
+  InventoryItems.scissors,
+  InventoryItems.paper,
 ];
 
 export const AcceptableGifts: InventoryItemType[] = [
-  CookedItems.cookedAppleSlices,
-  CookedItems.cookies,
-  CookedItems.eggnog,
-  FridgeItems.carrots,
-  FridgeItems.beer,
+  InventoryItems.cookedAppleSlices,
+  InventoryItems.cookies,
+  InventoryItems.eggnog,
+  InventoryItems.carrots,
+  InventoryItems.beer,
+
+  InventoryItems.wrappedPainting,
+  InventoryItems.wrappedVase,
+  InventoryItems.wrappedTshirt,
 ];
+
+export const WrappableItems: InventoryItemType[] = [
+  InventoryItems.painting,
+  InventoryItems.vase,
+  InventoryItems.tshirt,
+];
+
+export const WrappedItemsMap: {
+  [key: string]: InventoryItemType;
+} = {
+  [InventoryItems.painting]: InventoryItems.wrappedPainting,
+  [InventoryItems.vase]: InventoryItems.wrappedVase,
+  [InventoryItems.tshirt]: InventoryItems.wrappedTshirt,
+};
 
 export const getGiftValue = (item: InventoryItemType) => {
   switch (item) {
+    case InventoryItems.wrappedPainting:
+      return 30;
     case InventoryItems.cookedAppleSlices:
     case InventoryItems.eggnog:
       return 5;
     case InventoryItems.cookies:
       return 20;
+    case InventoryItems.wrappedVase:
+      return 5;
     default:
       return 0;
   }

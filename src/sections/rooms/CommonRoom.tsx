@@ -5,11 +5,21 @@ import { MenuButton } from '../../components/MenuButton';
 import { Button } from 'primereact/button';
 import { RoomSwitch } from '../RoomSwitch';
 import { useGameContext } from '../../hooks/GameContext';
-import { FreeStuff, GrabItem, Miscelaneous } from '../inventory';
+import {
+  FreeStuff,
+  GrabItem,
+  InventoryItems,
+  InventoryItemType,
+  Miscelaneous,
+  WrappableItems,
+} from '../inventory';
+import { Dropdown } from 'primereact/dropdown';
 
 const FreeStuffSection = () => {
-  const { inventory } = useGameContext();
-  const fridgeItems = Object.values(FreeStuff).filter((item) => !inventory.includes(item));
+  const { inventory, usedUp } = useGameContext();
+  const fridgeItems = Object.values(FreeStuff)
+    .filter((item) => !inventory.includes(item))
+    .filter((item) => !usedUp.includes(item));
 
   return (
     <>
@@ -24,7 +34,7 @@ const FreeStuffSection = () => {
 };
 
 const MonsteraSection = ({ closeModal }: { closeModal: () => void }) => {
-  const { inventory, paintingDown, setPaintingDown, addToInventory } = useGameContext();
+  const { inventory, usedUp, paintingDown, setPaintingDown, addToInventory } = useGameContext();
 
   const paintingPos = paintingDown
     ? "The controversial painging is stood by the monstera's plant pot."
@@ -34,7 +44,7 @@ const MonsteraSection = ({ closeModal }: { closeModal: () => void }) => {
     <>
       <p>The Monstera is a big plant.</p>
 
-      {!inventory.includes(Miscelaneous.painting) ? (
+      {!inventory.includes(Miscelaneous.painting) && usedUp.includes(Miscelaneous.painting) ? (
         <>
           <p>{paintingPos}</p>
           <div className="flex flex-wrap gap-2">
@@ -66,9 +76,103 @@ const MonsteraSection = ({ closeModal }: { closeModal: () => void }) => {
   );
 };
 
+const WrappingSection = () => {
+  const { inventory, wrapItem: wrapItemFunc } = useGameContext();
+  const [wrapItem, setWrapItem] = React.useState<InventoryItemType | undefined>();
+
+  const [isVisible, setVisible] = React.useState(false);
+  const [dialogContent, setDialogContent] = React.useState('');
+
+  const options = React.useMemo(
+    () => inventory.map((item) => ({ name: item, value: item })),
+    [inventory],
+  );
+
+  const onWrap = React.useCallback(() => {
+    if (wrapItem) {
+      if (WrappableItems.includes(wrapItem)) {
+        console.log('wrapping', wrapItem);
+        setDialogContent(
+          `You could work on your wrapping skills. But that is indeed one wrapped ${wrapItem.toLowerCase()}.`,
+        );
+
+        setVisible(true);
+        wrapItemFunc(wrapItem);
+      } else {
+        switch (wrapItem) {
+          case InventoryItems.tape:
+            setDialogContent('If you wrap the tape, how are you going to tape the wrapping paper?');
+            break;
+          default:
+            setDialogContent(`Wrapping ${wrapItem.toLowerCase()} makes no sense.`);
+            break;
+        }
+        setVisible(true);
+      }
+    }
+  }, [wrapItem, wrapItemFunc]);
+
+  return (
+    <>
+      <p>What do you want to wrap?</p>
+      <div className="flex gap-2">
+        <Dropdown
+          value={wrapItem}
+          options={options}
+          onChange={(e) => setWrapItem(e.value)}
+          optionLabel={'name'}
+          placeholder="Select a recipe"
+          className="w-5"
+          pt={{ wrapper: { className: 'max-h-full' } }}
+        />
+        <Button label="Wrap" disabled={!wrapItem} onClick={onWrap} />
+      </div>
+      <Dialog
+        visible={isVisible}
+        onHide={() => setVisible(false)}
+        footer={
+          <Button label="Back" outlined severity="secondary" onClick={() => setVisible(false)} />
+        }
+        dismissableMask
+        draggable={false}
+        resizable={false}
+        closable={false}
+        className="w-5"
+      >
+        <p>{dialogContent}</p>
+      </Dialog>
+    </>
+  );
+};
+
 export const CommonRoom = () => {
   const [visible, setVisible] = React.useState(false);
   const [dialogContent, setDialogContent] = React.useState<string | React.ReactNode>();
+  const { inventory } = useGameContext();
+
+  const canWrap = React.useMemo(
+    () =>
+      inventory.includes(InventoryItems.tape) &&
+      inventory.includes(InventoryItems.paper) &&
+      inventory.includes(InventoryItems.scissors),
+    [inventory],
+  );
+
+  const wrapAction = React.useMemo(() => {
+    return canWrap
+      ? [
+          <Button
+            label="Wrap something"
+            outlined
+            severity="secondary"
+            onClick={() => {
+              setVisible(true);
+              setDialogContent(<WrappingSection />);
+            }}
+          />,
+        ]
+      : [];
+  }, [canWrap]);
 
   const closeModal = () => {
     setVisible(false);
@@ -76,6 +180,7 @@ export const CommonRoom = () => {
   };
 
   const roomActions = [
+    ...wrapAction,
     <div className="flex-grow-1" key="spacer"></div>,
     <Button
       label="Complain about Santa"

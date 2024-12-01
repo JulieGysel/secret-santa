@@ -26,16 +26,18 @@ const Freezer = () => {
 };
 
 const Bar = () => {
-  const { inventory } = useGameContext();
-  const rumAvailable = !inventory.includes(Miscelaneous.rum);
+  const { inventory, usedUp } = useGameContext();
+  const rumAvailable = !inventory.includes(Miscelaneous.rum) && !usedUp.includes(Miscelaneous.rum);
+  const tapeAvailable = !inventory.includes(Miscelaneous.tape);
 
   return (
     <>
       {/* todo */}
       <p>Bar area description</p>
-      {rumAvailable && (
+      {(rumAvailable || tapeAvailable) && (
         <div className="flex flex-wrap gap-2">
-          <GrabItem item={Miscelaneous.rum} />
+          {rumAvailable && <GrabItem item={Miscelaneous.rum} />}
+          {tapeAvailable && <GrabItem item={Miscelaneous.tape} />}
         </div>
       )}
     </>

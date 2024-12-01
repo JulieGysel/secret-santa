@@ -1,6 +1,12 @@
 import React from 'react';
 import { GameContext, RoomType } from './GameContext';
-import { CookedItemKey, CookedItems, InventoryItemType } from '../sections/inventory';
+import {
+  CookedItemKey,
+  CookedItems,
+  InventoryItems,
+  InventoryItemType,
+  WrappedItemsMap,
+} from '../sections/inventory';
 
 const setCookie = (key: string, value: string | number) => {
   document.cookie = `${key}=${value};path=/;`;
@@ -125,6 +131,7 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
 
   const addToInventory = React.useCallback(
     (item: InventoryItemType) => {
+      console.log('adding', item);
       setInventory([item, ...inventory]);
       setCookie('inventory', [item, ...inventory].join(','));
     },
@@ -139,6 +146,25 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
 
       const newInventory = inventory.filter((item) => !items.includes(item));
       newInventory.splice(0, 0, CookedItems[recipe]);
+
+      setInventory(newInventory);
+      setCookie('inventory', newInventory.join(','));
+    },
+    [inventory, usedUp],
+  );
+
+  const wrapItem = React.useCallback(
+    (item: InventoryItemType) => {
+      const newItem = WrappedItemsMap[item];
+
+      const newUsedUp = [...usedUp, item];
+      setUsedUp(newUsedUp);
+      setCookie('usedUp', newUsedUp.join(','));
+
+      const newInventory = [
+        newItem as InventoryItemType,
+        ...inventory.filter((inventoryItem) => inventoryItem !== item),
+      ];
       setInventory(newInventory);
       setCookie('inventory', newInventory.join(','));
     },
@@ -208,6 +234,7 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
       addToInventory,
       usedUp,
       cookRecipe,
+      wrapItem,
       giftItem,
       paintingDown,
       setPaintingDown,
@@ -226,6 +253,7 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
       addToInventory,
       usedUp,
       cookRecipe,
+      wrapItem,
       giftItem,
       paintingDown,
       tennisGames,

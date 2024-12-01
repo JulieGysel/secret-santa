@@ -62,7 +62,7 @@ const GiftSection = () => {
       console.log('gift accepted!');
       setVisible(true);
 
-      setDialogContent(`Santa: “Aww, thank you! I love ${gift}!”`);
+      setDialogContent(`Santa: “Aww, thank you! I love ${gift.toLocaleLowerCase()}!”`);
 
       giftItem(gift);
       makeProgress(getGiftValue(gift));
@@ -74,7 +74,7 @@ const GiftSection = () => {
           setDialogContent('Santa: “Are you trying to give me diabetes?”');
           break;
         default:
-          setDialogContent(`Santa: What am I supposed to do with ${gift}?”`);
+          setDialogContent(`Santa: “What am I supposed to do with ${gift}?”`);
           break;
       }
       setVisible(true);
