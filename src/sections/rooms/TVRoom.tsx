@@ -15,12 +15,13 @@ const games = ['Settlers of Catan', 'Chess', 'Cards'];
 const Movie = ({ movie }: { movie: string }) => {
   const {
     inventory,
+    usedUp,
     movieWithSanta,
     watchedMovieWithSanta,
     setWatchedMovieWithSanta,
     makeProgress,
   } = useGameContext();
-  const cookieRecipeAvailable = !inventory.includes(Miscelaneous.cookieRecipe);
+  const cookieRecipeAvailable = !inventory.concat(usedUp).includes(Miscelaneous.cookieRecipe);
 
   React.useEffect(() => {
     if (movieWithSanta && !watchedMovieWithSanta) {
@@ -78,16 +79,6 @@ export const TVRoom = () => {
 
   const roomActions = [
     <div className="flex-grow-1" key={'span'}></div>,
-    <Button
-      label="Complain about Santa"
-      outlined
-      severity="danger"
-      onClick={() => {
-        setVisible(true);
-        setDialogContent('');
-      }}
-      key={'complain'}
-    />,
     <Button
       label="Leave the room"
       outlined

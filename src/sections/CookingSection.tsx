@@ -105,7 +105,6 @@ export const CookingSection = ({ closeModal }: { closeModal: VoidFunction }) => 
           placeholder="Select a recipe"
           className="w-5"
           itemTemplate={itemTemplate}
-          pt={{ wrapper: { className: 'max-h-full' } }}
         />
         <Button label="Cook" disabled={!currentRecipe} onClick={onCook} />
       </div>

@@ -10,16 +10,18 @@ import { WrappingSection } from '../WrappingSection';
 import commonSound from '../../audio/common.mp3';
 
 const FreeStuffSection = () => {
-  const { inventory, usedUp } = useGameContext();
-  const fridgeItems = Object.values(FreeStuff)
-    .filter((item) => !inventory.includes(item))
-    .filter((item) => !usedUp.includes(item));
+  const { inventory, usedUp, gifted } = useGameContext();
+
+  const freeItems = React.useMemo(() => {
+    const filter = inventory.concat(usedUp).concat(gifted);
+    return Object.values(FreeStuff).filter((item) => !filter.includes(item));
+  }, [gifted, inventory, usedUp]);
 
   return (
     <>
       <p>Wow! That's a lot of free stuff! Or is it just junk that should have been thrown out?</p>
       <div className="flex flex-wrap gap-2">
-        {fridgeItems.map((item, i) => (
+        {freeItems.map((item, i) => (
           <GrabItem item={item} key={`grab-item-${i}`} />
         ))}
       </div>
@@ -104,16 +106,16 @@ export const CommonRoom = () => {
 
   const roomActions = [
     <div className="flex-grow-1" key="spacer"></div>,
-    <Button
-      label="Complain about Santa"
-      outlined
-      severity="danger"
-      onClick={() => {
-        setVisible(true);
-        setDialogContent('Complaining about Santa...');
-      }}
-      key="complain"
-    />,
+    // <Button
+    //   label="Complain about Santa"
+    //   outlined
+    //   severity="danger"
+    //   onClick={() => {
+    //     setVisible(true);
+    //     setDialogContent('Complaining about Santa...');
+    //   }}
+    //   key="complain"
+    // />,
     <Button
       label="Leave the room"
       outlined
@@ -194,11 +196,11 @@ export const CommonRoom = () => {
             <p>
               The tables in the middle get slightly reorganized every now and then. They also only
               get cleaned every <i>now and then</i>. But today they are looking good. You might be
-              able to do some work here {!canWrap && 'later on'}, given that your own table is now
+              able to do some work here{!canWrap && ' later on'}, given that your own table is now
               rendered unusable by a squatting Santa.
             </p>
             <p>
-              One one side, next to the basement doors, there is a large cupboard with bin bags for
+              On one side, next to the basement doors, there is a large cupboard with bin bags for
               the kitchens. But today you can barely see it under all the free stuff that people
               have left for taking.
             </p>

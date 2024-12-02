@@ -17,8 +17,15 @@ const getMovieMessage = (movie: string) => {
   return messages[Math.floor(Math.random() * 100) % messages.length];
 };
 
-const getComplaintMessage = () => {
-  const messages = ["oh come on he can't be that bad", 'Have you tried talking to him?'];
+const getComplaintMessage = (movie?: string) => {
+  const messages = [
+    "oh come on he can't be that bad",
+    'Have you tried talking to him?',
+    "i'm sure you can just talk it out",
+    movie && `We're watching ${movie}. You should join.`,
+    movie && `Join us for ${movie}. Bring Santa`,
+    movie && `join us for ${movie}. bring him`,
+  ].filter(Boolean) as string[];
 
   return messages[Math.floor(Math.random() * 100) % messages.length];
 };
@@ -155,7 +162,7 @@ export const ChatContextProvider = ({ children }: { children: React.ReactNode })
             {
               type: 'other',
               author: 'L',
-              message: getComplaintMessage(),
+              message: getComplaintMessage(movie),
               liked: false,
             },
           ]);
@@ -169,7 +176,7 @@ export const ChatContextProvider = ({ children }: { children: React.ReactNode })
         addMessage([{ message: 'In', author: secondToLast.author, liked: false, type: 'other' }]);
       }
     }
-  }, [addMessage, likeMessage, messages]);
+  }, [addMessage, likeMessage, messages, movie]);
 
   const value: ChatContextType = React.useMemo(
     () => ({ messages, likeMessage, addMessage, audioRef }),

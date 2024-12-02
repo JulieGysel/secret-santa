@@ -5,6 +5,21 @@ import { useGameContext } from '../hooks/GameContext';
 
 const introSteps = [
   <>
+    <h3>Disclaimer:</h3>
+    <ul>
+      <li>
+        I couldn’t be bothered to optimize this game for mobile. Use a computer, a laptop, or a
+        tablet (horizontal).
+      </li>
+      <li>Sound on.</li>
+      <li>This site uses cookies. Deal with it.</li>
+    </ul>
+    <p className="font-italic mt-4">
+      “Insanity is doing the same thing over and over again and expecting different results.“
+    </p>
+    <p className="font-italic ">“You need a little bit of insanity to do great things.“</p>
+  </>,
+  <>
     <p>
       It is the middle of the night. The weather outside the dorm is not unusual for early December.
     </p>
@@ -138,11 +153,11 @@ export const Intro = () => {
     <Dialog
       footer={
         <div>
-          {!!step && (
+          {step > 1 && (
             <Button label="Back" outlined severity="secondary" onClick={() => setStep(step - 1)} />
           )}
           <Button
-            label="Next"
+            label={step ? 'Next' : 'Start'}
             severity="secondary"
             onClick={() => {
               if (step !== introSteps.length - 1) {

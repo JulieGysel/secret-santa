@@ -8,10 +8,12 @@ import { GrabItem, Room } from '../../components';
 import { FreezerItems, Miscelaneous } from '../../types';
 
 const Freezer = () => {
-  const { inventory, usedUp } = useGameContext();
-  const freezerItems = Object.values(FreezerItems)
-    .filter((item) => !inventory.includes(item))
-    .filter((item) => !usedUp.includes(item));
+  const { inventory, usedUp, gifted } = useGameContext();
+
+  const freezerItems = React.useMemo(() => {
+    const filter = inventory.concat(usedUp).concat(gifted);
+    return Object.values(FreezerItems).filter((item) => !filter.includes(item));
+  }, [gifted, inventory, usedUp]);
 
   return (
     <>
@@ -58,15 +60,15 @@ export const Basement = () => {
 
   const roomActions = [
     <div className="flex-grow-1"></div>,
-    <Button
-      label="Complain about Santa"
-      outlined
-      severity="danger"
-      onClick={() => {
-        setVisible(true);
-        setDialogContent('Complaining...');
-      }}
-    />,
+    // <Button
+    //   label="Complain about Santa"
+    //   outlined
+    //   severity="danger"
+    //   onClick={() => {
+    //     setVisible(true);
+    //     setDialogContent('Complaining...');
+    //   }}
+    // />,
     <Button
       label="Leave the room"
       outlined

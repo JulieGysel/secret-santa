@@ -22,6 +22,8 @@ export type GameContextType = {
   usedUp: InventoryItemType[];
   cookRecipe: (items: InventoryItemType[], recipe: CookedItemKey) => void;
   wrapItem: (item: InventoryItemType) => void;
+
+  gifted: InventoryItemType[];
   giftItem: (gift: InventoryItemType) => void;
 
   paintingDown: boolean;

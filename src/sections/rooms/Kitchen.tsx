@@ -48,8 +48,12 @@ const Oven = () => {
 };
 
 const Cupboard = () => {
-  const { inventory } = useGameContext();
-  const cupboardItems = Object.values(CupboardItems).filter((item) => !inventory.includes(item));
+  const { inventory, usedUp, gifted } = useGameContext();
+
+  const cupboardItems = React.useMemo(() => {
+    const filter = inventory.concat(usedUp).concat(gifted);
+    return Object.values(CupboardItems).filter((item) => !filter.includes(item));
+  }, [gifted, inventory, usedUp]);
 
   return (
     <>
@@ -99,15 +103,15 @@ export const Kitchen = () => {
       }}
     />,
     <div className="flex-grow-1"></div>,
-    <Button
-      label="Complain about Santa"
-      outlined
-      severity="danger"
-      onClick={() => {
-        setVisible(true);
-        setDialogContent('Complaining...');
-      }}
-    />,
+    // <Button
+    //   label="Complain about Santa"
+    //   outlined
+    //   severity="danger"
+    //   onClick={() => {
+    //     setVisible(true);
+    //     setDialogContent('Complaining...');
+    //   }}
+    // />,
     <Button
       label="Leave the room"
       outlined
@@ -204,7 +208,7 @@ export const Kitchen = () => {
             </p>
             <p>
               Ideally, the cleaning efforts would be equally divided between each of the ten people.
-              But we all know that someone always does more work somebody else.
+              But we all know that one person always ends up doing more work than another one.
             </p>
           </>
         }

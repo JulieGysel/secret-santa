@@ -52,7 +52,6 @@ export const WrappingSection = () => {
           optionLabel={'name'}
           placeholder="Select a recipe"
           className="w-5"
-          pt={{ wrapper: { className: 'max-h-full' } }}
         />
         <Button label="Wrap" disabled={!wrapItem} onClick={onWrap} />
       </div>

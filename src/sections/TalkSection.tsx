@@ -75,7 +75,7 @@ export const TalkSection = () => {
           </>
         ),
       },
-      {
+      !movie && {
         type: 'joke',
         chat: (
           <>
@@ -122,6 +122,10 @@ export const TalkSection = () => {
               <span className="text-400">You</span>: "You know at first I didn't like you much. But
               I am starting to."
             </p>
+            <p>
+              <span className="text-400">Santa</span> (crying): "Thank you. This really means a
+              lot."
+            </p>
           </>
         ),
       },
@@ -131,6 +135,39 @@ export const TalkSection = () => {
           <>
             <p>
               <span className="text-400">You</span>: "I love your jokes, man. Never change."
+            </p>
+            <p>
+              <span className="text-400">Santa</span>: "Do you wanna hear another one?"
+            </p>
+            <p className="mt-3">
+              <span className="text-400">Santa</span>: "A gingerbread man went to the doctor’s
+              complaining of a sore knee."
+            </p>
+            <p>
+              <span className="text-400">Santa</span>: "'A sore knee?' the doctor said. 'Have you
+              tried icing it?'"
+            </p>
+          </>
+        ),
+      },
+      !progress && {
+        type: 'hint',
+        chat: (
+          <>
+            <p>
+              <span className="text-400">Santa</span>: "Why doesn't anybody ever ask me what I want
+              for Christmas?"
+            </p>
+          </>
+        ),
+      },
+      !progress && {
+        type: 'hint',
+        chat: (
+          <>
+            <p>
+              <span className="text-400">Santa</span>: "I'm craving something sweet. Do you have
+              anything?"
             </p>
           </>
         ),

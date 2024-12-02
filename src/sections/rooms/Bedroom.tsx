@@ -16,6 +16,7 @@ import { useGameContext } from '../../hooks/GameContext';
 
 import bedroomSound from '../../audio/bedroom.mp3';
 import { TalkSection } from '../TalkSection';
+import { MenuItem } from 'primereact/menuitem';
 
 const endingLines = [
   <p>Well, except for fucking Santa who's decided to move in for some reason.</p>,
@@ -24,10 +25,12 @@ const endingLines = [
 ];
 
 const FridgeItemSection = () => {
-  const { inventory, usedUp } = useGameContext();
-  const fridgeItems = Object.values(FridgeItems)
-    .filter((item) => !inventory.includes(item))
-    .filter((item) => !usedUp.includes(item));
+  const { inventory, usedUp, gifted } = useGameContext();
+
+  const fridgeItems = React.useMemo(() => {
+    const filter = inventory.concat(usedUp).concat(gifted);
+    return Object.values(FridgeItems).filter((item) => !filter.includes(item));
+  }, [gifted, inventory, usedUp]);
 
   return (
     <>
@@ -119,7 +122,7 @@ export const Bedroom = () => {
   const [visible, setVisible] = React.useState(false);
   const [dialogContent, setDialogContent] = React.useState<string | React.ReactNode>();
   const audioRef = React.useRef<HTMLAudioElement>(null);
-  const { mute } = useGameContext();
+  const { mute, inventory } = useGameContext();
 
   const endLine = React.useMemo(
     () => endingLines[Math.floor(Math.random() * 100) % endingLines.length],
@@ -131,46 +134,42 @@ export const Bedroom = () => {
     setDialogContent(undefined);
   };
 
-  const roomActions = [
-    <MenuButton
-      label="Santa"
-      items={[
-        {
-          label: 'Talk to Santa',
-          command: () => {
-            setVisible(true);
-            setDialogContent(<TalkSection />);
-          },
-        },
-        {
-          label: 'Give a gift to Santa',
-          command: () => {
-            setVisible(true);
-            setDialogContent(<GiftSection />);
-          },
-        },
-      ]}
-    />,
-    <div className="flex-grow-1"></div>,
-    <Button
-      label="Complain about Santa"
-      outlined
-      severity="danger"
-      onClick={() => {
-        setVisible(true);
-        setDialogContent('Santa: “You know I can hear you, mate?”');
-      }}
-    />,
-    <Button
-      label="Leave the room"
-      outlined
-      severity="info"
-      onClick={() => {
-        setVisible(true);
-        setDialogContent(<RoomSwitch closeModal={closeModal} />);
-      }}
-    />,
-  ];
+  const roomActions = React.useMemo(
+    () => [
+      <MenuButton
+        label="Santa"
+        items={
+          [
+            {
+              label: 'Talk to Santa',
+              command: () => {
+                setVisible(true);
+                setDialogContent(<TalkSection />);
+              },
+            },
+            inventory.length && {
+              label: 'Give a gift to Santa',
+              command: () => {
+                setVisible(true);
+                setDialogContent(<GiftSection />);
+              },
+            },
+          ].filter(Boolean) as MenuItem[]
+        }
+      />,
+      <div className="flex-grow-1"></div>,
+      <Button
+        label="Leave the room"
+        outlined
+        severity="info"
+        onClick={() => {
+          setVisible(true);
+          setDialogContent(<RoomSwitch closeModal={closeModal} />);
+        }}
+      />,
+    ],
+    [inventory.length],
+  );
 
   const roomItems = [
     <MenuButton
@@ -200,7 +199,7 @@ export const Bedroom = () => {
           command: () => {
             setVisible(true);
             setDialogContent(
-              "It's so tempting to just sit down at your table and waste some time watching YouTube videos or something. But Santa is occupying your chair so that really isn't an option.",
+              "It's very tempting to just sit down at your table and waste some time watching YouTube videos or something. But Santa is occupying your chair so that really isn't an option.",
             );
           },
         },

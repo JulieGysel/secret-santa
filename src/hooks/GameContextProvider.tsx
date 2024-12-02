@@ -40,6 +40,7 @@ const movies = [
   'A Christmas Carol',
   'Frozen',
   'The Grinch',
+  '2 Girls 1 Cup: Christmas Edition',
 ];
 
 export const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
@@ -287,6 +288,8 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
       usedUp,
       cookRecipe,
       wrapItem,
+
+      gifted,
       giftItem,
       paintingDown,
       setPaintingDown,
@@ -321,6 +324,7 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
       usedUp,
       cookRecipe,
       wrapItem,
+      gifted,
       giftItem,
       paintingDown,
       tennisGames,

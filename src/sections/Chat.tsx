@@ -9,42 +9,62 @@ import { AutoComplete, AutoCompleteCompleteEvent } from 'primereact/autocomplete
 import pop from './../audio/pop.mp3';
 import { useGameContext } from '../hooks/GameContext';
 
-const messageHints: Omit<MessageType, 'id'>[] = [
-  {
-    type: 'complain',
-    message: 'Santa sucks!!!',
-    author: ' ',
-    liked: false,
-  },
-  {
-    type: 'complain',
-    message: 'Does anybody want a Santa?',
-    author: ' ',
-    liked: false,
-  },
-  {
-    type: 'complain',
-    message: 'Please help me get rid of this guy',
-    author: ' ',
-    liked: false,
-  },
-  {
-    type: 'complain',
-    message: 'fuck this santa person',
-    author: ' ',
-    liked: false,
-  },
-
-  { type: 'praise', message: 'Guys, Santa is quite nice actually', author: ' ', liked: false },
-  { type: 'praise', message: "I'm starting to like this Santa guy", author: ' ', liked: false },
-];
-
 export const Chat = () => {
   const { messages, likeMessage, addMessage, audioRef } = useChatContext();
-  const { mute } = useGameContext();
+  const { mute, progress } = useGameContext();
   const [newMessage, setNewMessage] = React.useState<Omit<MessageType, 'id'> | string>('');
   const [chatHints, setChatHints] = React.useState<object[]>([]);
   const chatRef = React.useRef<HTMLElement | null>(null);
+
+  const messageHints: Omit<MessageType, 'id'>[] = React.useMemo(
+    () =>
+      [
+        {
+          type: 'complain',
+          message: 'Santa sucks!!!',
+          author: ' ',
+          liked: false,
+        },
+        {
+          type: 'complain',
+          message: 'Does anybody want a Santa?',
+          author: ' ',
+          liked: false,
+        },
+        {
+          type: 'complain',
+          message: 'Please help me get rid of this guy',
+          author: ' ',
+          liked: false,
+        },
+        {
+          type: 'complain',
+          message: 'fuck this santa person',
+          author: ' ',
+          liked: false,
+        },
+        {
+          type: 'complain',
+          message: 'Santa is a creep',
+          author: ' ',
+          liked: false,
+        },
+
+        progress && {
+          type: 'praise',
+          message: 'Guys, Santa is quite nice actually',
+          author: ' ',
+          liked: false,
+        },
+        progress && {
+          type: 'praise',
+          message: "I'm starting to like this Santa guy",
+          author: ' ',
+          liked: false,
+        },
+      ].filter(Boolean) as Omit<MessageType, 'id'>[],
+    [progress],
+  );
 
   const onSubmit = React.useCallback(
     (e: React.SyntheticEvent) => {
@@ -87,7 +107,12 @@ export const Chat = () => {
 
   return (
     <Card
-      title={'Pølsefest'}
+      title={
+        <div className="flex flex-column">
+          <div className="p-card-title mb-1">Pølsefest</div>
+          <div className="text-xs font-normal">When in doubt, ask the chat.</div>
+        </div>
+      }
       footer={
         <form onSubmit={onSubmit}>
           <div className="flex justify-content-end gap-2">
