@@ -12,8 +12,32 @@ import { Intro } from './Intro';
 import { Button } from 'primereact/button';
 
 export const Main = () => {
-  const { room, showIntro, progress, mute, setMute, progressAudioRef, inventoryAudioRef } =
-    useGameContext();
+  const {
+    room,
+    showIntro,
+    progress,
+    mute,
+    setMute,
+    progressAudioRef,
+    inventoryAudioRef,
+    gameStart,
+  } = useGameContext();
+  const [gameTime, setGameTime] = React.useState('');
+
+  React.useEffect(() => {
+    const tick = () => {
+      if (gameStart) {
+        const now = new Date(Date.now());
+        const timeDiff = new Date(
+          now.getTime() - gameStart.getTime() + now.getTimezoneOffset() * 1000 * 60,
+        );
+
+        setGameTime(timeDiff.toLocaleTimeString());
+      }
+    };
+
+    setInterval(tick, 1000);
+  }, [gameStart]);
 
   const roomSection = React.useMemo(() => {
     switch (room) {
@@ -44,7 +68,7 @@ export const Main = () => {
             data-pr-tooltip="You are this close to making Santa leave"
             data-pr-position="mouse"
           />
-          <div className="flex">time</div>
+          <div className="flex">{gameTime}</div>
           <Button
             icon={`pi ${mute ? 'pi-volume-off' : 'pi-volume-up'}`}
             text

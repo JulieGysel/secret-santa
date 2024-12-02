@@ -10,6 +10,7 @@ export enum RoomType {
 }
 
 export type GameContextType = {
+  gameStart: Date;
   showIntro: boolean;
   onHideIntro: VoidFunction;
   room: RoomType | undefined;

@@ -52,6 +52,8 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
   const progressAudioRef = React.useRef<HTMLAudioElement>(null);
   const inventoryAudioRef = React.useRef<HTMLAudioElement>(null);
 
+  const [gameStart, setGameStart] = React.useState<Date>();
+
   const [isLoading, setLoading] = React.useState(true);
   const [showIntro, setShowIntro] = React.useState<boolean>(true);
   const [room, setRoom] = React.useState<RoomType>();
@@ -115,6 +117,11 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
       setFootballGames(0);
     }
 
+    const start = getCookie('gameStart');
+    if (start) {
+      setGameStart(new Date(start));
+    }
+
     setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -134,6 +141,10 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
   const onHideIntro = () => {
     setCookie('intro', 'false');
     setShowIntro(false);
+
+    const gStart = new Date(Date.now());
+    setGameStart(gStart);
+    setCookie('gameStart', gStart.toISOString());
   };
 
   const addToInventory = React.useCallback(
@@ -232,6 +243,7 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
 
   const value = React.useMemo(
     () => ({
+      gameStart,
       showIntro,
       onHideIntro,
       room,
