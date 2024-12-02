@@ -7,12 +7,16 @@ import { Basement, Bedroom, CommonRoom, Kitchen, TVRoom } from './rooms';
 import { ChatContextProvider } from '../hooks/ChatContextProvider';
 
 import experience from '../audio/experience.mp3';
+import inventory from '../audio/inventory.mp3';
+import { Intro } from './Intro';
+import { Button } from 'primereact/button';
 
 export const Main = () => {
-  const context = useGameContext();
+  const { room, showIntro, progress, mute, setMute, progressAudioRef, inventoryAudioRef } =
+    useGameContext();
 
-  const room = React.useMemo(() => {
-    switch (context.room) {
+  const roomSection = React.useMemo(() => {
+    switch (room) {
       case RoomType.BASEMENT:
         return <Basement />;
       case RoomType.KITCHEN:
@@ -25,20 +29,37 @@ export const Main = () => {
       default:
         return <Bedroom />;
     }
-  }, [context.room]);
+  }, [room]);
 
-  return (
+  return showIntro ? (
+    <Intro />
+  ) : (
     <>
       <div className="flex flex-column gap-2 p-2 h-screen">
-        <ProgressBar
-          value={context.progress}
-          color="#B73E43"
-          className="progress_bar flex-grow-0"
-          data-pr-tooltip="You are this close to making Santa leave"
-          data-pr-position="mouse"
-        />
+        <div className="flex align-items-center gap-2">
+          <ProgressBar
+            value={progress}
+            color="#B73E43"
+            className="progress_bar flex-grow-1"
+            data-pr-tooltip="You are this close to making Santa leave"
+            data-pr-position="mouse"
+          />
+          <div className="flex">time</div>
+          <Button
+            icon={`pi ${mute ? 'pi-volume-off' : 'pi-volume-up'}`}
+            text
+            rounded
+            className="w-1rem h-1rem p-2"
+            pt={{ icon: { className: 'text-xs' } }}
+            aria-label="Toggle sound"
+            tooltip="Toggle sound"
+            tooltipOptions={{ position: 'left' }}
+            onClick={() => setMute(!mute)}
+          />
+        </div>
+
         <div className="flex-grow-1 flex gap-2 w-full m-auto">
-          <div className="flex-grow-1">{room}</div>
+          <div className="flex-grow-1">{roomSection}</div>
           <div className="flex-grow-0 w-4 max-w-30rem" style={{ minWidth: '25rem' }}>
             <ChatContextProvider>
               <Chat />
@@ -47,8 +68,11 @@ export const Main = () => {
         </div>
         <Inventory />
       </div>
-      <audio ref={context.progressAudioRef} preload="auto" hidden>
+      <audio ref={progressAudioRef} preload="auto" hidden muted={mute}>
         <source src={experience} type="audio/mpeg" />
+      </audio>
+      <audio ref={inventoryAudioRef} preload="auto" hidden muted={mute}>
+        <source src={inventory} type="audio/mpeg" />
       </audio>
     </>
   );

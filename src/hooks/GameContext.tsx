@@ -3,10 +3,10 @@ import { CookedItemKey, InventoryItemType } from '../sections/inventory';
 
 export enum RoomType {
   BEDROOM = 'Bedroom',
-  TVROOM = 'TV Room',
   COMMON = 'Common Room',
-  BASEMENT = 'Basement',
+  TVROOM = 'TV Room',
   KITCHEN = 'Kitchen',
+  BASEMENT = 'Basement',
 }
 
 export type GameContextType = {
@@ -30,7 +30,10 @@ export type GameContextType = {
   setFootballGames: (games: number) => void;
   movie: string;
 
+  mute: boolean;
+  setMute: (mute: boolean) => void;
   progressAudioRef: React.RefObject<HTMLAudioElement>;
+  inventoryAudioRef: React.RefObject<HTMLAudioElement>;
 };
 
 export const GameContext = React.createContext<GameContextType | null>(null);

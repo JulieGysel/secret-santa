@@ -14,6 +14,7 @@ import {
 } from '../inventory';
 import { useGameContext } from '../../hooks/GameContext';
 import { Dropdown } from 'primereact/dropdown';
+import bedroomSound from '../../audio/bedroom.mp3';
 
 const endingLines = [
   <p>Well, except for fucking Santa who's decided to move in for some reason.</p>,
@@ -73,7 +74,7 @@ const GiftSection = () => {
           setDialogContent('Santa: “Are you trying to give me diabetes?”');
           break;
         default:
-          setDialogContent(`Santa: “What am I supposed to do with ${gift}?”`);
+          setDialogContent(`Santa: “What am I supposed to do with ${gift?.toLowerCase()}?”`);
           break;
       }
       setVisible(true);
@@ -116,6 +117,8 @@ const GiftSection = () => {
 export const Bedroom = () => {
   const [visible, setVisible] = React.useState(false);
   const [dialogContent, setDialogContent] = React.useState<string | React.ReactNode>();
+  const audioRef = React.useRef<HTMLAudioElement>(null);
+  const { mute } = useGameContext();
 
   const endLine = React.useMemo(
     () => endingLines[Math.floor(Math.random() * 100) % endingLines.length],
@@ -167,10 +170,29 @@ export const Bedroom = () => {
       label="Bed"
       items={[
         {
-          label: 'Go to sleep',
+          label: 'Explore',
           command: () => {
             setVisible(true);
-            setDialogContent('At this hour?');
+            setDialogContent(
+              <>
+                <p>The bed is just like you left it this morning.</p>
+                <p></p>
+              </>,
+            );
+          },
+        },
+      ]}
+    />,
+    <MenuButton
+      label="Table"
+      items={[
+        {
+          label: 'Explore',
+          command: () => {
+            setVisible(true);
+            setDialogContent(
+              "It's so tempting to just sit down at your table and waste some time watching YouTube videos or something. But Santa is occupying your chair so that really isn't an option.",
+            );
           },
         },
       ]}
@@ -201,6 +223,13 @@ export const Bedroom = () => {
     />,
   ];
 
+  React.useEffect(() => {
+    const rand = 1000 * 10 + Math.floor(1000 * Math.random()) * 50;
+    console.log(Math.floor(rand));
+    const interval = setInterval(() => audioRef.current?.play(), rand);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <>
       <Room
@@ -211,7 +240,11 @@ export const Bedroom = () => {
               If you had friends over, you would probably mention that your room is such a mess. But
               everybody would know it's not true at all.
             </p>
-            <p>Not much in your room looks out of the ordinary.</p>
+            <p>
+              Your bed looks just like you left it in the morning. Your table is standing next to
+              the walls. And the fridge is softly humming. Not much in your room looks out of the
+              ordinary.
+            </p>
             {endLine}
           </>
         }
@@ -230,6 +263,9 @@ export const Bedroom = () => {
       >
         {dialogContent}
       </Dialog>
+      <audio ref={audioRef} preload="auto" hidden muted={mute}>
+        <source src={bedroomSound} type="audio/mpeg" />
+      </audio>
     </>
   );
 };

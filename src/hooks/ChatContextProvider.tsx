@@ -11,6 +11,7 @@ const getMovieMessage = (movie: string) => {
     `${movie} in a bit!`,
     `Booking TV room for ${movie}`,
     `Watching ${movie} now`,
+    `${movie} in 5`,
   ];
 
   return messages[Math.floor(Math.random() * 100) % messages.length];
@@ -140,8 +141,8 @@ export const ChatContextProvider = ({ children }: { children: React.ReactNode })
         } else if (chance === 1) {
           likeMessage(messages.length - 1);
         }
-      } else if (lastMessage.type === 'door' && lastMessage.liked && lastMessage.message !== 'In') {
-        addMessage([{ message: 'In', author: lastMessage.author, liked: false, type: 'door' }]);
+      } else if (lastMessage.type === 'door' && lastMessage.liked) {
+        addMessage([{ message: 'In', author: lastMessage.author, liked: false, type: 'other' }]);
       } else if (lastMessage.type === 'complain') {
         if (chance === 0) {
           addMessage([
@@ -153,6 +154,13 @@ export const ChatContextProvider = ({ children }: { children: React.ReactNode })
             },
           ]);
         }
+      }
+    }
+
+    if (messages.length >= 2) {
+      const secondToLast = messages[messages.length - 2];
+      if (secondToLast.type === 'door' && !secondToLast.liked) {
+        addMessage([{ message: 'In', author: secondToLast.author, liked: false, type: 'other' }]);
       }
     }
   }, [addMessage, likeMessage, messages]);

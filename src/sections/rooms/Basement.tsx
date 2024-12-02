@@ -33,11 +33,12 @@ const Bar = () => {
   return (
     <>
       {/* todo */}
-      <p>Bar area description</p>
+      <p>The bar usually only get's used during parties.</p>
       {(rumAvailable || tapeAvailable) && (
         <div className="flex flex-wrap gap-2">
-          {rumAvailable && <GrabItem item={Miscelaneous.rum} />}
-          {tapeAvailable && <GrabItem item={Miscelaneous.tape} />}
+          <p>But what is that under the bar?</p>
+          {rumAvailable && <GrabItem mystery item={Miscelaneous.rum} />}
+          {tapeAvailable && <GrabItem mystery item={Miscelaneous.tape} />}
         </div>
       )}
     </>
@@ -78,6 +79,18 @@ export const Basement = () => {
 
   const roomItems = [
     <MenuButton
+      label="Bar area"
+      items={[
+        {
+          label: 'Look around',
+          command: () => {
+            setVisible(true);
+            setDialogContent(<Bar />);
+          },
+        },
+      ]}
+    />,
+    <MenuButton
       label="Freezer"
       items={[
         {
@@ -105,9 +118,11 @@ export const Basement = () => {
                 </p>
                 <p>
                   {/* todo: games won statistic */}
-                  {Math.random() < Math.min((tennisGames || 0) / 33, 1)
-                    ? 'Congratulations! You won this time!'
-                    : "You lost the game. But that's okay, these things take practice."}
+                  {!tennisGames
+                    ? "Congratulations! You won the tennis game. But is this just beginner's luck?"
+                    : Math.random() < Math.min((tennisGames || 0) / 33, 1)
+                      ? 'Congratulations! You won this time!'
+                      : "You lost the game. But that's okay, these things take practice."}
                 </p>
               </>,
             );
@@ -131,24 +146,14 @@ export const Basement = () => {
                 </p>
                 <p>
                   {/* todo: games won statistic */}
-                  {Math.random() < Math.min((footballGames || 0) / 33, 1)
-                    ? 'Congratulations! You won this time!'
-                    : 'You lost the game. But perhaps you will have more luck next time?'}
+                  {!footballGames
+                    ? "Congratulations! You won the tennis game. But is this just beginner's luck?"
+                    : Math.random() < Math.min((footballGames || 0) / 33, 1)
+                      ? 'Congratulations! You won this time!'
+                      : 'You lost the game. But perhaps you will have more luck next time?'}
                 </p>
               </>,
             );
-          },
-        },
-      ]}
-    />,
-    <MenuButton
-      label="Bar area"
-      items={[
-        {
-          label: 'Look around',
-          command: () => {
-            setVisible(true);
-            setDialogContent(<Bar />);
           },
         },
       ]}
@@ -162,7 +167,15 @@ export const Basement = () => {
         description={
           <>
             {/* //todo */}
-            <p>Basement description</p>
+            <p>
+              The dorm basement. The designated party area with painted walls, some more couches,
+              and a bar.
+            </p>
+            <p>
+              In the room next door, there are multiple freezers, table football, and a ping ping
+              table.
+            </p>
+            <p>There is also a little gym hidden behind a paper wall.</p>
           </>
         }
         roomActions={roomActions}

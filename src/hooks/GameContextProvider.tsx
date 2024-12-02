@@ -48,10 +48,12 @@ const movies = [
 ];
 
 export const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
+  const [mute, setMute] = React.useState(false);
   const progressAudioRef = React.useRef<HTMLAudioElement>(null);
+  const inventoryAudioRef = React.useRef<HTMLAudioElement>(null);
 
   const [isLoading, setLoading] = React.useState(true);
-  const [showIntro, setShowIntro] = React.useState<boolean>(false);
+  const [showIntro, setShowIntro] = React.useState<boolean>(true);
   const [room, setRoom] = React.useState<RoomType>();
   const [progress, setProgress] = React.useState(0);
 
@@ -136,9 +138,10 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
 
   const addToInventory = React.useCallback(
     (item: InventoryItemType) => {
-      console.log('adding', item);
       setInventory([item, ...inventory]);
       setCookie('inventory', [item, ...inventory].join(','));
+
+      inventoryAudioRef.current?.play();
     },
     [inventory],
   );
@@ -248,7 +251,11 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
       footballGames,
       setFootballGames,
       movie,
+
+      mute,
+      setMute,
       progressAudioRef,
+      inventoryAudioRef,
     }),
     [
       showIntro,
@@ -265,19 +272,21 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
       tennisGames,
       footballGames,
       movie,
+      mute,
     ],
   );
 
-  console.log(value);
+  console.log(isLoading, value);
 
   return (
     <GameContext.Provider value={value}>
-      {isLoading && (
+      {isLoading ? (
         <div className="flex justify-content-center align-items-center h-screen">
           <i className="pi pi-spinner pi-spin" style={{ fontSize: '2rem' }} />
         </div>
+      ) : (
+        children
       )}
-      {children}
     </GameContext.Provider>
   );
 };

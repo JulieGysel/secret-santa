@@ -26,11 +26,14 @@ const Trash = () => {
 
   return (
     <>
-      <p>You sweet, helpful person!</p>
+      <p>You sweet, helpful person! Thank you for taking the trash out.</p>
       {wrappingPaperAvailable && (
-        <div className="flex flex-wrap gap-2">
-          <GrabItem item={Miscelaneous.paper} />
-        </div>
+        <>
+          <p>But what is that lying next to the container?</p>
+          <div className="flex flex-wrap gap-2">
+            <GrabItem item={Miscelaneous.paper} mystery />
+          </div>
+        </>
       )}
     </>
   );
@@ -42,8 +45,10 @@ const Oven = () => {
 
   return (
     <>
-      {/* todo */}
-      <p>It's an oven.</p>
+      <p>
+        It's just an oven.{' '}
+        {panAvailable ? 'With a baking tray.' : 'But someone has taken the baking tray.'}
+      </p>
       {panAvailable && (
         <div className="flex flex-wrap gap-2">
           <GrabItem item={Miscelaneous.bakingTray} />
@@ -60,9 +65,9 @@ const Cupboard = () => {
   return (
     <>
       {cupboardItems.length < 3 ? (
-        <p>Your cupboard is strangely empty.</p>
+        <p>Your cupboard is looking strangely empty.</p>
       ) : (
-        <p>There is some stuff in your cupboard.</p>
+        <p>Look at that, you do have some stuff in your cupboard.</p>
       )}
       <div className="flex flex-wrap gap-2">
         {cupboardItems.map((item, i) => (
@@ -79,7 +84,12 @@ const recipeList: { [key in CookedItemKey]: Recipe } = {
   cookedAppleSlices: {
     value: 'cookedAppleSlices',
     name: CookedItems.cookedAppleSlices,
-    requires: [InventoryItems.bakingTray, InventoryItems.appleSlices, InventoryItems.sugar],
+    requires: [
+      InventoryItems.bakingTray,
+      InventoryItems.appleSlices,
+      InventoryItems.jam,
+      InventoryItems.sugar,
+    ],
   },
   cookies: {
     value: 'cookies',
@@ -121,12 +131,6 @@ const CookingSection = ({ closeModal }: { closeModal: VoidFunction }) => {
   }));
 
   const [currentRecipe, setCurrentRecipe] = React.useState();
-
-  React.useEffect(() => {
-    if (currentRecipe) {
-      console.log(currentRecipe, recipeList[currentRecipe]);
-    }
-  }, [currentRecipe]);
 
   const itemTemplate = (option: Recipe) => {
     return (
@@ -179,7 +183,7 @@ const CookingSection = ({ closeModal }: { closeModal: VoidFunction }) => {
 export const Kitchen = () => {
   const [visible, setVisible] = React.useState(false);
   const [dialogContent, setDialogContent] = React.useState<string | React.ReactNode>();
-  const { inventory } = useGameContext();
+  const { inventory, mute } = useGameContext();
   const additionalActions = !inventory.includes(Miscelaneous.paper)
     ? [
         {
@@ -260,7 +264,7 @@ export const Kitchen = () => {
           label: 'Explore',
           command: () => {
             setVisible(true);
-            setDialogContent('You think you will find something useful in the trash?');
+            setDialogContent('Do you think you will find something useful in the trash?');
           },
         },
         ...additionalActions,
@@ -273,7 +277,7 @@ export const Kitchen = () => {
           label: 'Explore',
           command: () => {
             setVisible(true);
-            setDialogContent("It's a kitchen sink.");
+            setDialogContent("It's a kitchen sink... with some leftovers around the drain? Eww!");
           },
         },
         {
@@ -281,7 +285,7 @@ export const Kitchen = () => {
           command: () => {
             setVisible(true);
             setDialogContent(
-              'Somehow, the kitchen sink is never clean enough. But thank you for your attempt.',
+              "Somehow, the kitchen sink is never clean enough. You look away for a second and it's dirty again. But thank you for your attempt.",
             );
           },
         },
@@ -305,8 +309,18 @@ export const Kitchen = () => {
     <>
       <Room
         title={'Kitchen'}
-        // todo
-        description={<p>Kitchen description.</p>}
+        description={
+          <>
+            <p>Roughtly ten people share each of the six kitchens here at the dorm.</p>
+            <p>
+              Everybody get's their own cupboard and has access to a sink, a big stove, and oven.
+            </p>
+            <p>
+              Ideally, the cleaning efforts would be equally divided between each of the ten people.
+              But we all know that someone always does more work somebody else.
+            </p>
+          </>
+        }
         roomActions={roomActions}
         roomItems={roomItems}
       ></Room>
@@ -322,7 +336,7 @@ export const Kitchen = () => {
       >
         {dialogContent}
       </Dialog>
-      <audio preload="auto" hidden autoPlay loop>
+      <audio preload="auto" hidden autoPlay loop muted={mute}>
         <source src={kitchenSound} type="audio/mpeg" />
       </audio>
     </>

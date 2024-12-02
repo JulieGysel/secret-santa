@@ -7,14 +7,16 @@ import { MenuProps } from 'primereact/menu';
 export const GrabItem = ({
   item,
   customItems,
+  mystery = false,
 }: {
   item: InventoryItemType;
   customItems?: MenuProps['model'];
+  mystery?: boolean;
 }) => {
   const { addToInventory } = useGameContext();
   return (
     <MenuButton
-      label={item}
+      label={mystery ? 'Mystery item' : item}
       items={customItems || [{ label: 'Grab', command: () => addToInventory(item) }]}
     />
   );

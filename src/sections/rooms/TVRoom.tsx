@@ -20,51 +20,13 @@ const Movie = ({ movie }: { movie: string }) => {
 
   return (
     <>
-      <p>Now watching: {movie}.</p>
+      <p>You always wanted to watch {movie}. Such a great Chrismas movie!</p>
       {cookieRecipeAvailable && (
         <>
           <p>But what is that in the couch?</p>
           <div className="flex flex-wrap gap-2">
-            <MenuButton
-              label="Couch"
-              items={[
-                {
-                  label: 'Explore',
-                  command: () => {
-                    setVisible(true);
-                  },
-                },
-              ]}
-            />
-            <Dialog
-              visible={isVisible}
-              onHide={() => setVisible(false)}
-              footer={
-                <Button
-                  label="Back"
-                  outlined
-                  severity="secondary"
-                  onClick={() => setVisible(false)}
-                />
-              }
-              dismissableMask
-              draggable={false}
-              resizable={false}
-              closable={false}
-              className="w-5"
-            >
-              <p>Recipe description</p>
-              <div className="flex flex-wrap gap-2">
-                <GrabItem item={Miscelaneous.cookieRecipe} />
-              </div>
-            </Dialog>
+            <GrabItem item={Miscelaneous.cookieRecipe} mystery />
           </div>
-          <audio preload="auto" hidden autoPlay loop>
-            <source src={commonSound} type="audio/mpeg" />
-          </audio>
-          <audio preload="auto" hidden autoPlay loop>
-            <source src={movieSound} type="audio/mpeg" />
-          </audio>
         </>
       )}
     </>
@@ -74,7 +36,7 @@ const Movie = ({ movie }: { movie: string }) => {
 export const TVRoom = () => {
   const [visible, setVisible] = React.useState(false);
   const [dialogContent, setDialogContent] = React.useState<string | React.ReactNode>();
-  const { movie } = useGameContext();
+  const { movie, mute } = useGameContext();
 
   const roomAudioRef = React.useRef<HTMLAudioElement>(null);
   const movieAudioRef = React.useRef<HTMLAudioElement>(null);
@@ -187,7 +149,19 @@ export const TVRoom = () => {
     <>
       <Room
         title={'TV Room'}
-        description={<p>TV Description</p>}
+        description={
+          <>
+            <p>The TV room is a cozy place.</p>
+            <p>
+              With multiple couches to sit or lie on, a large teddy bear to cuddle with, and of
+              course... the big TV it is the perfect place for watching a movie with some friends.
+            </p>
+            <p>
+              Around the TV, there are two shelves. One of them is absolutely stacked with board
+              games.
+            </p>
+          </>
+        }
         roomActions={roomActions}
         roomItems={roomItems}
       ></Room>
@@ -203,11 +177,11 @@ export const TVRoom = () => {
       >
         {dialogContent}
       </Dialog>
-      <audio ref={roomAudioRef} preload="auto" hidden loop>
+      <audio ref={roomAudioRef} preload="auto" hidden loop muted={mute}>
         <source src={commonSound} type="audio/mpeg" />
       </audio>
 
-      <audio ref={movieAudioRef} preload="auto" hidden loop>
+      <audio ref={movieAudioRef} preload="auto" hidden loop muted={mute}>
         <source src={movieSound} type="audio/mpeg" />
       </audio>
     </>

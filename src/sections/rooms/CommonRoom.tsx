@@ -25,7 +25,7 @@ const FreeStuffSection = () => {
 
   return (
     <>
-      <p>Wow! That's a lot of free stuff! Or junk that should be thrown out?</p>
+      <p>Wow! That's a lot of free stuff! Or is it just junk that should have been thrown out?</p>
       <div className="flex flex-wrap gap-2">
         {fridgeItems.map((item, i) => (
           <GrabItem item={item} key={`grab-item-${i}`} />
@@ -39,12 +39,12 @@ const MonsteraSection = ({ closeModal }: { closeModal: () => void }) => {
   const { inventory, usedUp, paintingDown, setPaintingDown, addToInventory } = useGameContext();
 
   const paintingPos = paintingDown
-    ? "The controversial painging is stood by the monstera's plant pot."
-    : 'The controversial painging is hanging on the wall next to it.';
+    ? "The controversial painting of an undressing lady is stood by the monstera's plant pot."
+    : 'A painting of an undressing lady from behind is hanging on the wall next to it.';
 
   return (
     <>
-      <p>The Monstera is a big plant.</p>
+      <p>The Monstera is a big plant climbing on the walls of the common room.</p>
 
       {!inventory.includes(Miscelaneous.painting) && !usedUp.includes(Miscelaneous.painting) ? (
         <>
@@ -72,7 +72,7 @@ const MonsteraSection = ({ closeModal }: { closeModal: () => void }) => {
           </div>
         </>
       ) : (
-        <p>The controversial painting is nowhere to be found.</p>
+        <p>There used to be a painting around here but it is nowhere to be found today.</p>
       )}
     </>
   );
@@ -150,7 +150,7 @@ const WrappingSection = () => {
 export const CommonRoom = () => {
   const [visible, setVisible] = React.useState(false);
   const [dialogContent, setDialogContent] = React.useState<string | React.ReactNode>();
-  const { inventory } = useGameContext();
+  const { inventory, mute } = useGameContext();
 
   const canWrap = React.useMemo(
     () =>
@@ -163,15 +163,13 @@ export const CommonRoom = () => {
   const wrapAction = React.useMemo(() => {
     return canWrap
       ? [
-          <Button
-            label="Wrap something"
-            outlined
-            severity="secondary"
-            onClick={() => {
+          {
+            label: 'Wrap something',
+            command: () => {
               setVisible(true);
               setDialogContent(<WrappingSection />);
-            }}
-          />,
+            },
+          },
         ]
       : [];
   }, [canWrap]);
@@ -182,7 +180,6 @@ export const CommonRoom = () => {
   };
 
   const roomActions = [
-    ...wrapAction,
     <div className="flex-grow-1" key="spacer"></div>,
     <Button
       label="Complain about Santa"
@@ -215,10 +212,11 @@ export const CommonRoom = () => {
           command: () => {
             setVisible(true);
             setDialogContent(
-              'The tables in the common room offer a big working surface to everyone in the dorm.',
+              "There are some crumbs on the table but it's not too bad. You might be able to do some work here if you wanted to.",
             );
           },
         },
+        ...wrapAction,
       ]}
       key="tables"
     />,
@@ -269,8 +267,22 @@ export const CommonRoom = () => {
         title={'Common Room'}
         description={
           <>
-            {/* //todo */}
-            <p>Common room description</p>
+            <p>The common room is often the center of all the action here at the dorm.</p>
+            <p>
+              The tables in the middle get slightly reorganized every now and then. They also only
+              get cleaned every <i>now and then</i>. But today they are looking good. You might be
+              able to do some work here {!canWrap && 'later on'}, given that your own table is now
+              rendered unusable by a squatting Santa.
+            </p>
+            <p>
+              One one side, next to the basement doors, there is a large cupboard with bin bags for
+              the kitchens. But today you can barely see it under all the free stuff that people
+              have left for taking.
+            </p>
+            <p>
+              On the other side, the large monstera plant is climbing on the walls of the common
+              room.
+            </p>
           </>
         }
         roomActions={roomActions}
@@ -288,7 +300,7 @@ export const CommonRoom = () => {
       >
         {dialogContent}
       </Dialog>
-      <audio preload="auto" hidden autoPlay loop>
+      <audio preload="auto" hidden autoPlay loop muted={mute}>
         <source src={commonSound} type="audio/mpeg" />
       </audio>
     </>

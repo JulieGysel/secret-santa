@@ -7,6 +7,7 @@ import { ChipProps, Chip } from 'primereact/chip';
 import { MessageType, useChatContext } from '../hooks/ChatContext';
 import { AutoComplete, AutoCompleteCompleteEvent } from 'primereact/autocomplete';
 import pop from './../audio/pop.mp3';
+import { useGameContext } from '../hooks/GameContext';
 
 const messageHints: Omit<MessageType, 'id'>[] = [
   {
@@ -28,6 +29,7 @@ const messageHints: Omit<MessageType, 'id'>[] = [
 
 export const Chat = () => {
   const { messages, likeMessage, addMessage, audioRef } = useChatContext();
+  const { mute } = useGameContext();
   const [newMessage, setNewMessage] = React.useState<Omit<MessageType, 'id'> | string>('');
   const [chatHints, setChatHints] = React.useState<object[]>([]);
   const chatRef = React.useRef<HTMLElement | null>(null);
@@ -147,7 +149,7 @@ export const Chat = () => {
           </div>
         </div>
       ))}
-      <audio ref={audioRef} preload="auto" hidden>
+      <audio ref={audioRef} preload="auto" hidden muted={mute}>
         <source src={pop} type="audio/mpeg" />
       </audio>
     </Card>
