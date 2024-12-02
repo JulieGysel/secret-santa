@@ -1,11 +1,10 @@
 import React from 'react';
-import { Room } from '../Room';
-import { Dialog } from 'primereact/dialog';
-import { MenuButton } from '../../components/MenuButton';
 import { Button } from 'primereact/button';
-import { RoomSwitch } from '../RoomSwitch';
+import { Dialog } from 'primereact/dialog';
 import { useGameContext } from '../../hooks/GameContext';
-import { GrabItem, Miscelaneous } from '../inventory';
+import { GrabItem, Room, MenuButton } from '../../components';
+import { Miscelaneous } from '../../types';
+import { RoomSwitch } from '../RoomSwitch';
 
 import commonSound from '../../audio/common.mp3';
 import movieSound from '../../audio/movie.mp3';
@@ -15,7 +14,6 @@ const games = ['Settlers of Catan', 'Chess', 'Cards'];
 
 const Movie = ({ movie }: { movie: string }) => {
   const { inventory } = useGameContext();
-  const [isVisible, setVisible] = React.useState(false);
   const cookieRecipeAvailable = !inventory.includes(Miscelaneous.cookieRecipe);
 
   return (

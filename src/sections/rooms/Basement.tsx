@@ -1,11 +1,11 @@
 import React from 'react';
-import { Room } from '../Room';
 import { Dialog } from 'primereact/dialog';
-import { MenuButton } from '../../components/MenuButton';
 import { Button } from 'primereact/button';
 import { RoomSwitch } from '../RoomSwitch';
+import { MenuButton } from '../../components/MenuButton';
 import { useGameContext } from '../../hooks/GameContext';
-import { FreezerItems, GrabItem, Miscelaneous } from '../inventory';
+import { GrabItem, Room } from '../../components';
+import { FreezerItems, Miscelaneous } from '../../types';
 
 const Freezer = () => {
   const { inventory, usedUp } = useGameContext();
@@ -32,7 +32,6 @@ const Bar = () => {
 
   return (
     <>
-      {/* todo */}
       <p>The bar usually only get's used during parties.</p>
       {(rumAvailable || tapeAvailable) && (
         <div className="flex flex-wrap gap-2">

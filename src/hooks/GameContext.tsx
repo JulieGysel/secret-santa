@@ -1,5 +1,5 @@
 import React from 'react';
-import { CookedItemKey, InventoryItemType } from '../sections/inventory';
+import { InventoryItemType, CookedItemKey } from '../types';
 
 export enum RoomType {
   BEDROOM = 'Bedroom',
@@ -10,7 +10,7 @@ export enum RoomType {
 }
 
 export type GameContextType = {
-  gameStart: Date;
+  gameStart: Date | undefined;
   showIntro: boolean;
   onHideIntro: VoidFunction;
   room: RoomType | undefined;

@@ -1,19 +1,19 @@
 import React from 'react';
-import { Room } from '../Room';
+import { Dropdown } from 'primereact/dropdown';
 import { Dialog } from 'primereact/dialog';
-import { MenuButton } from '../../components/MenuButton';
 import { Button } from 'primereact/button';
+import { MenuButton } from '../../components/MenuButton';
 import { RoomSwitch } from '../RoomSwitch';
 import {
   AcceptableGifts,
   FridgeItems,
   getGiftValue,
-  GrabItem,
   InventoryItems,
   InventoryItemType,
-} from '../inventory';
+} from '../../types';
+import { GrabItem, Room } from '../../components';
 import { useGameContext } from '../../hooks/GameContext';
-import { Dropdown } from 'primereact/dropdown';
+
 import bedroomSound from '../../audio/bedroom.mp3';
 
 const endingLines = [

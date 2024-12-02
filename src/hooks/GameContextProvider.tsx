@@ -1,11 +1,6 @@
 import React from 'react';
 import { GameContext, RoomType } from './GameContext';
-import {
-  CookedItemKey,
-  CookedItems,
-  InventoryItemType,
-  WrappedItemsMap,
-} from '../sections/inventory';
+import { CookedItemKey, CookedItems, InventoryItemType, WrappedItemsMap } from '../types';
 
 const setCookie = (key: string, value: string | number) => {
   document.cookie = `${key}=${value};path=/;`;
@@ -270,6 +265,7 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
       inventoryAudioRef,
     }),
     [
+      gameStart,
       showIntro,
       room,
       progress,

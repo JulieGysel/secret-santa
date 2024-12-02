@@ -1,7 +1,7 @@
 // import React from 'react';
-import { useGameContext } from '../../hooks/GameContext';
-import { MenuButton } from '../../components/MenuButton';
-import { InventoryItemType } from './types';
+import { useGameContext } from '../hooks/GameContext';
+import { MenuButton } from './MenuButton';
+import { InventoryItemType } from '../types';
 import { MenuProps } from 'primereact/menu';
 
 export const GrabItem = ({
