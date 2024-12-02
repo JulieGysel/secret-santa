@@ -63,6 +63,10 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
   const [footballGames, setFootballGames] = React.useState<number>();
 
   const [movie, setMovie] = React.useState('');
+  const [movieWithSanta, setMovieWithSanta] = React.useState(false);
+  const [watchedMovieWithSanta, setWatchedMovieWithSanta] = React.useState(false);
+
+  const [praisedSanta, setPraisedSanta] = React.useState(false);
 
   React.useEffect(() => {
     setShowIntro(!getCookie('intro'));
@@ -117,14 +121,35 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
       setGameStart(new Date(start));
     }
 
+    const movSanta = getCookie('movieWithSanta') === 'true';
+    if (movSanta) {
+      setMovieWithSanta(true);
+    }
+
+    const watchedMovSanta = getCookie('watchedMovieWithSanta') === 'true';
+    if (watchedMovSanta) {
+      setWatchedMovieWithSanta(true);
+    }
+
+    const praise = getCookie('praisedSanta') === 'true';
+    if (praise) {
+      setPraisedSanta(true);
+    }
+
     setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const makeProgress = React.useCallback(
     (inc: number) => {
-      setProgress(progress + inc);
-      setCookie('progress', progress + inc);
+      let newProgres = progress + inc;
+
+      if (newProgres > 100) {
+        newProgres = 100;
+      }
+
+      setProgress(newProgres);
+      setCookie('progress', newProgres);
 
       if (inc) {
         progressAudioRef.current?.play();
@@ -202,7 +227,19 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
     if (room) {
       setCookie('room', room as string);
     }
-  }, [room]);
+
+    if (movieWithSanta) {
+      setCookie('movieWithSanta', 'true');
+    }
+
+    if (watchedMovieWithSanta) {
+      setCookie('watchedMovieWithSanta', 'true');
+    }
+
+    if (praisedSanta) {
+      setCookie('praisedSanta', 'true');
+    }
+  }, [movieWithSanta, praisedSanta, room, watchedMovieWithSanta]);
 
   React.useEffect(() => {
     if (tennisGames) {
@@ -253,11 +290,20 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
       giftItem,
       paintingDown,
       setPaintingDown,
+
       tennisGames,
       setTennisGames,
       footballGames,
       setFootballGames,
+
       movie,
+      movieWithSanta,
+      setMovieWithSanta,
+      watchedMovieWithSanta,
+      setWatchedMovieWithSanta,
+
+      praisedSanta,
+      setPraisedSanta,
 
       mute,
       setMute,
@@ -280,6 +326,9 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
       tennisGames,
       footballGames,
       movie,
+      movieWithSanta,
+      watchedMovieWithSanta,
+      praisedSanta,
       mute,
     ],
   );

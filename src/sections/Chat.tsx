@@ -22,6 +22,18 @@ const messageHints: Omit<MessageType, 'id'>[] = [
     author: ' ',
     liked: false,
   },
+  {
+    type: 'complain',
+    message: 'Please help me get rid of this guy',
+    author: ' ',
+    liked: false,
+  },
+  {
+    type: 'complain',
+    message: 'fuck this santa person',
+    author: ' ',
+    liked: false,
+  },
 
   { type: 'praise', message: 'Guys, Santa is quite nice actually', author: ' ', liked: false },
   { type: 'praise', message: "I'm starting to like this Santa guy", author: ' ', liked: false },

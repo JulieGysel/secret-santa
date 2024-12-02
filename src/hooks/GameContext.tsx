@@ -23,13 +23,24 @@ export type GameContextType = {
   cookRecipe: (items: InventoryItemType[], recipe: CookedItemKey) => void;
   wrapItem: (item: InventoryItemType) => void;
   giftItem: (gift: InventoryItemType) => void;
+
   paintingDown: boolean;
   setPaintingDown: (down: boolean) => void;
+
   tennisGames: number | undefined;
   setTennisGames: (games: number) => void;
   footballGames: number | undefined;
   setFootballGames: (games: number) => void;
+
   movie: string;
+  movieWithSanta: boolean;
+  setMovieWithSanta: (watch: boolean) => void;
+
+  watchedMovieWithSanta: boolean;
+  setWatchedMovieWithSanta: (watch: boolean) => void;
+
+  praisedSanta: boolean;
+  setPraisedSanta: (praise: boolean) => void;
 
   mute: boolean;
   setMute: (mute: boolean) => void;

@@ -34,11 +34,13 @@ const Bar = () => {
     <>
       <p>The bar usually only get's used during parties.</p>
       {(rumAvailable || tapeAvailable) && (
-        <div className="flex flex-wrap gap-2">
+        <>
           <p>But what is that under the bar?</p>
-          {rumAvailable && <GrabItem mystery item={Miscelaneous.rum} />}
-          {tapeAvailable && <GrabItem mystery item={Miscelaneous.tape} />}
-        </div>
+          <div className="flex flex-wrap gap-2">
+            {rumAvailable && <GrabItem mystery item={Miscelaneous.rum} />}
+            {tapeAvailable && <GrabItem mystery item={Miscelaneous.tape} />}
+          </div>
+        </>
       )}
     </>
   );

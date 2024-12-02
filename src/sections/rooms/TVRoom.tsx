@@ -13,12 +13,26 @@ import movieSound from '../../audio/movie.mp3';
 const games = ['Settlers of Catan', 'Chess', 'Cards'];
 
 const Movie = ({ movie }: { movie: string }) => {
-  const { inventory } = useGameContext();
+  const {
+    inventory,
+    movieWithSanta,
+    watchedMovieWithSanta,
+    setWatchedMovieWithSanta,
+    makeProgress,
+  } = useGameContext();
   const cookieRecipeAvailable = !inventory.includes(Miscelaneous.cookieRecipe);
+
+  React.useEffect(() => {
+    if (movieWithSanta && !watchedMovieWithSanta) {
+      setWatchedMovieWithSanta(true);
+      makeProgress(20);
+    }
+  }, [makeProgress, movieWithSanta, setWatchedMovieWithSanta, watchedMovieWithSanta]);
 
   return (
     <>
       <p>You always wanted to watch {movie}. Such a great Chrismas movie!</p>
+      {movieWithSanta && <p>And Santa is loving it too.</p>}
       {cookieRecipeAvailable && (
         <>
           <p>But what is that in the couch?</p>

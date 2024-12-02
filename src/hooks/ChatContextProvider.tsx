@@ -17,6 +17,12 @@ const getMovieMessage = (movie: string) => {
   return messages[Math.floor(Math.random() * 100) % messages.length];
 };
 
+const getComplaintMessage = () => {
+  const messages = ["oh come on he can't be that bad", 'Have you tried talking to him?'];
+
+  return messages[Math.floor(Math.random() * 100) % messages.length];
+};
+
 const randMessages: NewMessageType[] = [
   // doors
   { message: 'Will someone let me in?', author: 'E', liked: false, type: 'door' },
@@ -149,7 +155,7 @@ export const ChatContextProvider = ({ children }: { children: React.ReactNode })
             {
               type: 'other',
               author: 'L',
-              message: "oh come on he can't be that bad",
+              message: getComplaintMessage(),
               liked: false,
             },
           ]);

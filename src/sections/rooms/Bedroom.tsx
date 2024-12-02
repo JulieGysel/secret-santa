@@ -15,6 +15,7 @@ import { GrabItem, Room } from '../../components';
 import { useGameContext } from '../../hooks/GameContext';
 
 import bedroomSound from '../../audio/bedroom.mp3';
+import { TalkSection } from '../TalkSection';
 
 const endingLines = [
   <p>Well, except for fucking Santa who's decided to move in for some reason.</p>,
@@ -134,7 +135,13 @@ export const Bedroom = () => {
     <MenuButton
       label="Santa"
       items={[
-        { label: 'Talk to Santa' },
+        {
+          label: 'Talk to Santa',
+          command: () => {
+            setVisible(true);
+            setDialogContent(<TalkSection />);
+          },
+        },
         {
           label: 'Give a gift to Santa',
           command: () => {
@@ -176,7 +183,9 @@ export const Bedroom = () => {
             setDialogContent(
               <>
                 <p>The bed is just like you left it this morning.</p>
-                <p></p>
+                <p>
+                  Hopefully you can get rid of Santa soon so you can sleep in your own bed today.
+                </p>
               </>,
             );
           },
@@ -225,7 +234,6 @@ export const Bedroom = () => {
 
   React.useEffect(() => {
     const rand = 1000 * 10 + Math.floor(1000 * Math.random()) * 50;
-    console.log(Math.floor(rand));
     const interval = setInterval(() => audioRef.current?.play(), rand);
     return () => clearInterval(interval);
   }, []);
