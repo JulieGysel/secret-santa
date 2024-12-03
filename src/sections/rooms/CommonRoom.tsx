@@ -8,6 +8,7 @@ import { RoomSwitch } from '../RoomSwitch';
 import { WrappingSection } from '../WrappingSection';
 
 import commonSound from '../../audio/common.mp3';
+import { Window } from '../Window';
 
 const FreeStuffSection = () => {
   const { inventory, usedUp, gifted } = useGameContext();
@@ -106,16 +107,6 @@ export const CommonRoom = () => {
 
   const roomActions = [
     <div className="flex-grow-1" key="spacer"></div>,
-    // <Button
-    //   label="Complain about Santa"
-    //   outlined
-    //   severity="danger"
-    //   onClick={() => {
-    //     setVisible(true);
-    //     setDialogContent('Complaining about Santa...');
-    //   }}
-    //   key="complain"
-    // />,
     <Button
       label="Leave the room"
       outlined
@@ -178,7 +169,7 @@ export const CommonRoom = () => {
           label: 'Look outside',
           command: () => {
             setVisible(true);
-            setDialogContent('Nasty Danish morning weather.');
+            setDialogContent(<Window />);
           },
         },
       ]}

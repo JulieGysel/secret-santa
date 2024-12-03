@@ -140,12 +140,12 @@ export const getGiftValue = (item: InventoryItemType) => {
   switch (item) {
     case InventoryItems.wrappedPainting:
       return 30;
-    case InventoryItems.cookedAppleSlices:
-    case InventoryItems.eggnog:
-      return 5;
     case InventoryItems.cookies:
       return 20;
+    case InventoryItems.cookedAppleSlices:
+      return 10;
     case InventoryItems.wrappedVase:
+    case InventoryItems.eggnog:
       return 5;
     default:
       return 0;

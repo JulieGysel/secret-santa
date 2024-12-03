@@ -81,12 +81,10 @@ export const CookingSection = ({ closeModal }: { closeModal: VoidFunction }) => 
 
   const onCook = React.useCallback(() => {
     if (currentRecipe) {
-      console.log('cooking ', currentRecipe);
       const usedItems = (recipeList[currentRecipe] as Recipe).requires.filter(
         (item) => !Object.values(ReusableItems).includes(item),
       );
 
-      console.log('using up', usedItems);
       cookRecipe(usedItems, currentRecipe);
       setCurrentRecipe(undefined);
       closeModal();

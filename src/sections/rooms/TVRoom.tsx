@@ -8,6 +8,7 @@ import { RoomSwitch } from '../RoomSwitch';
 
 import commonSound from '../../audio/common.mp3';
 import movieSound from '../../audio/movie.mp3';
+import { Window } from '../Window';
 
 // todo
 const games = ['Settlers of Catan', 'Chess', 'Cards'];
@@ -28,7 +29,7 @@ const Movie = ({ movie }: { movie: string }) => {
   React.useEffect(() => {
     if (movieWithSanta && !watchedMovieWithSanta) {
       setWatchedMovieWithSanta(true);
-      makeProgress(20);
+      makeProgress(10);
     }
   }, [makeProgress, movieWithSanta, setWatchedMovieWithSanta, watchedMovieWithSanta]);
 
@@ -140,7 +141,7 @@ export const TVRoom = () => {
           label: 'Look outside',
           command: () => {
             setVisible(true);
-            setDialogContent('Nasty Danish morning weather.');
+            setDialogContent(<Window />);
           },
         },
       ]}
@@ -150,7 +151,6 @@ export const TVRoom = () => {
 
   React.useEffect(() => {
     if (movieAudioRef.current && roomAudioRef.current) {
-      console.log(movie || 'no movie');
       if (movie) {
         movieAudioRef.current.play();
         roomAudioRef.current.pause();

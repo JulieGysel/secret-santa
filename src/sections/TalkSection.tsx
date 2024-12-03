@@ -2,20 +2,21 @@ import React from 'react';
 import { RoomType, useGameContext } from '../hooks/GameContext';
 import { Button } from 'primereact/button';
 
-type ChatType = { type: 'movie' | 'joke' | 'praise'; chat: React.ReactNode }[];
+type ChatType = { type: 'movie' | 'joke' | 'praise' | 'snow'; chat: React.ReactNode }[];
 
 export const TalkSection = () => {
   const {
     progress,
     movie,
+    snow,
     setRoom,
     setMovieWithSanta,
     praisedSanta,
     setPraisedSanta,
+    showedSnow,
+    setShowedSnow,
     makeProgress,
   } = useGameContext();
-
-  console.log(movie);
 
   const tvButton = React.useMemo(
     () => (
@@ -172,20 +173,42 @@ export const TalkSection = () => {
           </>
         ),
       },
+      snow && {
+        type: snow,
+        chat: (
+          <>
+            <p>
+              <span className="text-400">You</span>: "Hey! Look outside! It's snowing!"
+            </p>
+          </>
+        ),
+      },
+      snow && {
+        type: snow,
+        chat: (
+          <>
+            <p>
+              <span className="text-400">You</span>: "It's snowing, look!"
+            </p>
+          </>
+        ),
+      },
     ].filter(Boolean);
 
     return chats as ChatType;
-  }, [movie, progress, tvButton]);
+  }, [movie, progress, snow, tvButton]);
 
   const chat = chats[Math.floor(Math.random() * 100) % chats.length];
 
   React.useEffect(() => {
-    console.log(chat.type);
     if (chat.type === 'praise' && !praisedSanta) {
       setPraisedSanta(true);
-      makeProgress(20);
+      makeProgress(10);
+    } else if (chat.type === 'snow' && !showedSnow) {
+      setShowedSnow(true);
+      makeProgress(10);
     }
-  }, [chat.type, makeProgress, praisedSanta, setPraisedSanta]);
+  }, [chat.type, makeProgress, praisedSanta, setPraisedSanta, setShowedSnow, showedSnow]);
 
   return <>{chat.chat}</>;
 };

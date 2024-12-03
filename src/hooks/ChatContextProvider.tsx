@@ -17,7 +17,7 @@ const getMovieMessage = (movie: string) => {
   return messages[Math.floor(Math.random() * 100) % messages.length];
 };
 
-const getComplaintMessage = (movie?: string) => {
+const getComplaintMessage = (movie?: string, snow?: boolean) => {
   const messages = [
     "oh come on he can't be that bad",
     'Have you tried talking to him?',
@@ -25,6 +25,8 @@ const getComplaintMessage = (movie?: string) => {
     movie && `We're watching ${movie}. You should join.`,
     movie && `Join us for ${movie}. Bring Santa`,
     movie && `join us for ${movie}. bring him`,
+    snow && "Look outside, it's snowing!",
+    snow && "It's snowing, guys, look!",
   ].filter(Boolean) as string[];
 
   return messages[Math.floor(Math.random() * 100) % messages.length];
@@ -47,26 +49,6 @@ const randMessages: NewMessageType[] = [
   { message: 'Machine 2 done', type: 'other', author: 'D', liked: false },
   { message: 'Dryer', type: 'other', author: 'B', liked: false },
   { message: 'dryer', type: 'other', author: 'C', liked: false },
-
-  // things
-  {
-    message: `Does anybody have scissors?`,
-    author: 'D',
-    liked: false,
-    type: 'thing',
-  },
-  {
-    message: `Does anybody have a hair dryer?`,
-    author: 'D',
-    liked: false,
-    type: 'thing',
-  },
-  {
-    message: `Does anybody have some tape?`,
-    author: 'D',
-    liked: false,
-    type: 'thing',
-  },
 ];
 
 const getRandMessage = (): NewMessageType[] => {
@@ -75,7 +57,7 @@ const getRandMessage = (): NewMessageType[] => {
 };
 
 export const ChatContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const { movie, stats, updateStats } = useGameContext();
+  const { movie, snow, stats, updateStats } = useGameContext();
   const [messages, setMessages] = React.useState<MessageType[]>([]);
   const [sendMovie, setSendMovie] = React.useState(true);
   const audioRef = React.useRef<HTMLAudioElement>(null);
@@ -163,7 +145,7 @@ export const ChatContextProvider = ({ children }: { children: React.ReactNode })
             {
               type: 'other',
               author: 'L',
-              message: getComplaintMessage(movie),
+              message: getComplaintMessage(movie, snow),
               liked: false,
             },
           ]);
@@ -177,7 +159,7 @@ export const ChatContextProvider = ({ children }: { children: React.ReactNode })
         addMessage([{ message: 'In', author: secondToLast.author, liked: false, type: 'other' }]);
       }
     }
-  }, [addMessage, likeMessage, messages, movie, stats.peopleLetIn, updateStats]);
+  }, [addMessage, likeMessage, messages, movie, snow, stats.peopleLetIn, updateStats]);
 
   const value: ChatContextType = React.useMemo(
     () => ({ messages, likeMessage, addMessage, audioRef }),

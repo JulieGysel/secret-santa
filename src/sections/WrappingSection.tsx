@@ -20,7 +20,6 @@ export const WrappingSection = () => {
   const onWrap = React.useCallback(() => {
     if (wrapItem) {
       if (WrappableItems.includes(wrapItem)) {
-        console.log('wrapping', wrapItem);
         setDialogContent(
           `You could work on your wrapping skills. But that is indeed one wrapped ${wrapItem.toLowerCase()}.`,
         );

@@ -17,6 +17,7 @@ import { useGameContext } from '../../hooks/GameContext';
 import bedroomSound from '../../audio/bedroom.mp3';
 import { TalkSection } from '../TalkSection';
 import { MenuItem } from 'primereact/menuitem';
+import { Window } from '../Window';
 
 const endingLines = [
   <p>Well, except for fucking Santa who's decided to move in for some reason.</p>,
@@ -61,11 +62,8 @@ const GiftSection = () => {
   );
 
   const onGift = React.useCallback(() => {
-    console.log('atempting to gift', gift);
     if (gift && AcceptableGifts.includes(gift)) {
-      console.log('gift accepted!');
       setVisible(true);
-
       setDialogContent(`Santa: “Aww, thank you! I love ${gift.toLocaleLowerCase()}!”`);
 
       giftItem(gift);
@@ -224,7 +222,7 @@ export const Bedroom = () => {
           label: 'Look outside',
           command: () => {
             setVisible(true);
-            setDialogContent('Nasty Danish morning weather.');
+            setDialogContent(<Window />);
           },
         },
       ]}

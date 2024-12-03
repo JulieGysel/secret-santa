@@ -73,11 +73,13 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
 
   const [paintingDown, setPaintingDown] = React.useState(true);
 
+  const [snow, setSnow] = React.useState(false);
   const [movie, setMovie] = React.useState('');
   const [movieWithSanta, setMovieWithSanta] = React.useState(false);
   const [watchedMovieWithSanta, setWatchedMovieWithSanta] = React.useState(false);
 
   const [praisedSanta, setPraisedSanta] = React.useState(false);
+  const [showedSnow, setShowedSnow] = React.useState(false);
   const [stats, setStats] = React.useState<StatsType>({
     moviesWatched: 0,
     moviesWatchedWithSanta: 0,
@@ -141,6 +143,11 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
     const praise = getCookie('praisedSanta') === 'true';
     if (praise) {
       setPraisedSanta(true);
+    }
+
+    const snow = getCookie('showSnow') === 'true';
+    if (snow) {
+      setShowedSnow(true);
     }
 
     const st = getCookie('stats');
@@ -258,18 +265,30 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
       const nextMovie = movies[Math.floor(Math.random() * 100) % movies.length];
       setMovie(nextMovie);
 
-      console.log('Now playing', nextMovie);
-
       const clearAfter = Math.random() * 1000 * 10 + 1000 * 15;
       setTimeout(() => {
         setMovie('');
-        console.log('No movie playing');
       }, clearAfter); // Clear the value after the random time
     };
 
     const interval = setInterval(randomizeValue, 1000 * 60); // Trigger every 60 seconds
 
     // Cleanup interval on unmount
+    return () => clearInterval(interval);
+  }, []);
+
+  React.useEffect(() => {
+    const randomizeValue = () => {
+      setSnow(true);
+
+      const clearAfter = Math.random() * 1000 * 10 + 1000 * 15;
+      setTimeout(() => {
+        setSnow(false);
+      }, clearAfter);
+    };
+
+    const interval = setInterval(randomizeValue, 1000 * 60 * 2);
+
     return () => clearInterval(interval);
   }, []);
 
@@ -318,6 +337,7 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
       paintingDown,
       setPaintingDown,
 
+      snow,
       movie,
       movieWithSanta,
       setMovieWithSanta,
@@ -326,6 +346,8 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
 
       praisedSanta,
       setPraisedSanta,
+      showedSnow,
+      setShowedSnow,
 
       mute,
       setMute,
@@ -350,15 +372,15 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
       gifted,
       giftItem,
       paintingDown,
+      snow,
       movie,
       movieWithSanta,
       watchedMovieWithSanta,
       praisedSanta,
+      showedSnow,
       mute,
     ],
   );
-
-  console.log(isLoading, value);
 
   return (
     <GameContext.Provider value={value}>

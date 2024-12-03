@@ -51,6 +51,7 @@ export type GameContextType = {
   setPaintingDown: (down: boolean) => void;
 
   movie: string;
+  snow: boolean;
   movieWithSanta: boolean;
   setMovieWithSanta: (watch: boolean) => void;
 
@@ -59,6 +60,8 @@ export type GameContextType = {
 
   praisedSanta: boolean;
   setPraisedSanta: (praise: boolean) => void;
+  showedSnow: boolean;
+  setShowedSnow: (showed: boolean) => void;
 
   mute: boolean;
   setMute: (mute: boolean) => void;

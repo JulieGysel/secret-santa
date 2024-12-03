@@ -8,6 +8,7 @@ import { RoomSwitch } from '../RoomSwitch';
 import { CookingSection } from '../CookingSection';
 
 import kitchenSound from '../../audio/kitchen.mp3';
+import { Window } from '../Window';
 
 const Trash = () => {
   const { inventory } = useGameContext();
@@ -103,15 +104,6 @@ export const Kitchen = () => {
       }}
     />,
     <div className="flex-grow-1"></div>,
-    // <Button
-    //   label="Complain about Santa"
-    //   outlined
-    //   severity="danger"
-    //   onClick={() => {
-    //     setVisible(true);
-    //     setDialogContent('Complaining...');
-    //   }}
-    // />,
     <Button
       label="Leave the room"
       outlined
@@ -189,7 +181,7 @@ export const Kitchen = () => {
           label: 'Look outside',
           command: () => {
             setVisible(true);
-            setDialogContent('Nasty Danish morning weather.');
+            setDialogContent(<Window />);
           },
         },
       ]}
