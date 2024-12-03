@@ -9,10 +9,31 @@ export enum RoomType {
   BASEMENT = 'Basement',
 }
 
+export type StatsType = {
+  moviesWatched: number;
+  moviesWatchedWithSanta: number;
+
+  peopleLetIn: number;
+
+  tennisGamesPlayed: number;
+  tennisGamesWon: number;
+
+  footballGamesPlayed: number;
+  footballGamesWon: number;
+  boardGamesPlayed: number;
+};
+
 export type GameContextType = {
   gameStart: Date | undefined;
+  gameEnd: Date | undefined;
+
   showIntro: boolean;
   onHideIntro: VoidFunction;
+  showOutro: boolean;
+
+  stats: StatsType;
+  updateStats: (update: Partial<StatsType>) => void;
+
   room: RoomType | undefined;
   setRoom: React.Dispatch<React.SetStateAction<RoomType | undefined>>;
   progress: number;
@@ -28,11 +49,6 @@ export type GameContextType = {
 
   paintingDown: boolean;
   setPaintingDown: (down: boolean) => void;
-
-  tennisGames: number | undefined;
-  setTennisGames: (games: number) => void;
-  footballGames: number | undefined;
-  setFootballGames: (games: number) => void;
 
   movie: string;
   movieWithSanta: boolean;

@@ -48,10 +48,89 @@ const Bar = () => {
   );
 };
 
+const TennisGame = () => {
+  const { stats, updateStats } = useGameContext();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const games = React.useMemo(() => stats.tennisGamesPlayed, []);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const gamesWon = React.useMemo(() => stats.tennisGamesWon, []);
+
+  const win = !games || Math.random() < Math.min(games / 33, 1);
+
+  React.useEffect(() => {
+    if (win) {
+      updateStats({
+        tennisGamesWon: gamesWon + 1,
+        tennisGamesPlayed: games + 1,
+      });
+    } else {
+      updateStats({
+        tennisGamesPlayed: games + 1,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <>
+      <p>
+        You can always count on there being someone who will play a round of table tennis with you.
+      </p>
+      <p>
+        {!games
+          ? "Congratulations! You won the tennis game. But is this just beginner's luck?"
+          : win
+            ? 'Congratulations! You won this time!'
+            : "You lost the game. But that's okay, these things take practice."}
+      </p>
+    </>
+  );
+};
+
+const FootballGame = () => {
+  const { stats, updateStats } = useGameContext();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const games = React.useMemo(() => stats.footballGamesPlayed, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const gamesWon = React.useMemo(() => stats.footballGamesWon, []);
+
+  const win = !games || Math.random() < Math.min(games / 33, 1);
+
+  React.useEffect(
+    () => {
+      if (win) {
+        updateStats({
+          footballGamesWon: gamesWon + 1,
+          footballGamesPlayed: games + 1,
+        });
+      } else {
+        updateStats({
+          footballGamesPlayed: games + 1,
+        });
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
+  return (
+    <>
+      <p>You can always count on there being someone for a round of table football with you.</p>
+      <p>
+        {!games
+          ? "Congratulations! You won this game. But is it just beginner's luck?"
+          : win
+            ? 'Congratulations! You won this time!'
+            : "You lost the game. But that's okay, these things take practice."}
+      </p>
+    </>
+  );
+};
+
 export const Basement = () => {
   const [visible, setVisible] = React.useState(false);
   const [dialogContent, setDialogContent] = React.useState<string | React.ReactNode>();
-  const { tennisGames, setTennisGames, footballGames, setFootballGames } = useGameContext();
 
   const closeModal = () => {
     setVisible(false);
@@ -60,15 +139,6 @@ export const Basement = () => {
 
   const roomActions = [
     <div className="flex-grow-1"></div>,
-    // <Button
-    //   label="Complain about Santa"
-    //   outlined
-    //   severity="danger"
-    //   onClick={() => {
-    //     setVisible(true);
-    //     setDialogContent('Complaining...');
-    //   }}
-    // />,
     <Button
       label="Leave the room"
       outlined
@@ -112,23 +182,7 @@ export const Basement = () => {
           label: 'Play a game',
           command: () => {
             setVisible(true);
-            setTennisGames((tennisGames || 0) + 1);
-            setDialogContent(
-              <>
-                <p>
-                  You can always count on there being someone who will play a round of table tennis
-                  with you.
-                </p>
-                <p>
-                  {/* todo: games won statistic */}
-                  {!tennisGames
-                    ? "Congratulations! You won the tennis game. But is this just beginner's luck?"
-                    : Math.random() < Math.min((tennisGames || 0) / 33, 1)
-                      ? 'Congratulations! You won this time!'
-                      : "You lost the game. But that's okay, these things take practice."}
-                </p>
-              </>,
-            );
+            setDialogContent(<TennisGame />);
           },
         },
       ]}
@@ -140,23 +194,7 @@ export const Basement = () => {
           label: 'Play a game',
           command: () => {
             setVisible(true);
-            setFootballGames((footballGames || 0) + 1);
-            setDialogContent(
-              <>
-                <p>
-                  You can always count on there being someone who will play a game of table football
-                  with you.
-                </p>
-                <p>
-                  {/* todo: games won statistic */}
-                  {!footballGames
-                    ? "Congratulations! You won the tennis game. But is this just beginner's luck?"
-                    : Math.random() < Math.min((footballGames || 0) / 33, 1)
-                      ? 'Congratulations! You won this time!'
-                      : 'You lost the game. But perhaps you will have more luck next time?'}
-                </p>
-              </>,
-            );
+            setDialogContent(<FootballGame />);
           },
         },
       ]}
@@ -169,7 +207,6 @@ export const Basement = () => {
         title={'Basement'}
         description={
           <>
-            {/* //todo */}
             <p>
               The dorm basement. The designated party area with painted walls, some more couches,
               and a bar.

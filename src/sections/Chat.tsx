@@ -174,11 +174,11 @@ export const Chat = () => {
               className="p-overlay-badge p-2 px-3"
               template={chipTemplate}
               onClick={() => {
-                if (!liked) {
+                if (!liked || author !== ' ') {
                   likeMessage(id);
                 }
               }}
-              style={{ cursor: liked ? 'default' : 'pointer' }}
+              style={{ cursor: liked || author === ' ' ? 'default' : 'pointer' }}
               pt={{ root: { className: author === ' ' ? 'bg-primary' : '' } }}
             >
               {liked && <Badge value={'❤'} className="p-overlay-badge" severity={'danger'} />}

@@ -1,26 +1,7 @@
 import React from 'react';
-import { GameContext, RoomType } from './GameContext';
+import { GameContext, RoomType, StatsType } from './GameContext';
 import { CookedItemKey, CookedItems, InventoryItemType, WrappedItemsMap } from '../types';
-
-const setCookie = (key: string, value: string | number) => {
-  document.cookie = `${key}=${value};path=/;`;
-};
-
-const getCookie = (key: string) => {
-  const name = key + '=';
-  const decodedCookie = decodeURIComponent(document.cookie);
-  const ca = decodedCookie.split(';');
-  for (let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return '';
-};
+import { getCookie, setCookie } from '../helpers';
 
 const movies = [
   'The Holdovers',
@@ -31,9 +12,22 @@ const movies = [
   'Love Actually',
   'The Polar Express',
   'Pretty Woman',
-  'Star Wars Holiday Special',
+  'Star Wars: Holiday Special',
+  'Star Wars: A New Hope',
+  'Star Wars: Empire Strikes Back',
+  'Star Wars: Return of the Jedi',
+  'Star Wars: The Phantom Menace',
+  'Star Wars: Attack of the Clones',
+  'Star Wars: Revenge of the Sith',
   'Hot Frosty',
-  'Harry Potter',
+  "Harry Potter and the Philosopher's Stone",
+  'Harry Potter and the Chamber of Secrets',
+  'Harry Potter and the Prisoner of Azkaban',
+  'Harry Potter and the Goblet of Fire',
+  'Harry Potter and the Order of the Phoenix',
+  'Harry Potter and the Half-Blood Prince',
+  'Harry Potter and the Deathly Hallows – Part 1',
+  'Harry Potter and the Deathly Hallows – Part 2',
   'How the Grinch Stole Christmas',
   'The Holiday',
   'Gremlins',
@@ -41,6 +35,21 @@ const movies = [
   'Frozen',
   'The Grinch',
   '2 Girls 1 Cup: Christmas Edition',
+  'Notting Hill',
+  'Doctor Who: Husbands of River Song',
+  'Doctor Who: The Christmas Invasion',
+  'Doctor Who: The Runaway Bride',
+  'Doctor Who: A Christmas Carol',
+  'Doctor Who: Last Christmas',
+  'Doctor Who: The Church on Ruby Road',
+  'Doctor Who: Joy to the Worls',
+  'Paddington',
+  'The Fellowship of the Ring',
+  'The Two Towers',
+  'The Return of the King',
+  'World War Z',
+  'Klaus',
+  'Violent Night',
 ];
 
 export const GameContextProvider = ({ children }: { children: React.ReactNode }) => {
@@ -49,9 +58,12 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
   const inventoryAudioRef = React.useRef<HTMLAudioElement>(null);
 
   const [gameStart, setGameStart] = React.useState<Date>();
+  const [gameEnd, setGameEnd] = React.useState<Date>();
 
   const [isLoading, setLoading] = React.useState(true);
   const [showIntro, setShowIntro] = React.useState<boolean>(true);
+  const [showOutro, setShowOutro] = React.useState<boolean>(false);
+
   const [room, setRoom] = React.useState<RoomType>();
   const [progress, setProgress] = React.useState(0);
 
@@ -60,14 +72,22 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
   const [gifted, setGifted] = React.useState<InventoryItemType[]>([]);
 
   const [paintingDown, setPaintingDown] = React.useState(true);
-  const [tennisGames, setTennisGames] = React.useState<number>();
-  const [footballGames, setFootballGames] = React.useState<number>();
 
   const [movie, setMovie] = React.useState('');
   const [movieWithSanta, setMovieWithSanta] = React.useState(false);
   const [watchedMovieWithSanta, setWatchedMovieWithSanta] = React.useState(false);
 
   const [praisedSanta, setPraisedSanta] = React.useState(false);
+  const [stats, setStats] = React.useState<StatsType>({
+    moviesWatched: 0,
+    moviesWatchedWithSanta: 0,
+    peopleLetIn: 0,
+    tennisGamesPlayed: 0,
+    tennisGamesWon: 0,
+    footballGamesPlayed: 0,
+    footballGamesWon: 0,
+    boardGamesPlayed: 0,
+  });
 
   React.useEffect(() => {
     setShowIntro(!getCookie('intro'));
@@ -103,20 +123,6 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
       setCookie('progress', 0);
     }
 
-    const tg = Number(getCookie('tennisGames'));
-    if (tg) {
-      setTennisGames(tg);
-    } else {
-      setTennisGames(0);
-    }
-
-    const fg = Number(getCookie('footballGames'));
-    if (fg) {
-      setFootballGames(tg);
-    } else {
-      setFootballGames(0);
-    }
-
     const start = getCookie('gameStart');
     if (start) {
       setGameStart(new Date(start));
@@ -135,6 +141,11 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
     const praise = getCookie('praisedSanta') === 'true';
     if (praise) {
       setPraisedSanta(true);
+    }
+
+    const st = getCookie('stats');
+    if (st) {
+      setStats(JSON.parse(st));
     }
 
     setLoading(false);
@@ -243,18 +254,6 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
   }, [movieWithSanta, praisedSanta, room, watchedMovieWithSanta]);
 
   React.useEffect(() => {
-    if (tennisGames) {
-      setCookie('tennisGames', tennisGames);
-    }
-  }, [tennisGames]);
-
-  React.useEffect(() => {
-    if (footballGames) {
-      setCookie('footballGames', footballGames);
-    }
-  }, [footballGames]);
-
-  React.useEffect(() => {
     const randomizeValue = () => {
       const nextMovie = movies[Math.floor(Math.random() * 100) % movies.length];
       setMovie(nextMovie);
@@ -274,11 +273,36 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
     return () => clearInterval(interval);
   }, []);
 
+  const updateStats = React.useCallback(
+    (update: Partial<StatsType>) => {
+      const newStats = { ...stats, ...update };
+      setStats(newStats);
+      setCookie('stats', JSON.stringify(newStats));
+    },
+    [stats],
+  );
+
+  React.useEffect(() => {
+    if (progress === 100) {
+      setTimeout(() => {
+        setShowOutro(true);
+        setGameEnd(new Date(Date.now()));
+        setMute(true);
+      }, 1000 * 3);
+    }
+  }, [progress]);
+
   const value = React.useMemo(
     () => ({
       gameStart,
+      gameEnd,
       showIntro,
       onHideIntro,
+      showOutro,
+
+      stats,
+      updateStats,
+
       room,
       setRoom,
       progress,
@@ -293,11 +317,6 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
       giftItem,
       paintingDown,
       setPaintingDown,
-
-      tennisGames,
-      setTennisGames,
-      footballGames,
-      setFootballGames,
 
       movie,
       movieWithSanta,
@@ -315,7 +334,11 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
     }),
     [
       gameStart,
+      gameEnd,
       showIntro,
+      showOutro,
+      stats,
+      updateStats,
       room,
       progress,
       makeProgress,
@@ -327,8 +350,6 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
       gifted,
       giftItem,
       paintingDown,
-      tennisGames,
-      footballGames,
       movie,
       movieWithSanta,
       watchedMovieWithSanta,

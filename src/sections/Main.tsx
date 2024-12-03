@@ -10,6 +10,8 @@ import experience from '../audio/experience.mp3';
 import inventory from '../audio/inventory.mp3';
 import { Intro } from './Intro';
 import { Button } from 'primereact/button';
+import { Outro } from './Outro';
+import { getGameTime } from '../helpers';
 
 export const Main = () => {
   const {
@@ -27,12 +29,7 @@ export const Main = () => {
   React.useEffect(() => {
     const tick = () => {
       if (gameStart) {
-        const now = new Date(Date.now());
-        const timeDiff = new Date(
-          now.getTime() - gameStart.getTime() + now.getTimezoneOffset() * 1000 * 60,
-        );
-
-        setGameTime(timeDiff.toLocaleTimeString());
+        setGameTime(getGameTime(gameStart));
       }
     };
 
@@ -92,6 +89,9 @@ export const Main = () => {
         </div>
         <Inventory />
       </div>
+      <ChatContextProvider>
+        <Outro />
+      </ChatContextProvider>
       <audio ref={progressAudioRef} preload="auto" hidden muted={mute}>
         <source src={experience} type="audio/mpeg" />
       </audio>

@@ -20,6 +20,8 @@ const Movie = ({ movie }: { movie: string }) => {
     watchedMovieWithSanta,
     setWatchedMovieWithSanta,
     makeProgress,
+    stats,
+    updateStats,
   } = useGameContext();
   const cookieRecipeAvailable = !inventory.concat(usedUp).includes(Miscelaneous.cookieRecipe);
 
@@ -29,6 +31,16 @@ const Movie = ({ movie }: { movie: string }) => {
       makeProgress(20);
     }
   }, [makeProgress, movieWithSanta, setWatchedMovieWithSanta, watchedMovieWithSanta]);
+
+  React.useEffect(() => {
+    updateStats({
+      moviesWatched: stats.moviesWatched + 1,
+      moviesWatchedWithSanta: movieWithSanta
+        ? stats.moviesWatchedWithSanta + 1
+        : stats.moviesWatchedWithSanta,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -49,7 +61,7 @@ const Movie = ({ movie }: { movie: string }) => {
 export const TVRoom = () => {
   const [visible, setVisible] = React.useState(false);
   const [dialogContent, setDialogContent] = React.useState<string | React.ReactNode>();
-  const { movie, mute } = useGameContext();
+  const { movie, mute, stats, updateStats } = useGameContext();
 
   const roomAudioRef = React.useRef<HTMLAudioElement>(null);
   const movieAudioRef = React.useRef<HTMLAudioElement>(null);
@@ -115,6 +127,7 @@ export const TVRoom = () => {
           command: () => {
             setVisible(true);
             setDialogContent(`${game}? Good choice! That will be a fun couple hours...`);
+            updateStats({ boardGamesPlayed: stats.boardGamesPlayed + 1 });
           },
         },
       ]}

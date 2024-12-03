@@ -1,22 +1,24 @@
 export enum FridgeItems {
-  eggs = 'Eggs',
   milk = 'Milk',
-  cream = 'Cream',
+  carrots = 'Carrots',
   butter = 'Butter',
   jam = 'Jam',
   ham = 'Ham',
+  eggs = 'Eggs',
   cheese = 'Cheese',
   mayo = 'Mayonnaise',
   beer = 'Beer',
-  carrots = 'Carrots',
+  cream = 'Cream',
 }
 
 type FridgeItemKey = keyof typeof FridgeItems;
 export type FridgeItemType = (typeof FridgeItems)[FridgeItemKey];
 
 export enum FreeStuff {
+  handCream = 'Hand Cream',
   pan = 'Pan',
   tshirt = 'T-Shirt',
+  jeans = 'Old Jeans',
   scissors = 'Scissors',
   vase = 'Vase',
 }
@@ -49,11 +51,12 @@ type FreezerItemKey = keyof typeof FreezerItems;
 export type FreezerItemType = (typeof FreezerItems)[FreezerItemKey];
 
 export enum CupboardItems {
+  salt = 'Salt',
   flour = 'Flour',
-  sugar = 'Sugar',
   bowl = 'Bowl',
   spatula = 'Spatula',
   plates = 'Plates',
+  sugar = 'Sugar',
   utensils = 'Utensils',
   cinnamon = 'Cinnamon',
 }
