@@ -307,7 +307,7 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
         setShowOutro(true);
         setGameEnd(new Date(Date.now()));
         setMute(true);
-      }, 1000 * 3);
+      }, 1000 * 5);
     }
   }, [progress]);
 

@@ -11,13 +11,13 @@ const introSteps = [
         I couldn’t be bothered to optimize this game for mobile. Use a computer, a laptop, or a
         tablet (horizontal).
       </li>
-      <li>Sound on.</li>
+      <li>Sound on, please.</li>
       <li>This site uses cookies. Deal with it.</li>
     </ul>
     <p className="font-italic mt-4">
-      “Insanity is doing the same thing over and over again and expecting different results.“
+      Insanity is doing the same thing over and over again and expecting different results.{' '}
     </p>
-    <p className="font-italic ">“You need a little bit of insanity to do great things.“</p>
+    <p className="font-italic ">You need a little bit of insanity to do great things.</p>
   </>,
   <>
     <p>
@@ -25,7 +25,6 @@ const introSteps = [
     </p>
     <p>You are sleeping in your bed. Until suddenly…</p>
   </>,
-
   <>
     <p>
       It is the middle of the night. The weather outside the dorm is not unusual for early December.
@@ -61,12 +60,13 @@ const introSteps = [
     <p>
       <span className="text-400">Santa:</span> “I’m at it from early afternoon because some little
       shits just couldn’t wait until after dinner for their presents. And I cannot stop until late
-      at night because some of the older shits just had to have a third portion of their dinner.”
+      at night because some of the older shits just had to have a third portion. I get it, you're
+      growing. But get the fuck on with it so that I can go home.”
     </p>
   </>,
   <>
     <p>
-      <span className="text-400">Santa:</span> “And the weather is always shit. When was the last
+      <span className="text-400">Santa:</span> “...and the weather is always shit. When was the last
       time we had a white Christmas? No, no more snow covered rooftops these days. Just rain and
       mud.”
     </p>
@@ -78,7 +78,7 @@ const introSteps = [
       <span className="text-400">Santa:</span> “You know what is the worst?”
     </p>
     <p>
-      <span className="text-400">You:</span> “What is the worst?”
+      <span className="text-400">You:</span> “What is?”
     </p>
     <p>
       <span className="text-400">Santa:</span> “I don’t even get properly paid for it.”
@@ -131,7 +131,7 @@ const introSteps = [
       <span className="text-400">Santa:</span> “I am going to sleep on the bed tonight. We people of
       a certain age need our comfort.”
     </p>
-    <p>This is too much for you. You slowly get out of bed and...</p>
+    <p className="mt-6">This is too much for you. You slowly get out of bed and...</p>
   </>,
 ];
 

@@ -56,7 +56,7 @@ const TennisGame = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const gamesWon = React.useMemo(() => stats.tennisGamesWon, []);
 
-  const win = !games || Math.random() < Math.min(games / 33, 1);
+  const win = !games || Math.random() < Math.min(games / 20, 1);
 
   React.useEffect(() => {
     if (win) {
@@ -95,7 +95,7 @@ const FootballGame = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const gamesWon = React.useMemo(() => stats.footballGamesWon, []);
 
-  const win = !games || Math.random() < Math.min(games / 33, 1);
+  const win = !games || Math.random() < Math.min(games / 15, 1);
 
   React.useEffect(
     () => {

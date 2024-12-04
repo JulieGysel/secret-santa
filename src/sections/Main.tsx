@@ -17,6 +17,7 @@ export const Main = () => {
   const {
     room,
     showIntro,
+    showOutro,
     progress,
     mute,
     setMute,
@@ -56,41 +57,39 @@ export const Main = () => {
     <Intro />
   ) : (
     <>
-      <div className="flex flex-column gap-2 p-2 h-screen">
-        <div className="flex align-items-center gap-2">
-          <ProgressBar
-            value={progress}
-            color="#B73E43"
-            className="progress_bar flex-grow-1"
-            data-pr-tooltip="You are this close to making Santa leave"
-            data-pr-position="mouse"
-          />
-          <div className="flex">{gameTime}</div>
-          <Button
-            icon={`pi ${mute ? 'pi-volume-off' : 'pi-volume-up'}`}
-            text
-            rounded
-            className="w-1rem h-1rem p-2"
-            pt={{ icon: { className: 'text-xs' } }}
-            aria-label="Toggle sound"
-            tooltip="Toggle sound"
-            tooltipOptions={{ position: 'left' }}
-            onClick={() => setMute(!mute)}
-          />
-        </div>
-
-        <div className="flex-grow-1 flex gap-2 w-full m-auto">
-          <div className="flex-grow-1">{roomSection}</div>
-          <div className="flex-grow-0 w-4 max-w-30rem" style={{ minWidth: '25rem' }}>
-            <ChatContextProvider>
-              <Chat />
-            </ChatContextProvider>
-          </div>
-        </div>
-        <Inventory />
-      </div>
       <ChatContextProvider>
-        <Outro />
+        <div className="flex flex-column gap-2 p-2 h-screen">
+          <div className="flex align-items-center gap-2">
+            <ProgressBar
+              value={progress}
+              color="#B73E43"
+              className="progress_bar flex-grow-1"
+              data-pr-tooltip="You are this close to making Santa leave"
+              data-pr-position="mouse"
+            />
+            <div className="flex">{gameTime}</div>
+            <Button
+              icon={`pi ${mute ? 'pi-volume-off' : 'pi-volume-up'}`}
+              text
+              rounded
+              className="w-1rem h-1rem p-2"
+              pt={{ icon: { className: 'text-xs' } }}
+              aria-label="Toggle sound"
+              tooltip="Toggle sound"
+              tooltipOptions={{ position: 'left' }}
+              onClick={() => setMute(!mute)}
+            />
+          </div>
+
+          <div className="flex-grow-1 flex gap-2 w-full m-auto">
+            <div className="flex-grow-1">{roomSection}</div>
+            <div className="flex-grow-0 w-4 max-w-30rem" style={{ minWidth: '25rem' }}>
+              <Chat />
+            </div>
+          </div>
+          <Inventory />
+        </div>
+        {showOutro && <Outro />}
       </ChatContextProvider>
       <audio ref={progressAudioRef} preload="auto" hidden muted={mute}>
         <source src={experience} type="audio/mpeg" />

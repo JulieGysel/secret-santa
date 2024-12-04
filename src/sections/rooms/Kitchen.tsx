@@ -196,7 +196,7 @@ export const Kitchen = () => {
           <>
             <p>Roughtly ten people share each of the six kitchens here at the dorm.</p>
             <p>
-              Everybody get's their own cupboard and has access to a sink, a big stove, and oven.
+              Everybody gets their own cupboard and has access to a sink, a big stove, and oven.
             </p>
             <p>
               Ideally, the cleaning efforts would be equally divided between each of the ten people.

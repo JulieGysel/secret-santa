@@ -20,37 +20,35 @@ export const Outro = () => {
     }
   }, [showOutro]);
 
-  const gameStats = React.useMemo(
-    () => [
-      { stat: 'Time', value: getGameTime(gameStart as Date, gameEnd), key: 'time' },
-      { stat: 'Movies watched', value: stats.moviesWatched, key: 'movies' },
-      {
-        stat: 'Movies watched with Santa',
-        value: stats.moviesWatchedWithSanta,
-        key: 'movies-santa',
-      },
-      {
-        stat: 'Messages sent',
-        value: messages.filter((message) => message.author === ' ').length,
-        key: 'message-sent',
-      },
-      {
-        stat: 'Messages liked',
-        value: messages.filter((message) => message.author === ' ' && message.liked).length,
-        key: 'message-sent',
-      },
-      { stat: 'People let in', value: stats.peopleLetIn, key: 'let-in' },
-      { stat: 'Football games played', value: stats.footballGamesPlayed, key: 'f-played' },
-      { stat: 'Football games won', value: stats.footballGamesWon, key: 'f-won' },
-      { stat: 'Ping Pong games played', value: stats.tennisGamesPlayed, key: 't-played' },
-      { stat: 'Ping Pong games won', value: stats.tennisGamesWon, key: 't-won' },
-    ],
-    [gameEnd, gameStart, messages, stats],
-  );
+  console.log(messages);
+
+  const gameStats = [
+    { stat: 'Time', value: getGameTime(gameStart as Date, gameEnd), key: 'time' },
+    { stat: 'Movies watched', value: stats.moviesWatched, key: 'movies' },
+    {
+      stat: 'Movies watched with Santa',
+      value: stats.moviesWatchedWithSanta,
+      key: 'movies-santa',
+    },
+    {
+      stat: 'Messages sent',
+      value: messages.filter((message) => message.author === ' ').length,
+      key: 'message-sent',
+    },
+    {
+      stat: 'Messages liked',
+      value: messages.filter((message) => message.author === ' ' && message.liked).length,
+      key: 'message-sent',
+    },
+    { stat: 'People let in', value: stats.peopleLetIn, key: 'let-in' },
+    { stat: 'Football games played', value: stats.footballGamesPlayed, key: 'f-played' },
+    { stat: 'Football games won', value: stats.footballGamesWon, key: 'f-won' },
+    { stat: 'Ping Pong games played', value: stats.tennisGamesPlayed, key: 't-played' },
+    { stat: 'Ping Pong games won', value: stats.tennisGamesWon, key: 't-won' },
+  ];
 
   return (
     <Dialog
-      header="The End."
       visible={visible}
       draggable={false}
       resizable={false}
@@ -75,6 +73,7 @@ export const Outro = () => {
         </div>
       }
     >
+      <h2>The End.</h2>
       <p>Congratulations! You won this game.</p>
 
       <DataTable
@@ -85,7 +84,7 @@ export const Outro = () => {
         headerColumnGroup={
           <ColumnGroup>
             <Row>
-              <Column header="Would you like to see some stats?" colSpan={2}></Column>
+              <Column header="Would you like to see some game stats?" colSpan={2}></Column>
             </Row>
           </ColumnGroup>
         }

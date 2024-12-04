@@ -29,9 +29,9 @@ a:hover {
   background: linear-gradient(40deg, #9cc8f9, #dfbac1, #757da4, #60be87, #587792, #4d3462, #373d4a);
   background-size: 1000% 1000%;
 
-  -webkit-animation: AnimationName 500s ease infinite;
-  -moz-animation: AnimationName 500s ease infinite;
-  animation: AnimationName 500s ease infinite;
+  -webkit-animation: AnimationName 100s linear infinite;
+  -moz-animation: AnimationName 100s linear infinite;
+  animation: AnimationName 100s linear infinite;
 }
 
 @-webkit-keyframes AnimationName {

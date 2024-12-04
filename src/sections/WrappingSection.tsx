@@ -29,7 +29,24 @@ export const WrappingSection = () => {
       } else {
         switch (wrapItem) {
           case InventoryItems.tape:
-            setDialogContent('If you wrap the tape, how are you going to tape the wrapping paper?');
+          case InventoryItems.scissors:
+          case InventoryItems.paper:
+            setDialogContent(
+              `If you wrap the ${wrapItem.toLowerCase()}, how are you going to wrap anything else?`,
+            );
+            break;
+          case InventoryItems.bakingTray:
+            setDialogContent(`Isn't that ${wrapItem.toLowerCase()} common?`);
+            break;
+          case InventoryItems.utensils:
+          case InventoryItems.plates:
+            setDialogContent(`Wait, you still need those!`);
+            break;
+          case InventoryItems.jeans:
+            setDialogContent('Nobody is going to want these.');
+            break;
+          case InventoryItems.handCream:
+            setDialogContent('Nobody is going to want this.');
             break;
           default:
             setDialogContent(`Wrapping ${wrapItem.toLowerCase()} makes no sense.`);
@@ -42,14 +59,15 @@ export const WrappingSection = () => {
 
   return (
     <>
-      <p>What do you want to wrap?</p>
+      <p>There is only one thing that you can do with all of this stuff.</p>
+      <p>Wrap it.</p>
       <div className="flex gap-2">
         <Dropdown
           value={wrapItem}
           options={options}
           onChange={(e) => setWrapItem(e.value)}
           optionLabel={'name'}
-          placeholder="Select a recipe"
+          placeholder="Select something to wrap"
           className="w-5"
         />
         <Button label="Wrap" disabled={!wrapItem} onClick={onWrap} />

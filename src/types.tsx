@@ -66,7 +66,7 @@ export type CupboardItemType = (typeof CupboardItems)[CupboardItemKey];
 
 export enum CookedItems {
   cookedAppleSlices = 'Æbleskiver',
-  cookies = 'Cookies',
+  cookies = 'Cinnamon cookies',
   eggnog = 'Eggnog',
 }
 
@@ -116,6 +116,7 @@ export const AcceptableGifts: InventoryItemType[] = [
   InventoryItems.eggnog,
   InventoryItems.carrots,
   InventoryItems.beer,
+  InventoryItems.iceLolly,
 
   InventoryItems.wrappedPainting,
   InventoryItems.wrappedVase,

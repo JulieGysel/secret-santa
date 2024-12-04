@@ -64,7 +64,32 @@ const GiftSection = () => {
   const onGift = React.useCallback(() => {
     if (gift && AcceptableGifts.includes(gift)) {
       setVisible(true);
-      setDialogContent(`Santa: “Aww, thank you! I love ${gift.toLocaleLowerCase()}!”`);
+
+      switch (gift) {
+        case InventoryItems.cookedAppleSlices:
+        case InventoryItems.cookies:
+        case InventoryItems.eggnog:
+          setDialogContent(`Santa: “Aww, thank you! I love ${gift.toLocaleLowerCase()}!”`);
+          break;
+        case InventoryItems.carrots:
+          setDialogContent('Santa: “I will take a carrot, thank you.“');
+          break;
+        case InventoryItems.beer:
+          setDialogContent('Santa: “I will take a beer, thank you.“');
+          break;
+        case InventoryItems.iceLolly:
+          setDialogContent('Santa: “Thanks. I like Ice lolies.“');
+          break;
+        case InventoryItems.wrappedPainting:
+          setDialogContent('Santa: “Oh look at that... Ho. Ho. Ho“');
+          break;
+        case InventoryItems.wrappedVase:
+        case InventoryItems.tshirt:
+          setDialogContent('Santa: “This is what I always wanted! How did you know that?“');
+          break;
+        default:
+          break;
+      }
 
       giftItem(gift);
       makeProgress(getGiftValue(gift));
@@ -74,6 +99,30 @@ const GiftSection = () => {
       switch (gift) {
         case InventoryItems.sugar:
           setDialogContent('Santa: “Are you trying to give me diabetes?”');
+          break;
+        case InventoryItems.ice:
+          setDialogContent('Santa: “Just like that? No alcohol with them?”');
+          break;
+        case InventoryItems.cinnamon:
+        case InventoryItems.salt:
+          setDialogContent("Santa: “No, no, no. I'm way too old for this shit.”");
+          break;
+        case InventoryItems.scissors:
+          setDialogContent('Santa: “Can I stab someone with these?”');
+          break;
+        case InventoryItems.eggs:
+          setDialogContent('Santa: “Are we going to throw them at somebody?”');
+          break;
+        case InventoryItems.handCream:
+          setDialogContent('Santa: “Is that lube?”');
+          break;
+        case InventoryItems.painting:
+        case InventoryItems.vase:
+        case InventoryItems.tshirt:
+          setDialogContent('Santa: “Meh. Not even gift wrapped?”');
+          break;
+        case InventoryItems.jeans:
+          setDialogContent("Santa: “These ain't gonna fit me.”");
           break;
         default:
           setDialogContent(`Santa: “What am I supposed to do with ${gift?.toLowerCase()}?”`);

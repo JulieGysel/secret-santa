@@ -19,6 +19,19 @@ export const Chat = () => {
   const messageHints: Omit<MessageType, 'id'>[] = React.useMemo(
     () =>
       [
+        progress && {
+          type: 'praise',
+          message: 'Guys, Santa is quite nice actually',
+          author: ' ',
+          liked: false,
+        },
+        progress && {
+          type: 'praise',
+          message: "I'm starting to like this Santa guy",
+          author: ' ',
+          liked: false,
+        },
+
         {
           type: 'complain',
           message: 'Santa sucks!!!',
@@ -28,6 +41,12 @@ export const Chat = () => {
         {
           type: 'complain',
           message: 'Does anybody want a Santa?',
+          author: ' ',
+          liked: false,
+        },
+        {
+          type: 'complain',
+          message: 'What am I supposed to do with Santa?',
           author: ' ',
           liked: false,
         },
@@ -46,19 +65,6 @@ export const Chat = () => {
         {
           type: 'complain',
           message: 'Santa is a creep',
-          author: ' ',
-          liked: false,
-        },
-
-        progress && {
-          type: 'praise',
-          message: 'Guys, Santa is quite nice actually',
-          author: ' ',
-          liked: false,
-        },
-        progress && {
-          type: 'praise',
-          message: "I'm starting to like this Santa guy",
           author: ' ',
           liked: false,
         },
@@ -147,7 +153,7 @@ export const Chat = () => {
             </div>
           </div>
           <div className="pl-2">
-            <span className="text-xs">Click to like messages</span>
+            <span className="text-xs">Click to like messages.</span>
           </div>
         </form>
       }

@@ -30,7 +30,7 @@ const FreeStuffSection = () => {
   );
 };
 
-const MonsteraSection = ({ closeModal }: { closeModal: () => void }) => {
+const MonsteraSection = () => {
   const { inventory, usedUp, paintingDown, setPaintingDown, addToInventory } = useGameContext();
 
   const paintingPos = paintingDown
@@ -52,14 +52,12 @@ const MonsteraSection = ({ closeModal }: { closeModal: () => void }) => {
                   label: paintingDown ? 'Put up' : 'Put down',
                   command: () => {
                     setPaintingDown(!paintingDown);
-                    closeModal();
                   },
                 },
                 {
                   label: 'Grab',
                   command: () => {
                     addToInventory(Miscelaneous.painting);
-                    closeModal();
                   },
                 },
               ]}
@@ -90,7 +88,7 @@ export const CommonRoom = () => {
     return canWrap
       ? [
           {
-            label: 'Wrap something',
+            label: 'Do some work',
             command: () => {
               setVisible(true);
               setDialogContent(<WrappingSection />);
@@ -128,7 +126,7 @@ export const CommonRoom = () => {
           command: () => {
             setVisible(true);
             setDialogContent(
-              "There are some crumbs on the table but it's not too bad. You might be able to do some work here if you wanted to.",
+              "There are some crumbs on the table but it's not too bad. You might be able to do some work here later if you wanted to.",
             );
           },
         },
@@ -156,7 +154,7 @@ export const CommonRoom = () => {
           label: 'Explore',
           command: () => {
             setVisible(true);
-            setDialogContent(<MonsteraSection closeModal={closeModal} />);
+            setDialogContent(<MonsteraSection />);
           },
         },
       ]}
