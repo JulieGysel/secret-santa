@@ -8,11 +8,10 @@ const introSteps = [
     <h3>Disclaimer:</h3>
     <ul>
       <li>
-        I couldn’t be bothered to optimize this game for mobile. Use a computer, a laptop, or a
-        tablet (horizontal).
+        Use a computer, a laptop, or a tablet (horizontal). This game is not optimised for mobile.
       </li>
       <li>Sound on, please.</li>
-      <li>This site uses cookies. Deal with it.</li>
+      <li>This site uses cookies.</li>
     </ul>
     <p className="font-italic mt-4">
       Insanity is doing the same thing over and over again and expecting different results.{' '}

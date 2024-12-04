@@ -24,6 +24,7 @@ export const Main = () => {
     progressAudioRef,
     inventoryAudioRef,
     gameStart,
+    gameEnd,
   } = useGameContext();
   const [gameTime, setGameTime] = React.useState('');
 
@@ -34,8 +35,11 @@ export const Main = () => {
       }
     };
 
-    setInterval(tick, 1000);
-  }, [gameStart]);
+    if (!gameEnd) {
+      const interval = setInterval(tick, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [gameEnd, gameStart]);
 
   const roomSection = React.useMemo(() => {
     switch (room) {

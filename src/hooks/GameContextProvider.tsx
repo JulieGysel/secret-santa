@@ -130,6 +130,11 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
       setGameStart(new Date(start));
     }
 
+    const end = getCookie('gameEnd');
+    if (end) {
+      setGameEnd(new Date(end));
+    }
+
     const movSanta = getCookie('movieWithSanta') === 'true';
     if (movSanta) {
       setMovieWithSanta(true);
@@ -303,13 +308,17 @@ export const GameContextProvider = ({ children }: { children: React.ReactNode })
 
   React.useEffect(() => {
     if (progress === 100) {
+      if (!gameEnd) {
+        const end = new Date(Date.now());
+        setGameEnd(end);
+        setCookie('gameEnd', end.toISOString());
+      }
       setTimeout(() => {
         setShowOutro(true);
-        setGameEnd(new Date(Date.now()));
         setMute(true);
       }, 1000 * 5);
     }
-  }, [progress]);
+  }, [gameEnd, progress]);
 
   const value = React.useMemo(
     () => ({

@@ -14,6 +14,8 @@ export const Outro = () => {
   const { messages } = useChatContext();
   const [visible, setVisible] = React.useState(false);
 
+  const [showStats, setShowStats] = React.useState(false);
+
   React.useEffect(() => {
     if (showOutro) {
       setVisible(true);
@@ -60,38 +62,72 @@ export const Outro = () => {
       closable={false}
       style={{ minHeight: '50vh' }}
       footer={
-        <div className="pt-4">
-          <Button
-            label={'Replay'}
-            severity="secondary"
-            outlined
-            onClick={() => {
-              clearCookies();
-              window.location.reload();
-            }}
-          />
-        </div>
+        showStats ? (
+          <div className="pt-4 flex justify-content-between">
+            <p>
+              Bike shed <span className="font-bold">113</span>.
+            </p>
+            <Button
+              label={'Replay'}
+              severity="secondary"
+              outlined
+              onClick={() => {
+                clearCookies();
+                window.location.reload();
+              }}
+            />
+          </div>
+        ) : (
+          <div className="pt-4 flex justify-content-end">
+            <Button label="Next" severity="secondary" outlined onClick={() => setShowStats(true)} />
+          </div>
+        )
       }
     >
-      <h2>The End.</h2>
-      <p>Congratulations! You won this game.</p>
+      {showStats ? (
+        <>
+          <h2>The End.</h2>
+          <p>Congratulations! You won this game.</p>
 
-      <DataTable
-        value={gameStats}
-        dataKey={'value'}
-        scrollable
-        scrollHeight="45vh"
-        headerColumnGroup={
-          <ColumnGroup>
-            <Row>
-              <Column header="Would you like to see some game stats?" colSpan={2}></Column>
-            </Row>
-          </ColumnGroup>
-        }
-      >
-        <Column field="stat" />
-        <Column field="value" />
-      </DataTable>
+          <DataTable
+            value={gameStats}
+            dataKey={'value'}
+            scrollable
+            scrollHeight="45vh"
+            headerColumnGroup={
+              <ColumnGroup>
+                <Row>
+                  <Column header="Would you like to see some game stats?" colSpan={2}></Column>
+                </Row>
+              </ColumnGroup>
+            }
+          >
+            <Column field="stat" />
+            <Column field="value" />
+          </DataTable>
+        </>
+      ) : (
+        <>
+          <p>
+            <span className="text-400">Santa:</span> “My friend, todays has been the best day of my
+            life.”
+          </p>
+          <p>
+            <span className="text-400">Santa:</span> “It snowed. I ate incredible food. I had a good
+            time with some great people. I got some awesome gifts...”
+          </p>
+          <p>
+            <span className="text-400">Santa:</span> “And all because of you. Thank you.”
+          </p>
+          <p>
+            <span className="text-400">Santa:</span> “I guess this is what Christmas is all about.
+            And it would be a shame if I denied it to others. So I must go now.”
+          </p>
+          <p>
+            <span className="text-400">Santa:</span> “Thank you. And goodbye.”
+          </p>
+        </>
+      )}
     </Dialog>
   );
 };

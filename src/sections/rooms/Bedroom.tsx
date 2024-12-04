@@ -84,7 +84,7 @@ const GiftSection = () => {
           setDialogContent('Santa: “Oh look at that... Ho. Ho. Ho“');
           break;
         case InventoryItems.wrappedVase:
-        case InventoryItems.tshirt:
+        case InventoryItems.wrappedTshirt:
           setDialogContent('Santa: “This is what I always wanted! How did you know that?“');
           break;
         default:
