@@ -63,10 +63,7 @@ export const Outro = () => {
       style={{ minHeight: '50vh' }}
       footer={
         showStats ? (
-          <div className="pt-4 flex justify-content-between">
-            <p>
-              Bike shed <span className="font-bold">113</span>.
-            </p>
+          <div className="pt-4 flex justify-content-end">
             <Button
               label={'Replay'}
               severity="secondary"
