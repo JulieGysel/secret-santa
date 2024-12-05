@@ -24,7 +24,7 @@ const getComplaintMessage = (movie?: string, snow?: boolean) => {
     "i'm sure you can just talk it out",
     movie && `We're watching ${movie}. You should join.`,
     movie && `Join us for ${movie}. Bring Santa`,
-    movie && `join us for ${movie}. bring him`,
+    movie && `join us for ${movie}. bring him too`,
     snow && "Look outside, it's snowing!",
     snow && "It's snowing, guys, look!",
   ].filter(Boolean) as string[];

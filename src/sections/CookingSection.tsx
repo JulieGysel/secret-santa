@@ -53,6 +53,16 @@ const recipeList: { [key in CookedItemKey]: Recipe } = {
       InventoryItems.cinnamon,
     ],
   },
+  sandwich: {
+    value: 'sandwich',
+    name: CookedItems.sandwich,
+    requires: [
+      InventoryItems.bread,
+      InventoryItems.mayo,
+      InventoryItems.cheese,
+      InventoryItems.ham,
+    ],
+  },
 };
 
 export const CookingSection = ({ closeModal }: { closeModal: VoidFunction }) => {

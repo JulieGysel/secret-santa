@@ -68,6 +68,7 @@ export enum CookedItems {
   cookedAppleSlices = 'Æbleskiver',
   cookies = 'Cinnamon cookies',
   eggnog = 'Eggnog',
+  sandwich = 'Sandwich',
 }
 
 export type CookedItemKey = keyof typeof CookedItems;
@@ -117,6 +118,7 @@ export const AcceptableGifts: InventoryItemType[] = [
   InventoryItems.carrots,
   InventoryItems.beer,
   InventoryItems.iceLolly,
+  InventoryItems.sandwich,
 
   InventoryItems.wrappedPainting,
   InventoryItems.wrappedVase,

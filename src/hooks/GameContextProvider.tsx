@@ -42,7 +42,7 @@ const movies = [
   'Doctor Who: A Christmas Carol',
   'Doctor Who: Last Christmas',
   'Doctor Who: The Church on Ruby Road',
-  'Doctor Who: Joy to the Worls',
+  'Doctor Who: Joy to the World',
   'Paddington',
   'The Fellowship of the Ring',
   'The Two Towers',
